@@ -9,21 +9,41 @@
 /* Begin PBXBuildFile section */
 		B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7832990DBF2008558EA /* AppDelegate.swift */; };
 		B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7852990DBF2008558EA /* SceneDelegate.swift */; };
-		B09DC7882990DBF2008558EA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7872990DBF2008558EA /* ViewController.swift */; };
-		B09DC78B2990DBF2008558EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B09DC7892990DBF2008558EA /* Main.storyboard */; };
 		B09DC78D2990DBF6008558EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B09DC78C2990DBF6008558EA /* Assets.xcassets */; };
 		B09DC7902990DBF6008558EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B09DC78E2990DBF6008558EA /* LaunchScreen.storyboard */; };
+		B09DC7992990DD7D008558EA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7982990DD7D008558EA /* AppCoordinator.swift */; };
+		B09DC79B2990DEA2008558EA /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC79A2990DEA2008558EA /* MainCoordinator.swift */; };
+		B09DC7A02990E214008558EA /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC79F2990E214008558EA /* MainViewController.swift */; };
+		B09DC7A22990E21A008558EA /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7A12990E21A008558EA /* LoginViewController.swift */; };
+		B09DC7A42990E29F008558EA /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7A32990E29F008558EA /* LoginCoordinator.swift */; };
+		B09DC7A72990E9DD008558EA /* Lemon Days.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B09DC7A62990E9DD008558EA /* Lemon Days.ttf */; };
+		B09DC7AA2990EC50008558EA /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7A92990EC50008558EA /* UITextField.swift */; };
+		B09DC7AC2990F3E6008558EA /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */; };
+		B09DC7AE2990FFAF008558EA /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7AD2990FFAF008558EA /* CALayer.swift */; };
+		B09DC7B129910D93008558EA /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7B029910D93008558EA /* CustomTextField.swift */; };
+		DE1D946785BD77890688D2B7 /* Pods_WalkFriends.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B69A27509896D10B1710869E /* Pods_WalkFriends.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		40B8E93FFDC9EEFF8BC55A5E /* Pods-WalkFriends.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WalkFriends.release.xcconfig"; path = "Target Support Files/Pods-WalkFriends/Pods-WalkFriends.release.xcconfig"; sourceTree = "<group>"; };
 		B09DC7802990DBF2008558EA /* WalkFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalkFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B09DC7832990DBF2008558EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B09DC7852990DBF2008558EA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		B09DC7872990DBF2008558EA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		B09DC78A2990DBF2008558EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		B09DC78C2990DBF6008558EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B09DC78F2990DBF6008558EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B09DC7912990DBF6008558EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B09DC7982990DD7D008558EA /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		B09DC79A2990DEA2008558EA /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
+		B09DC79F2990E214008558EA /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		B09DC7A12990E21A008558EA /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		B09DC7A32990E29F008558EA /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
+		B09DC7A62990E9DD008558EA /* Lemon Days.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lemon Days.ttf"; sourceTree = "<group>"; };
+		B09DC7A92990EC50008558EA /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
+		B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		B09DC7AD2990FFAF008558EA /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
+		B09DC7B029910D93008558EA /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		B69A27509896D10B1710869E /* Pods_WalkFriends.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WalkFriends.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4B9BED1A6433E210673E4C4 /* Pods-WalkFriends.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WalkFriends.debug.xcconfig"; path = "Target Support Files/Pods-WalkFriends/Pods-WalkFriends.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +51,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE1D946785BD77890688D2B7 /* Pods_WalkFriends.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1FCD9CE7A48E710C4C5DAF02 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B69A27509896D10B1710869E /* Pods_WalkFriends.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B09DC7772990DBF2008558EA = {
 			isa = PBXGroup;
 			children = (
 				B09DC7822990DBF2008558EA /* WalkFriends */,
 				B09DC7812990DBF2008558EA /* Products */,
+				DFC1E7CBCB9E9E23A859086E /* Pods */,
+				1FCD9CE7A48E710C4C5DAF02 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,15 +87,88 @@
 		B09DC7822990DBF2008558EA /* WalkFriends */ = {
 			isa = PBXGroup;
 			children = (
+				B09DC7AF29910D71008558EA /* Class */,
+				B09DC7A82990EC46008558EA /* Extensions */,
+				B09DC7972990DC95008558EA /* Coordinator */,
+				B09DC79D2990DEF4008558EA /* Models */,
+				B09DC79C2990DEE3008558EA /* ViewModels */,
+				B09DC79E2990DEFB008558EA /* Controllers */,
 				B09DC7832990DBF2008558EA /* AppDelegate.swift */,
 				B09DC7852990DBF2008558EA /* SceneDelegate.swift */,
-				B09DC7872990DBF2008558EA /* ViewController.swift */,
-				B09DC7892990DBF2008558EA /* Main.storyboard */,
 				B09DC78C2990DBF6008558EA /* Assets.xcassets */,
 				B09DC78E2990DBF6008558EA /* LaunchScreen.storyboard */,
 				B09DC7912990DBF6008558EA /* Info.plist */,
+				B09DC7A52990E9D1008558EA /* Fonts */,
 			);
 			path = WalkFriends;
+			sourceTree = "<group>";
+		};
+		B09DC7972990DC95008558EA /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				B09DC7982990DD7D008558EA /* AppCoordinator.swift */,
+				B09DC79A2990DEA2008558EA /* MainCoordinator.swift */,
+				B09DC7A32990E29F008558EA /* LoginCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		B09DC79C2990DEE3008558EA /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		B09DC79D2990DEF4008558EA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		B09DC79E2990DEFB008558EA /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				B09DC79F2990E214008558EA /* MainViewController.swift */,
+				B09DC7A12990E21A008558EA /* LoginViewController.swift */,
+				B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		B09DC7A52990E9D1008558EA /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				B09DC7A62990E9DD008558EA /* Lemon Days.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		B09DC7A82990EC46008558EA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B09DC7A92990EC50008558EA /* UITextField.swift */,
+				B09DC7AD2990FFAF008558EA /* CALayer.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		B09DC7AF29910D71008558EA /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				B09DC7B029910D93008558EA /* CustomTextField.swift */,
+			);
+			path = Class;
+			sourceTree = "<group>";
+		};
+		DFC1E7CBCB9E9E23A859086E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D4B9BED1A6433E210673E4C4 /* Pods-WalkFriends.debug.xcconfig */,
+				40B8E93FFDC9EEFF8BC55A5E /* Pods-WalkFriends.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,9 +178,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B09DC7942990DBF6008558EA /* Build configuration list for PBXNativeTarget "WalkFriends" */;
 			buildPhases = (
+				B7E69CA3563D85BFBDC8E852 /* [CP] Check Pods Manifest.lock */,
 				B09DC77C2990DBF2008558EA /* Sources */,
 				B09DC77D2990DBF2008558EA /* Frameworks */,
 				B09DC77E2990DBF2008558EA /* Resources */,
+				1DB57D4D6D138D6F2F3469FD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -125,36 +231,78 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B09DC7A72990E9DD008558EA /* Lemon Days.ttf in Resources */,
 				B09DC7902990DBF6008558EA /* LaunchScreen.storyboard in Resources */,
 				B09DC78D2990DBF6008558EA /* Assets.xcassets in Resources */,
-				B09DC78B2990DBF2008558EA /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1DB57D4D6D138D6F2F3469FD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WalkFriends/Pods-WalkFriends-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-WalkFriends/Pods-WalkFriends-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WalkFriends/Pods-WalkFriends-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B7E69CA3563D85BFBDC8E852 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-WalkFriends-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B09DC77C2990DBF2008558EA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B09DC7882990DBF2008558EA /* ViewController.swift in Sources */,
+				B09DC7AC2990F3E6008558EA /* RegisterViewController.swift in Sources */,
+				B09DC7B129910D93008558EA /* CustomTextField.swift in Sources */,
+				B09DC7A22990E21A008558EA /* LoginViewController.swift in Sources */,
+				B09DC7992990DD7D008558EA /* AppCoordinator.swift in Sources */,
+				B09DC7A42990E29F008558EA /* LoginCoordinator.swift in Sources */,
+				B09DC7AA2990EC50008558EA /* UITextField.swift in Sources */,
+				B09DC79B2990DEA2008558EA /* MainCoordinator.swift in Sources */,
 				B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */,
 				B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */,
+				B09DC7A02990E214008558EA /* MainViewController.swift in Sources */,
+				B09DC7AE2990FFAF008558EA /* CALayer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		B09DC7892990DBF2008558EA /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B09DC78A2990DBF2008558EA /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		B09DC78E2990DBF6008558EA /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -282,6 +430,7 @@
 		};
 		B09DC7952990DBF6008558EA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D4B9BED1A6433E210673E4C4 /* Pods-WalkFriends.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -292,9 +441,7 @@
 				INFOPLIST_FILE = WalkFriends/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -302,14 +449,18 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "Dev-Ozzy.WalkFriends";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		B09DC7962990DBF6008558EA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40B8E93FFDC9EEFF8BC55A5E /* Pods-WalkFriends.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -320,9 +471,7 @@
 				INFOPLIST_FILE = WalkFriends/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -330,9 +479,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "Dev-Ozzy.WalkFriends";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
