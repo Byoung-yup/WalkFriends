@@ -20,7 +20,7 @@ class LoginViewController: UIViewController {
     lazy var loginLabel: UILabel = {
        let lbl = UILabel()
         lbl.text = "Login"
-        lbl.tintColor = .black
+        lbl.textColor = .black
         lbl.font = UIFont(name: "Lemon-Days", size: 40)
         return lbl
     }()
@@ -35,10 +35,10 @@ class LoginViewController: UIViewController {
     
     lazy var emailTextField: CustomTextField = {
        let tf = CustomTextField()
-        tf.backgroundColor = .white
         tf.addleftimage(image: UIImage(systemName: "envelope")!)
         tf.font = UIFont(name: "Lemon-Days", size: 15)
-        tf.attributedPlaceholder = NSAttributedString(string: "Email")
+        tf.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [.foregroundColor: UIColor.systemGray])
+        tf.textColor = .black
         return tf
     }()
     
@@ -46,8 +46,9 @@ class LoginViewController: UIViewController {
        let tf = CustomTextField()
         tf.addleftimage(image: UIImage(systemName: "lock")!)
         tf.font = UIFont(name: "Lemon-Days", size: 15)
-        tf.attributedPlaceholder = NSAttributedString(string: "Password")
+        tf.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [.foregroundColor: UIColor.systemGray])
         tf.isSecureTextEntry = true
+        tf.textColor = .black
         return tf
     }()
     
@@ -81,7 +82,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .white
         
         configureUI()
         addTarget()
