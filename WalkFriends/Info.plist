@@ -5,6 +5,9 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>Lemon Days.ttf</string>
+		<string>Letters for Learners Outline Bold.ttf</string>
+		<string>Letters for Learners Outline Light.ttf</string>
+		<string>Letters for Learners.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

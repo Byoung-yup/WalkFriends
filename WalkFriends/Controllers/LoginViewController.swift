@@ -21,7 +21,7 @@ class LoginViewController: UIViewController {
        let lbl = UILabel()
         lbl.text = "Login"
         lbl.textColor = .black
-        lbl.font = UIFont(name: "Lemon-Days", size: 40)
+        lbl.font = UIFont(name: "LettersforLearners", size: 50)
         return lbl
     }()
     
@@ -29,14 +29,14 @@ class LoginViewController: UIViewController {
        let lbl = UILabel()
         lbl.text = "Please sign in to continue."
         lbl.textColor = .gray
-        lbl.font = UIFont(name: "Lemon-Days", size: 17)
+        lbl.font = UIFont(name: "LettersforLearners", size: 27)
         return lbl
     }()
     
     lazy var emailTextField: CustomTextField = {
        let tf = CustomTextField()
         tf.addleftimage(image: UIImage(systemName: "envelope")!)
-        tf.font = UIFont(name: "Lemon-Days", size: 15)
+        tf.font = UIFont(name: "LettersforLearners", size: 20)
         tf.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [.foregroundColor: UIColor.systemGray])
         tf.textColor = .black
         return tf
@@ -45,7 +45,7 @@ class LoginViewController: UIViewController {
     lazy var passwordTextField: CustomTextField = {
        let tf = CustomTextField()
         tf.addleftimage(image: UIImage(systemName: "lock")!)
-        tf.font = UIFont(name: "Lemon-Days", size: 15)
+        tf.font = UIFont(name: "LettersforLearners", size: 20)
         tf.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [.foregroundColor: UIColor.systemGray])
         tf.isSecureTextEntry = true
         tf.textColor = .black
@@ -55,7 +55,7 @@ class LoginViewController: UIViewController {
     lazy var loginButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Login", for: .normal)
-        btn.titleLabel?.font = UIFont(name: "Lemon-Days", size: 18)
+        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 25)
         btn.setTitleColor(.white, for: .normal)
         btn.backgroundColor = .orange
         btn.clipsToBounds = true
@@ -67,14 +67,14 @@ class LoginViewController: UIViewController {
        let lbl = UILabel()
         lbl.text = "Don't have an account?"
         lbl.textColor = .gray
-        lbl.font = UIFont(name: "Lemon-Days", size: 12)
+        lbl.font = UIFont(name: "LettersforLearners", size: 19)
         return lbl
     }()
     
     lazy var registerInfoButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("Sign up", for: .normal)
-        btn.titleLabel?.font = UIFont(name: "Lemon-Days", size: 12)
+        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 19)
         btn.setTitleColor(.orange, for: .normal)
         return btn
     }()
@@ -86,6 +86,15 @@ class LoginViewController: UIViewController {
         
         configureUI()
         addTarget()
+        
+//        for family in UIFont.familyNames.sorted() {
+//            let names = UIFont.fontNames(forFamilyName: family)
+//            print("Family: \(family) Font names: \(names)")
+//        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     // MARK: UI Configure

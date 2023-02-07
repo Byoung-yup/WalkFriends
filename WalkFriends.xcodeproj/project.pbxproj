@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B031A1BC2991F64400C51B5A /* Letters for Learners Outline Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */; };
+		B031A1BD2991F64400C51B5A /* Letters for Learners Outline Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */; };
+		B031A1BF2991F73800C51B5A /* Letters for Learners.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */; };
 		B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7832990DBF2008558EA /* AppDelegate.swift */; };
 		B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7852990DBF2008558EA /* SceneDelegate.swift */; };
 		B09DC78D2990DBF6008558EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B09DC78C2990DBF6008558EA /* Assets.xcassets */; };
@@ -21,11 +24,22 @@
 		B09DC7AC2990F3E6008558EA /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */; };
 		B09DC7AE2990FFAF008558EA /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7AD2990FFAF008558EA /* CALayer.swift */; };
 		B09DC7B129910D93008558EA /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7B029910D93008558EA /* CustomTextField.swift */; };
+		B0C56F2A29921413004E83B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0C56F2929921412004E83B8 /* GoogleService-Info.plist */; };
+		B0C56F2D2992208C004E83B8 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C56F2C2992208C004E83B8 /* DatabaseManager.swift */; };
+		B0C56F2F29922094004E83B8 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C56F2E29922094004E83B8 /* StorageManager.swift */; };
+		B0C56F3129922322004E83B8 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C56F3029922321004E83B8 /* RegisterViewModel.swift */; };
+		B0C56F332992232D004E83B8 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C56F322992232D004E83B8 /* LoginViewModel.swift */; };
+		B0C56F3629922D26004E83B8 /* EmailConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C56F3529922D26004E83B8 /* EmailConfirmViewController.swift */; };
+		B0C56F3829924443004E83B8 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C56F3729924443004E83B8 /* String.swift */; };
+		B0C56F3A299244D4004E83B8 /* EmailConfirmViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C56F39299244D4004E83B8 /* EmailConfirmViewModel.swift */; };
 		DE1D946785BD77890688D2B7 /* Pods_WalkFriends.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B69A27509896D10B1710869E /* Pods_WalkFriends.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		40B8E93FFDC9EEFF8BC55A5E /* Pods-WalkFriends.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WalkFriends.release.xcconfig"; path = "Target Support Files/Pods-WalkFriends/Pods-WalkFriends.release.xcconfig"; sourceTree = "<group>"; };
+		B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Light.ttf"; sourceTree = "<group>"; };
+		B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Bold.ttf"; sourceTree = "<group>"; };
+		B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners.ttf"; sourceTree = "<group>"; };
 		B09DC7802990DBF2008558EA /* WalkFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalkFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B09DC7832990DBF2008558EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B09DC7852990DBF2008558EA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -42,6 +56,14 @@
 		B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		B09DC7AD2990FFAF008558EA /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		B09DC7B029910D93008558EA /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		B0C56F2929921412004E83B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B0C56F2C2992208C004E83B8 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		B0C56F2E29922094004E83B8 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		B0C56F3029922321004E83B8 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
+		B0C56F322992232D004E83B8 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		B0C56F3529922D26004E83B8 /* EmailConfirmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailConfirmViewController.swift; sourceTree = "<group>"; };
+		B0C56F3729924443004E83B8 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		B0C56F39299244D4004E83B8 /* EmailConfirmViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailConfirmViewModel.swift; sourceTree = "<group>"; };
 		B69A27509896D10B1710869E /* Pods_WalkFriends.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WalkFriends.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4B9BED1A6433E210673E4C4 /* Pods-WalkFriends.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WalkFriends.debug.xcconfig"; path = "Target Support Files/Pods-WalkFriends/Pods-WalkFriends.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -87,6 +109,8 @@
 		B09DC7822990DBF2008558EA /* WalkFriends */ = {
 			isa = PBXGroup;
 			children = (
+				B0C56F2B29922079004E83B8 /* Services */,
+				B0C56F2929921412004E83B8 /* GoogleService-Info.plist */,
 				B09DC7AF29910D71008558EA /* Class */,
 				B09DC7A82990EC46008558EA /* Extensions */,
 				B09DC7972990DC95008558EA /* Coordinator */,
@@ -116,6 +140,9 @@
 		B09DC79C2990DEE3008558EA /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				B0C56F322992232D004E83B8 /* LoginViewModel.swift */,
+				B0C56F3029922321004E83B8 /* RegisterViewModel.swift */,
+				B0C56F39299244D4004E83B8 /* EmailConfirmViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -133,6 +160,7 @@
 				B09DC79F2990E214008558EA /* MainViewController.swift */,
 				B09DC7A12990E21A008558EA /* LoginViewController.swift */,
 				B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */,
+				B0C56F3429922CCD004E83B8 /* Popup */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -140,6 +168,9 @@
 		B09DC7A52990E9D1008558EA /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */,
+				B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */,
+				B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */,
 				B09DC7A62990E9DD008558EA /* Lemon Days.ttf */,
 			);
 			path = Fonts;
@@ -150,6 +181,7 @@
 			children = (
 				B09DC7A92990EC50008558EA /* UITextField.swift */,
 				B09DC7AD2990FFAF008558EA /* CALayer.swift */,
+				B0C56F3729924443004E83B8 /* String.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -160,6 +192,23 @@
 				B09DC7B029910D93008558EA /* CustomTextField.swift */,
 			);
 			path = Class;
+			sourceTree = "<group>";
+		};
+		B0C56F2B29922079004E83B8 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B0C56F2C2992208C004E83B8 /* DatabaseManager.swift */,
+				B0C56F2E29922094004E83B8 /* StorageManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		B0C56F3429922CCD004E83B8 /* Popup */ = {
+			isa = PBXGroup;
+			children = (
+				B0C56F3529922D26004E83B8 /* EmailConfirmViewController.swift */,
+			);
+			path = Popup;
 			sourceTree = "<group>";
 		};
 		DFC1E7CBCB9E9E23A859086E /* Pods */ = {
@@ -231,9 +280,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B031A1BC2991F64400C51B5A /* Letters for Learners Outline Light.ttf in Resources */,
 				B09DC7A72990E9DD008558EA /* Lemon Days.ttf in Resources */,
+				B031A1BD2991F64400C51B5A /* Letters for Learners Outline Bold.ttf in Resources */,
 				B09DC7902990DBF6008558EA /* LaunchScreen.storyboard in Resources */,
+				B031A1BF2991F73800C51B5A /* Letters for Learners.ttf in Resources */,
 				B09DC78D2990DBF6008558EA /* Assets.xcassets in Resources */,
+				B0C56F2A29921413004E83B8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,6 +339,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0C56F3629922D26004E83B8 /* EmailConfirmViewController.swift in Sources */,
 				B09DC7AC2990F3E6008558EA /* RegisterViewController.swift in Sources */,
 				B09DC7B129910D93008558EA /* CustomTextField.swift in Sources */,
 				B09DC7A22990E21A008558EA /* LoginViewController.swift in Sources */,
@@ -294,9 +348,15 @@
 				B09DC7AA2990EC50008558EA /* UITextField.swift in Sources */,
 				B09DC79B2990DEA2008558EA /* MainCoordinator.swift in Sources */,
 				B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */,
+				B0C56F332992232D004E83B8 /* LoginViewModel.swift in Sources */,
+				B0C56F3A299244D4004E83B8 /* EmailConfirmViewModel.swift in Sources */,
+				B0C56F2D2992208C004E83B8 /* DatabaseManager.swift in Sources */,
+				B0C56F3129922322004E83B8 /* RegisterViewModel.swift in Sources */,
 				B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */,
 				B09DC7A02990E214008558EA /* MainViewController.swift in Sources */,
+				B0C56F3829924443004E83B8 /* String.swift in Sources */,
 				B09DC7AE2990FFAF008558EA /* CALayer.swift in Sources */,
+				B0C56F2F29922094004E83B8 /* StorageManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -30,9 +30,11 @@ final class LoginCoordinator: Coordinator {
 extension LoginCoordinator: showRegisterVCDelegate {
     
     func showRegisterVC() {
-        let registerViewController = RegisterViewController()
+        
+        let registerViewController = RegisterViewController(registerViewModel: RegiterViewModel())
         registerViewController.modalPresentationStyle = .overCurrentContext
-        navigationController.present(registerViewController, animated: false)
+        navigationController.present(registerViewController, animated: true)
+        
     }
 
 }
