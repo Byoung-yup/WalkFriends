@@ -10,6 +10,8 @@
 		B031A1BC2991F64400C51B5A /* Letters for Learners Outline Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */; };
 		B031A1BD2991F64400C51B5A /* Letters for Learners Outline Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */; };
 		B031A1BF2991F73800C51B5A /* Letters for Learners.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */; };
+		B07391572993601000903C1F /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07391562993601000903C1F /* FirebaseService.swift */; };
+		B07391592993634B00903C1F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07391582993634B00903C1F /* User.swift */; };
 		B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7832990DBF2008558EA /* AppDelegate.swift */; };
 		B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7852990DBF2008558EA /* SceneDelegate.swift */; };
 		B09DC78D2990DBF6008558EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B09DC78C2990DBF6008558EA /* Assets.xcassets */; };
@@ -40,6 +42,8 @@
 		B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Light.ttf"; sourceTree = "<group>"; };
 		B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Bold.ttf"; sourceTree = "<group>"; };
 		B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners.ttf"; sourceTree = "<group>"; };
+		B07391562993601000903C1F /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		B07391582993634B00903C1F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B09DC7802990DBF2008558EA /* WalkFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalkFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B09DC7832990DBF2008558EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B09DC7852990DBF2008558EA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -150,6 +154,7 @@
 		B09DC79D2990DEF4008558EA /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				B07391582993634B00903C1F /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -199,6 +204,7 @@
 			children = (
 				B0C56F2C2992208C004E83B8 /* DatabaseManager.swift */,
 				B0C56F2E29922094004E83B8 /* StorageManager.swift */,
+				B07391562993601000903C1F /* FirebaseService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -339,6 +345,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B07391572993601000903C1F /* FirebaseService.swift in Sources */,
 				B0C56F3629922D26004E83B8 /* EmailConfirmViewController.swift in Sources */,
 				B09DC7AC2990F3E6008558EA /* RegisterViewController.swift in Sources */,
 				B09DC7B129910D93008558EA /* CustomTextField.swift in Sources */,
@@ -346,6 +353,7 @@
 				B09DC7992990DD7D008558EA /* AppCoordinator.swift in Sources */,
 				B09DC7A42990E29F008558EA /* LoginCoordinator.swift in Sources */,
 				B09DC7AA2990EC50008558EA /* UITextField.swift in Sources */,
+				B07391592993634B00903C1F /* User.swift in Sources */,
 				B09DC79B2990DEA2008558EA /* MainCoordinator.swift in Sources */,
 				B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */,
 				B0C56F332992232D004E83B8 /* LoginViewModel.swift in Sources */,

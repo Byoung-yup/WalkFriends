@@ -8,9 +8,15 @@
 import Foundation
 import UIKit
 
-final class MainCoordinator: Coordinator {
+protocol MainCoordinatorDelegate {
+    func didLoggedOut(_ coordinator: MainCoordinator)
+}
+
+class MainCoordinator: Coordinator {
     
     var childCoordinators: [Coordinator] = []
+    var delegate: MainCoordinatorDelegate?
+    
     private let navigationController: UINavigationController!
     
     init(navigationController: UINavigationController) {
@@ -19,8 +25,18 @@ final class MainCoordinator: Coordinator {
     
     func start() {
         
+        let mainViewController = MainViewController()
+        mainViewController.delegate = self
         
-        
+        navigationController.viewControllers = [mainViewController]
     }
+
     
+}
+
+extension MainCoordinator: MainViewControllerDelegate {
+    
+    func logout() {
+        delegate?.didLoggedOut(self)
+    }
 }

@@ -10,16 +10,16 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class RegiterViewModel {
+final class RegiterViewModel {
     
-    let name: PublishSubject<String> = PublishSubject<String>()
+//    let name: PublishSubject<String> = PublishSubject<String>()
     let email: PublishSubject<Bool> = PublishSubject<Bool>()
     let password: PublishSubject<String> = PublishSubject<String>()
     let confirmPassword: PublishSubject<String> = PublishSubject<String>()
     
-    var isValidName: Observable<Bool> {
-        name.map { !$0.isValidName() }
-    }
+//    var isValidName: Observable<Bool> {
+//        name.map { !$0.isValidName() }
+//    }
     
     var isValidEmail: Observable<Bool> {
         email.map { !$0 }
@@ -41,15 +41,34 @@ class RegiterViewModel {
         Observable.combineLatest(passwordObservable, confirmPasswordObservable).map { $0 != $1 }
     }
     
-    var nameWithEmail: Observable<Bool> {
-        Observable.combineLatest(isValidName, isValidEmail).map { !$0 && !$1 }
-    }
+//    var nameWithEmail: Observable<Bool> {
+//        Observable.combineLatest(isValidName, isValidEmail).map { !$0 && !$1 }
+//    }
     
     var passwordWithConfirmPassword: Observable<Bool> {
         Observable.combineLatest(isValidPassword, isValidConfirmPassword).map { !$0 && !$1 }
     }
     
     var isValidRegister: Observable<Bool> {
-        Observable.combineLatest(nameWithEmail, passwordWithConfirmPassword).map { $0 && $1 }
+        Observable.combineLatest(isValidEmail, passwordWithConfirmPassword).map { !$0 && $1 }
+    }
+}
+
+// MARK: Firebase Auth Service
+extension RegiterViewModel {
+    
+    func createUsers(with email: String, password: String) -> Observable<Bool> {
+        
+        return Observable.create { observer in
+            
+            FirebaseService.shard.createUser(with: email, password: password) { result in
+                
+                if result { observer.onNext(true) }
+                else { observer.onNext(false)}
+                
+                observer.onCompleted()
+            }
+            return Disposables.create()
+        }
     }
 }

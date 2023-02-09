@@ -16,7 +16,7 @@ class RegisterViewController: UIViewController {
     
     var checkedEmail: BehaviorSubject<Bool> = BehaviorSubject(value: false)
     
-    var disposebag = DisposeBag()
+    let disposebag = DisposeBag()
     
     // MARK: UI Properties
     lazy var backToButton: UIButton = {
@@ -36,24 +36,24 @@ class RegisterViewController: UIViewController {
         return lbl
     }()
     
-    lazy var nameTextField: CustomTextField = {
-       let tf = CustomTextField()
-        tf.addleftimage(image: UIImage(systemName: "person")!)
-        tf.font = UIFont(name: "LettersforLearners", size: 20)
-        tf.attributedPlaceholder = NSAttributedString(string: "Name", attributes: [.foregroundColor: UIColor.systemGray])
-        tf.textColor = .black
-        return tf
-    }()
-    
-    lazy var nameSymbol: UIButton = {
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
-        let systemImage = UIImage(systemName: "checkmark", withConfiguration: imageConfig)
-        let btn = UIButton()
-        btn.setImage(systemImage, for: .normal)
-        btn.tintColor = .green
-        btn.isHidden = true
-        return btn
-    }()
+//    lazy var nameTextField: CustomTextField = {
+//       let tf = CustomTextField()
+//        tf.addleftimage(image: UIImage(systemName: "person")!)
+//        tf.font = UIFont(name: "LettersforLearners", size: 20)
+//        tf.attributedPlaceholder = NSAttributedString(string: "Name", attributes: [.foregroundColor: UIColor.systemGray])
+//        tf.textColor = .black
+//        return tf
+//    }()
+//
+//    lazy var nameSymbol: UIButton = {
+//        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
+//        let systemImage = UIImage(systemName: "checkmark", withConfiguration: imageConfig)
+//        let btn = UIButton()
+//        btn.setImage(systemImage, for: .normal)
+//        btn.tintColor = .green
+//        btn.isHidden = true
+//        return btn
+//    }()
     
     lazy var emailTextField: CustomTextField = {
        let tf = CustomTextField()
@@ -61,6 +61,7 @@ class RegisterViewController: UIViewController {
         tf.font = UIFont(name: "LettersforLearners", size: 20)
         tf.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [.foregroundColor: UIColor.systemGray])
         tf.textColor = .black
+        tf.autocapitalizationType = .none
         return tf
     }()
     
@@ -80,6 +81,8 @@ class RegisterViewController: UIViewController {
         tf.font = UIFont(name: "LettersforLearners", size: 20)
         tf.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [.foregroundColor: UIColor.systemGray])
         tf.textColor = .black
+        tf.isSecureTextEntry = true
+        tf.autocapitalizationType = .none
         return tf
     }()
     
@@ -99,6 +102,8 @@ class RegisterViewController: UIViewController {
         tf.font = UIFont(name: "LettersforLearners", size: 20)
         tf.attributedPlaceholder = NSAttributedString(string: "Confirm Password", attributes: [.foregroundColor: UIColor.systemGray])
         tf.textColor = .black
+        tf.isSecureTextEntry = true
+        tf.autocapitalizationType = .none
         return tf
     }()
     
@@ -184,35 +189,35 @@ class RegisterViewController: UIViewController {
             make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(25)
         }
         
-        view.addSubview(nameTextField)
-        nameTextField.snp.makeConstraints { make in
+//        view.addSubview(nameTextField)
+//        nameTextField.snp.makeConstraints { make in
+//            make.top.equalTo(registerLabel.snp.bottom).offset(40)
+//            make.left.equalTo(registerLabel.snp.left)
+//            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-25)
+//            make.height.equalTo(50)
+//        }
+//
+        view.addSubview(emailTextField)
+        emailTextField.snp.makeConstraints { make in
             make.top.equalTo(registerLabel.snp.bottom).offset(40)
             make.left.equalTo(registerLabel.snp.left)
             make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-25)
             make.height.equalTo(50)
         }
         
-        view.addSubview(emailTextField)
-        emailTextField.snp.makeConstraints { make in
-            make.top.equalTo(nameTextField.snp.bottom).offset(20)
-            make.left.equalTo(nameTextField.snp.left)
-            make.right.equalTo(nameTextField.snp.right)
-            make.height.equalTo(50)
-        }
-        
         view.addSubview(passwordTextField)
         passwordTextField.snp.makeConstraints { make in
             make.top.equalTo(emailTextField.snp.bottom).offset(20)
-            make.left.equalTo(nameTextField.snp.left)
-            make.right.equalTo(nameTextField.snp.right)
+            make.left.equalTo(emailTextField.snp.left)
+            make.right.equalTo(emailTextField.snp.right)
             make.height.equalTo(50)
         }
         
         view.addSubview(confirmPasswordTextField)
         confirmPasswordTextField.snp.makeConstraints { make in
             make.top.equalTo(passwordTextField.snp.bottom).offset(20)
-            make.left.equalTo(nameTextField.snp.left)
-            make.right.equalTo(nameTextField.snp.right)
+            make.left.equalTo(emailTextField.snp.left)
+            make.right.equalTo(emailTextField.snp.right)
             make.height.equalTo(50)
         }
         
@@ -236,11 +241,11 @@ class RegisterViewController: UIViewController {
             make.left.equalTo(noRegisterLabel.snp.right).offset(5)
         }
         
-        nameTextField.addSubview(nameSymbol)
-        nameSymbol.snp.makeConstraints { make in
-            make.centerY.equalTo(nameTextField.snp.centerY)
-            make.right.equalTo(nameTextField.safeAreaLayoutGuide.snp.right).offset(-15)
-        }
+//        nameTextField.addSubview(nameSymbol)
+//        nameSymbol.snp.makeConstraints { make in
+//            make.centerY.equalTo(nameTextField.snp.centerY)
+//            make.right.equalTo(nameTextField.safeAreaLayoutGuide.snp.right).offset(-15)
+//        }
         
         emailTextField.addSubview(emailSymbol)
         emailSymbol.snp.makeConstraints { make in
@@ -269,8 +274,8 @@ class RegisterViewController: UIViewController {
                 self.showPopupView()
             }.disposed(by: disposebag)
         
-        nameTextField.rx.text.map { $0 ?? "" }.bind(to: registerViewModel.name).disposed(by: disposebag)
-        registerViewModel.isValidName.bind(to: nameSymbol.rx.isHidden).disposed(by: disposebag)
+//        nameTextField.rx.text.map { $0 ?? "" }.bind(to: registerViewModel.name).disposed(by: disposebag)
+//        registerViewModel.isValidName.bind(to: nameSymbol.rx.isHidden).disposed(by: disposebag)
         
         checkedEmail.bind(to: registerViewModel.email).disposed(by: disposebag)
         registerViewModel.isValidEmail.bind(to: emailSymbol.rx.isHidden).disposed(by: disposebag)
@@ -282,6 +287,24 @@ class RegisterViewController: UIViewController {
         registerViewModel.isValidConfirmPassword.bind(to: confirmPasswordSymbol.rx.isHidden).disposed(by: disposebag)
         
         registerViewModel.isValidRegister.bind(to: registerButton.rx.isEnabled).disposed(by: disposebag)
+        
+    }
+    
+    // MARK: register Binding
+    @objc private func registerBinding() {
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        
+        registerViewModel.createUsers(with: email, password: password)
+            .subscribe { result in
+                
+                if result { self.dismiss(animated: true) }
+                else {
+                    // 오류 메시지 안내
+                    print("Error Register account")
+                }
+            }.disposed(by: disposebag)
+        
     }
     
     // MARK: AddTarget
@@ -289,7 +312,7 @@ class RegisterViewController: UIViewController {
         
         backToButton.addTarget(self, action: #selector(toBack(_ :)), for: .touchUpInside)
         backToLoginButton.addTarget(self, action: #selector(toBack(_ :)), for: .touchUpInside)
-        
+        registerButton.addTarget(self, action: #selector(registerBinding), for: .touchUpInside)
     }
     
     // MARK: objc Method

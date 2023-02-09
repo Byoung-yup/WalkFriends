@@ -8,9 +8,15 @@
 import Foundation
 import UIKit
 
-final class LoginCoordinator: Coordinator {
+protocol LoginCoordinatorDelegate {
+    func didLoggedIn(_ coordinator: LoginCoordinator)
+}
+
+class LoginCoordinator: Coordinator {
     
     var childCoordinators: [Coordinator] = []
+    var delegate: LoginCoordinatorDelegate?
+    
     private let navigationController: UINavigationController!
     
     init(navigationController: UINavigationController) {
@@ -19,7 +25,7 @@ final class LoginCoordinator: Coordinator {
     
     func start() {
         
-        let loginViewController = LoginViewController()
+        let loginViewController = LoginViewController(loginViewModel: LoginViewModel())
         loginViewController.delegate = self
         navigationController.viewControllers = [loginViewController]
         
@@ -27,7 +33,7 @@ final class LoginCoordinator: Coordinator {
     
 }
 
-extension LoginCoordinator: showRegisterVCDelegate {
+extension LoginCoordinator: LoginViewControllerDelegate {
     
     func showRegisterVC() {
         
@@ -35,6 +41,10 @@ extension LoginCoordinator: showRegisterVCDelegate {
         registerViewController.modalPresentationStyle = .overCurrentContext
         navigationController.present(registerViewController, animated: true)
         
+    }
+    
+    func signIn() {
+        delegate?.didLoggedIn(self)
     }
 
 }

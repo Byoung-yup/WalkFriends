@@ -7,14 +7,21 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
-protocol showRegisterVCDelegate {
+protocol LoginViewControllerDelegate {
     func showRegisterVC()
+    func signIn()
 }
 
 class LoginViewController: UIViewController {
     
-    var delegate: showRegisterVCDelegate!
+    let loginViewModel: LoginViewModel
+    
+    let disposeBag = DisposeBag()
+    
+    var delegate: LoginViewControllerDelegate!
     
     // MARK: UI Properties
     lazy var loginLabel: UILabel = {
@@ -39,6 +46,7 @@ class LoginViewController: UIViewController {
         tf.font = UIFont(name: "LettersforLearners", size: 20)
         tf.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [.foregroundColor: UIColor.systemGray])
         tf.textColor = .black
+        tf.autocapitalizationType = .none
         return tf
     }()
     
@@ -49,6 +57,7 @@ class LoginViewController: UIViewController {
         tf.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [.foregroundColor: UIColor.systemGray])
         tf.isSecureTextEntry = true
         tf.textColor = .black
+        tf.autocapitalizationType = .none
         return tf
     }()
     
@@ -78,7 +87,16 @@ class LoginViewController: UIViewController {
         btn.setTitleColor(.orange, for: .normal)
         return btn
     }()
-
+    
+    init(loginViewModel: LoginViewModel) {
+        self.loginViewModel = loginViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -86,6 +104,7 @@ class LoginViewController: UIViewController {
         
         configureUI()
         addTarget()
+        Binding()
         
 //        for family in UIFont.familyNames.sorted() {
 //            let names = UIFont.fontNames(forFamilyName: family)
@@ -152,6 +171,16 @@ class LoginViewController: UIViewController {
     private func addTarget() {
         
         registerInfoButton.addTarget(self, action: #selector(showRegisterVC), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(loginButtonBinding), for: .touchUpInside)
+    }
+    
+    // MARK: Binding
+    private func Binding() {
+        
+        emailTextField.rx.text.map { $0 ?? "" }.bind(to: loginViewModel.email).disposed(by: disposeBag)
+        passwordTextField.rx.text.map { $0 ?? "" }.bind(to: loginViewModel.password).disposed(by: disposeBag)
+        
+        loginViewModel.isValidInput.bind(to: loginButton.rx.isEnabled).disposed(by: disposeBag)
         
     }
     
@@ -160,4 +189,24 @@ class LoginViewController: UIViewController {
         delegate.showRegisterVC()
     }
     
+    // MARK: loginButton Binding
+    @objc private func loginButtonBinding() {
+        
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        
+        loginViewModel.signIn(with: email, password: password)
+            .observe(on: MainScheduler.instance)
+            .subscribe { result in
+                print("email: \(email)")
+                if result {
+                    self.delegate.signIn()
+                } else {
+                    // 로그인 오류 안내 메시지
+                }
+            }.disposed(by: disposeBag)
+        
+    }
+    
 }
+

@@ -45,6 +45,7 @@ class EmailConfirmViewController: UIViewController {
         tf.textColor = .black
         tf.font = UIFont(name: "LettersforLearners", size: 20)
         tf.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [.foregroundColor: UIColor.systemGray])
+        tf.autocapitalizationType = .none
         return tf
     }()
     
@@ -98,11 +99,6 @@ class EmailConfirmViewController: UIViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        emailTextField.becomeFirstResponder()
     }
     
     override func viewDidLayoutSubviews() {
@@ -208,7 +204,7 @@ class EmailConfirmViewController: UIViewController {
         emailConfirmViewModel.userExists(with: email)
             .observe(on: MainScheduler.instance)
             .subscribe { exists in
-                
+                print("exists: \(exists)")
                 if exists {
                     self.existingAlert(type: .exists)
                     self.useEmailButton.isHidden = true

@@ -7,38 +7,69 @@
 
 import Foundation
 import UIKit
+import FirebaseAuth
 
-protocol Coordinator  {
+protocol Coordinator: AnyObject  {
     var childCoordinators : [Coordinator] { get set }
     func start()
 }
 
-final class AppCoordinator: Coordinator {
+class AppCoordinator: Coordinator {
+    
+    let currentUser = FirebaseAuth.Auth.auth().currentUser
     
     var childCoordinators: [Coordinator] = []
     private let navigationController: UINavigationController!
-    
-    var isLoggedIn: Bool = false
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
     func start() {
-        isLoggedIn ? showMainViewController() : showLoginViewController()
+        
+        if (currentUser != nil) {
+            showMainViewController()
+        } else {
+            showLoginViewController()
+        }
     }
     
     private func showMainViewController() {
         
+        let coordinator = MainCoordinator(navigationController: navigationController)
+        coordinator.delegate = self
+        coordinator.start()
+        
+        childCoordinators.append(coordinator)
     }
     
     private func showLoginViewController() {
         
         let coordinator = LoginCoordinator(navigationController: navigationController)
+        coordinator.delegate = self
         coordinator.start()
         
         childCoordinators.append(coordinator)
         
     }
     
+}
+
+extension AppCoordinator: LoginCoordinatorDelegate {
+    
+    func didLoggedIn(_ coordinator: LoginCoordinator) {
+        
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+        showMainViewController()
+        
+    }
+}
+
+extension AppCoordinator: MainCoordinatorDelegate {
+    
+    func didLoggedOut(_ coordinator: MainCoordinator) {
+        
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+        showLoginViewController()
+    }
 }

@@ -23,8 +23,7 @@ final class EmailConfirmViewModel {
         
         return Observable.create { observer in
             
-            let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
-            DatabaseManager.shared.userExists(with: safeEmail) { result in
+            DatabaseManager.shared.userExists(with: email) { result in
                 
                 if result {
                     observer.onNext(true)
