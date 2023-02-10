@@ -322,7 +322,7 @@ class RegisterViewController: UIViewController {
     
     // MARK: Show PopupView
     private func showPopupView() {
-        
+
         let popUpView = EmailConfirmViewController(viewModel: EmailConfirmViewModel())
         popUpView.delegate = self
         popUpView.modalPresentationStyle = .overCurrentContext

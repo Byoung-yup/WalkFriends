@@ -10,7 +10,7 @@ import UIKit
 import FirebaseFirestore
 
 protocol DatabaseService {
-    func userExists(with email: String, completion: @escaping (Bool) -> Void)
+    //func userExists(with email: String, completion: @escaping (Bool) -> Void)
     func insertUsers(with user: User, completion: @escaping (Bool) -> Void)
 }
 
@@ -20,28 +20,14 @@ final class DatabaseManager: DatabaseService {
     
     private let database = Firestore.firestore()
     
-    static func safeEmail(emailAddress: String) -> String {
-        var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
-        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
-        return safeEmail
-    }
+//    static func safeEmail(emailAddress: String) -> String {
+//        var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
+//        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
+//        return safeEmail
+//    }
 }
 
 extension DatabaseManager {
-    
-    // MARK: userExists Method
-    func userExists(with email: String, completion: @escaping (Bool) -> Void) {
-        
-        let docRef = database.collection("duplicate").document("email")
-        
-        docRef.getDocument { document, error in
-            if let document = document, document.exists {
-                completion(true)
-            } else {
-                completion(false)
-            }
-        }
-    }
     
     // MARK: create Users
     func insertUsers(with user: User, completion: @escaping (Bool) -> Void) {
@@ -58,7 +44,8 @@ extension DatabaseManager {
             } else {
                 
                 strongSelf.database.collection("user").document(user.uid).setData([
-                    "email": "\(user.email)"
+                    "email": "\(user.email)",
+                    "favorite": []
                 ]) { error in
                     guard error == nil else {
                         print("Failed to write Database")

@@ -20,13 +20,31 @@ final class FirebaseService {
 
 extension FirebaseService {
     
+    // MARK: exists user
+    func userExists(with email: String, completion: @escaping (Bool) -> Void) {
+        
+        auth.fetchSignInMethods(forEmail: email) { emailList, error in
+    
+            guard emailList != nil, error == nil else {
+                completion(false)
+                return
+            }
+            
+            completion(true)
+            return
+        }
+        
+    }
+    
     // MARK: create User
     func createUser(with email: String, password: String, completion: @escaping (Bool) -> Void) {
         
         auth.createUser(withEmail: email, password: password) { authResult, error in
             
             guard authResult != nil, error == nil else {
-                print("Error creating user")
+                if let error = error?.localizedDescription {
+                    print("error: \(error)")
+                }
                 completion(false)
                 return
             }

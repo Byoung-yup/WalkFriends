@@ -12,7 +12,6 @@ import RxSwift
 
 final class RegiterViewModel {
     
-//    let name: PublishSubject<String> = PublishSubject<String>()
     let email: PublishSubject<Bool> = PublishSubject<Bool>()
     let password: PublishSubject<String> = PublishSubject<String>()
     let confirmPassword: PublishSubject<String> = PublishSubject<String>()

@@ -23,7 +23,7 @@ final class EmailConfirmViewModel {
         
         return Observable.create { observer in
             
-            DatabaseManager.shared.userExists(with: email) { result in
+            FirebaseService.shard.userExists(with: email) { result in
                 
                 if result {
                     observer.onNext(true)

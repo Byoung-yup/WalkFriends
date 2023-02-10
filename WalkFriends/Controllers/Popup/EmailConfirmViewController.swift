@@ -91,6 +91,7 @@ class EmailConfirmViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .black.withAlphaComponent(0.5)
+        emailTextField.isUserInteractionEnabled = true
         
         configureUI()
         binding()
@@ -204,14 +205,16 @@ class EmailConfirmViewController: UIViewController {
         emailConfirmViewModel.userExists(with: email)
             .observe(on: MainScheduler.instance)
             .subscribe { exists in
-                print("exists: \(exists)")
+                
                 if exists {
                     self.existingAlert(type: .exists)
                     self.useEmailButton.isHidden = true
                 } else {
                     self.existingAlert(type: .nonExists)
                     self.useEmailButton.isHidden = false
+                    self.emailTextField.isUserInteractionEnabled = false
                 }
+                
             }.disposed(by: disposeBag)
     }
     
