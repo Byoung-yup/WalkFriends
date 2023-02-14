@@ -10,24 +10,18 @@ import UIKit
 import FirebaseFirestore
 
 protocol DatabaseService {
-    //func userExists(with email: String, completion: @escaping (Bool) -> Void)
     func insertUsers(with user: User, completion: @escaping (Bool) -> Void)
 }
 
-final class DatabaseManager: DatabaseService {
+final class DatabaseManager {
     
     static let shared = DatabaseManager()
     
     private let database = Firestore.firestore()
-    
-//    static func safeEmail(emailAddress: String) -> String {
-//        var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
-//        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
-//        return safeEmail
-//    }
+
 }
 
-extension DatabaseManager {
+extension DatabaseManager: DatabaseService {
     
     // MARK: create Users
     func insertUsers(with user: User, completion: @escaping (Bool) -> Void) {

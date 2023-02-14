@@ -26,6 +26,11 @@
 		B09DC7AC2990F3E6008558EA /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */; };
 		B09DC7AE2990FFAF008558EA /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7AD2990FFAF008558EA /* CALayer.swift */; };
 		B09DC7B129910D93008558EA /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7B029910D93008558EA /* CustomTextField.swift */; };
+		B0C273B8299B6B92005B3AAD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C273B7299B6B92005B3AAD /* HomeViewController.swift */; };
+		B0C273BA299B6BAC005B3AAD /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C273B9299B6BAC005B3AAD /* FavoriteListViewController.swift */; };
+		B0C273BC299B6BB5005B3AAD /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C273BB299B6BB5005B3AAD /* MessagesViewController.swift */; };
+		B0C273BE299B6BC2005B3AAD /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C273BD299B6BC2005B3AAD /* InfoViewController.swift */; };
+		B0C273C0299B6BCB005B3AAD /* AlarmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C273BF299B6BCB005B3AAD /* AlarmViewController.swift */; };
 		B0C56F2A29921413004E83B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0C56F2929921412004E83B8 /* GoogleService-Info.plist */; };
 		B0C56F2D2992208C004E83B8 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C56F2C2992208C004E83B8 /* DatabaseManager.swift */; };
 		B0C56F2F29922094004E83B8 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C56F2E29922094004E83B8 /* StorageManager.swift */; };
@@ -60,6 +65,11 @@
 		B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		B09DC7AD2990FFAF008558EA /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		B09DC7B029910D93008558EA /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		B0C273B7299B6B92005B3AAD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		B0C273B9299B6BAC005B3AAD /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
+		B0C273BB299B6BB5005B3AAD /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
+		B0C273BD299B6BC2005B3AAD /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
+		B0C273BF299B6BCB005B3AAD /* AlarmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmViewController.swift; sourceTree = "<group>"; };
 		B0C56F2929921412004E83B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B0C56F2C2992208C004E83B8 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		B0C56F2E29922094004E83B8 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -163,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				B09DC79F2990E214008558EA /* MainViewController.swift */,
+				B0C273B6299B6B7C005B3AAD /* TabViewControllers */,
 				B09DC7A12990E21A008558EA /* LoginViewController.swift */,
 				B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */,
 				B0C56F3429922CCD004E83B8 /* Popup */,
@@ -197,6 +208,18 @@
 				B09DC7B029910D93008558EA /* CustomTextField.swift */,
 			);
 			path = Class;
+			sourceTree = "<group>";
+		};
+		B0C273B6299B6B7C005B3AAD /* TabViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				B0C273B9299B6BAC005B3AAD /* FavoriteListViewController.swift */,
+				B0C273BB299B6BB5005B3AAD /* MessagesViewController.swift */,
+				B0C273B7299B6B92005B3AAD /* HomeViewController.swift */,
+				B0C273BF299B6BCB005B3AAD /* AlarmViewController.swift */,
+				B0C273BD299B6BC2005B3AAD /* InfoViewController.swift */,
+			);
+			path = TabViewControllers;
 			sourceTree = "<group>";
 		};
 		B0C56F2B29922079004E83B8 /* Services */ = {
@@ -350,6 +373,7 @@
 				B09DC7AC2990F3E6008558EA /* RegisterViewController.swift in Sources */,
 				B09DC7B129910D93008558EA /* CustomTextField.swift in Sources */,
 				B09DC7A22990E21A008558EA /* LoginViewController.swift in Sources */,
+				B0C273B8299B6B92005B3AAD /* HomeViewController.swift in Sources */,
 				B09DC7992990DD7D008558EA /* AppCoordinator.swift in Sources */,
 				B09DC7A42990E29F008558EA /* LoginCoordinator.swift in Sources */,
 				B09DC7AA2990EC50008558EA /* UITextField.swift in Sources */,
@@ -359,12 +383,16 @@
 				B0C56F332992232D004E83B8 /* LoginViewModel.swift in Sources */,
 				B0C56F3A299244D4004E83B8 /* EmailConfirmViewModel.swift in Sources */,
 				B0C56F2D2992208C004E83B8 /* DatabaseManager.swift in Sources */,
+				B0C273C0299B6BCB005B3AAD /* AlarmViewController.swift in Sources */,
 				B0C56F3129922322004E83B8 /* RegisterViewModel.swift in Sources */,
 				B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */,
 				B09DC7A02990E214008558EA /* MainViewController.swift in Sources */,
 				B0C56F3829924443004E83B8 /* String.swift in Sources */,
 				B09DC7AE2990FFAF008558EA /* CALayer.swift in Sources */,
+				B0C273BA299B6BAC005B3AAD /* FavoriteListViewController.swift in Sources */,
 				B0C56F2F29922094004E83B8 /* StorageManager.swift in Sources */,
+				B0C273BE299B6BC2005B3AAD /* InfoViewController.swift in Sources */,
+				B0C273BC299B6BB5005B3AAD /* MessagesViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
