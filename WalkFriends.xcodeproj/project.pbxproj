@@ -10,6 +10,7 @@
 		B031A1BC2991F64400C51B5A /* Letters for Learners Outline Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */; };
 		B031A1BD2991F64400C51B5A /* Letters for Learners Outline Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */; };
 		B031A1BF2991F73800C51B5A /* Letters for Learners.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */; };
+		B0638BA1299FCFBA001776F5 /* CustomLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0638BA0299FCFBA001776F5 /* CustomLabelView.swift */; };
 		B07391572993601000903C1F /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07391562993601000903C1F /* FirebaseService.swift */; };
 		B07391592993634B00903C1F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07391582993634B00903C1F /* User.swift */; };
 		B076C6CA299CACBD00EFDA7F /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B076C6C9299CACBD00EFDA7F /* UserProfile.swift */; };
@@ -49,6 +50,7 @@
 		B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Light.ttf"; sourceTree = "<group>"; };
 		B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Bold.ttf"; sourceTree = "<group>"; };
 		B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners.ttf"; sourceTree = "<group>"; };
+		B0638BA0299FCFBA001776F5 /* CustomLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabelView.swift; sourceTree = "<group>"; };
 		B07391562993601000903C1F /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		B07391582993634B00903C1F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B076C6C9299CACBD00EFDA7F /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				B09DC7B029910D93008558EA /* CustomTextField.swift */,
+				B0638BA0299FCFBA001776F5 /* CustomLabelView.swift */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -399,6 +402,7 @@
 				B0C56F3A299244D4004E83B8 /* EmailConfirmViewModel.swift in Sources */,
 				B0C56F2D2992208C004E83B8 /* DatabaseManager.swift in Sources */,
 				B0C273C0299B6BCB005B3AAD /* AlarmViewController.swift in Sources */,
+				B0638BA1299FCFBA001776F5 /* CustomLabelView.swift in Sources */,
 				B076C6CD299CC1CF00EFDA7F /* HomeViewModel.swift in Sources */,
 				B0C56F3129922322004E83B8 /* RegisterViewModel.swift in Sources */,
 				B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */,

@@ -55,15 +55,30 @@ class RegisterViewController: UIViewController {
 //        return btn
 //    }()
     
-    lazy var emailTextField: CustomTextField = {
-       let tf = CustomTextField()
-        tf.addleftimage(image: UIImage(systemName: "envelope")!)
-        tf.font = UIFont(name: "LettersforLearners", size: 20)
-        tf.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [.foregroundColor: UIColor.systemGray])
-        tf.textColor = .black
-        tf.autocapitalizationType = .none
-        return tf
+    lazy var emailTextView: CustomLabelView = {
+        let lbl = CustomLabelView()
+        let attributedString = NSMutableAttributedString(string: "")
+        let imageAttachment = NSTextAttachment()
+        let imageConfig = UIImage.SymbolConfiguration(paletteColors: [.systemGray])
+        imageAttachment.image = UIImage(systemName: "envelope", withConfiguration: imageConfig)
+        attributedString.append(NSAttributedString(attachment: imageAttachment))
+        attributedString.append(NSAttributedString(string: " Email"))
+        lbl.attributedText = attributedString
+        lbl.textColor = .systemGray
+        lbl.font = UIFont(name: "LettersforLearners", size: 20)
+        lbl.isUserInteractionEnabled = true
+        return lbl
     }()
+    
+//    lazy var emailTextField: CustomTextField = {
+//       let tf = CustomTextField()
+//        tf.addleftimage(image: UIImage(systemName: "envelope")!)
+//        tf.font = UIFont(name: "LettersforLearners", size: 20)
+//        tf.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [.foregroundColor: UIColor.systemGray])
+//        tf.textColor = .black
+//        tf.autocapitalizationType = .none
+//        return tf
+//    }()
     
     lazy var emailSymbol: UIButton = {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
@@ -197,8 +212,8 @@ class RegisterViewController: UIViewController {
 //            make.height.equalTo(50)
 //        }
 //
-        view.addSubview(emailTextField)
-        emailTextField.snp.makeConstraints { make in
+        view.addSubview(emailTextView)
+        emailTextView.snp.makeConstraints { make in
             make.top.equalTo(registerLabel.snp.bottom).offset(40)
             make.left.equalTo(registerLabel.snp.left)
             make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-25)
@@ -207,17 +222,17 @@ class RegisterViewController: UIViewController {
         
         view.addSubview(passwordTextField)
         passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(emailTextField.snp.bottom).offset(20)
-            make.left.equalTo(emailTextField.snp.left)
-            make.right.equalTo(emailTextField.snp.right)
+            make.top.equalTo(emailTextView.snp.bottom).offset(20)
+            make.left.equalTo(emailTextView.snp.left)
+            make.right.equalTo(emailTextView.snp.right)
             make.height.equalTo(50)
         }
         
         view.addSubview(confirmPasswordTextField)
         confirmPasswordTextField.snp.makeConstraints { make in
             make.top.equalTo(passwordTextField.snp.bottom).offset(20)
-            make.left.equalTo(emailTextField.snp.left)
-            make.right.equalTo(emailTextField.snp.right)
+            make.left.equalTo(emailTextView.snp.left)
+            make.right.equalTo(emailTextView.snp.right)
             make.height.equalTo(50)
         }
         
@@ -247,10 +262,10 @@ class RegisterViewController: UIViewController {
 //            make.right.equalTo(nameTextField.safeAreaLayoutGuide.snp.right).offset(-15)
 //        }
         
-        emailTextField.addSubview(emailSymbol)
+        emailTextView.addSubview(emailSymbol)
         emailSymbol.snp.makeConstraints { make in
-            make.centerY.equalTo(emailTextField.snp.centerY)
-            make.right.equalTo(emailTextField.safeAreaLayoutGuide.snp.right).offset(-15)
+            make.centerY.equalTo(emailTextView.snp.centerY)
+            make.right.equalTo(emailTextView.safeAreaLayoutGuide.snp.right).offset(-15)
         }
         
         passwordTextField.addSubview(passwordSymbol)
@@ -269,10 +284,17 @@ class RegisterViewController: UIViewController {
     // MARK: TextField Binding
     private func binding() {
         
-        emailTextField.rx.controlEvent(.touchDown)
-            .subscribe { _ in
-                self.showPopupView()
-            }.disposed(by: disposebag)
+        let tapGesture = UITapGestureRecognizer()
+        emailTextView.addGestureRecognizer(tapGesture)
+        
+        tapGesture.rx.event.bind(onNext: { _ in
+            self.showPopupView()
+        }).disposed(by: disposebag)
+        
+//        emailTextView.rx.controlEvent(.touchDown)
+//            .subscribe { _ in
+//                self.showPopupView()
+//            }.disposed(by: disposebag)
         
 //        nameTextField.rx.text.map { $0 ?? "" }.bind(to: registerViewModel.name).disposed(by: disposebag)
 //        registerViewModel.isValidName.bind(to: nameSymbol.rx.isHidden).disposed(by: disposebag)
@@ -291,28 +313,28 @@ class RegisterViewController: UIViewController {
     }
     
     // MARK: register Binding
-    @objc private func registerBinding() {
-        guard let email = emailTextField.text else { return }
-        guard let password = passwordTextField.text else { return }
-        
-        registerViewModel.createUsers(with: email, password: password)
-            .subscribe { result in
-                
-                if result { self.dismiss(animated: true) }
-                else {
-                    // 오류 메시지 안내
-                    print("Error Register account")
-                }
-            }.disposed(by: disposebag)
-        
-    }
+//    @objc private func registerBinding() {
+//        guard let email = emailTextField.text else { return }
+//        guard let password = passwordTextField.text else { return }
+//
+//        registerViewModel.createUsers(with: email, password: password)
+//            .subscribe { result in
+//
+//                if result { self.dismiss(animated: true) }
+//                else {
+//                    // 오류 메시지 안내
+//                    print("Error Register account")
+//                }
+//            }.disposed(by: disposebag)
+//
+//    }
     
     // MARK: AddTarget
     private func addTarget() {
         
         backToButton.addTarget(self, action: #selector(toBack(_ :)), for: .touchUpInside)
         backToLoginButton.addTarget(self, action: #selector(toBack(_ :)), for: .touchUpInside)
-        registerButton.addTarget(self, action: #selector(registerBinding), for: .touchUpInside)
+//        registerButton.addTarget(self, action: #selector(registerBinding), for: .touchUpInside)
     }
     
     // MARK: objc Method
@@ -333,7 +355,7 @@ class RegisterViewController: UIViewController {
 extension RegisterViewController: submitEmailDelegate {
     
     func submitEmail(with email: String, exists: Bool) {
-        emailTextField.text = email
+        emailTextView.text = email
         checkedEmail.onNext(exists)
     }
     
