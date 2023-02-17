@@ -14,11 +14,17 @@ protocol submitEmailDelegate {
     func submitEmail(with email: String, exists: Bool)
 }
 
-enum emailExists {
-    case exists, nonExists
+enum EmailExists {
+    case exists
+    case nonExists
 }
 
 class EmailConfirmViewController: UIViewController {
+    
+    let emailExists: PublishSubject<Bool> = PublishSubject<Bool>()
+    var emailExistsObserver: Observable<Bool> {
+        emailExists.asObserver()
+    }
     
     let emailConfirmViewModel: EmailConfirmViewModel
     
@@ -28,19 +34,19 @@ class EmailConfirmViewController: UIViewController {
     
     // MARK: UI Properties
     lazy var containerView: UIView = {
-       let view = UIView()
+        let view = UIView()
         view.backgroundColor = .white
         return view
     }()
     
     lazy var bannerView: UIView = {
-       let view = UIView()
+        let view = UIView()
         view.backgroundColor = .orange
         return view
     }()
     
     lazy var emailTextField: CustomTextField = {
-       let tf = CustomTextField()
+        let tf = CustomTextField()
         tf.addLeftPadding()
         tf.textColor = .black
         tf.font = UIFont(name: "LettersforLearners", size: 20)
@@ -89,13 +95,18 @@ class EmailConfirmViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = .black.withAlphaComponent(0.5)
         emailTextField.isUserInteractionEnabled = true
         
         configureUI()
         binding()
         addTarget()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        emailTextField.becomeFirstResponder()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -109,7 +120,7 @@ class EmailConfirmViewController: UIViewController {
         containerView.layer.masksToBounds = true
         
         useEmailButton.layer.cornerRadius = 20
-    
+        
     }
     
     // MARK: UI Configure
@@ -168,13 +179,11 @@ class EmailConfirmViewController: UIViewController {
         
         emailConfirmViewModel.isValidEmail.bind(to: checkButton.rx.isEnabled).disposed(by: disposeBag)
         
-        checkButton.rx.controlEvent(.touchDown)
-            .subscribe { _ in
-                
-                guard let emailText = self.emailTextField.text else { return }
-                self.checkEmail(with: emailText)
-                
+        checkButton.rx.tap
+            .bind{
+                self.checkEmail()
             }.disposed(by: disposeBag)
+        
     }
     
     // MARK: addTarget
@@ -200,12 +209,12 @@ class EmailConfirmViewController: UIViewController {
     }
     
     // MARK: checkEmail
-    private func checkEmail(with email: String) {
+    private func checkEmail() {
         
-        emailConfirmViewModel.userExists(with: email)
+        emailConfirmViewModel.existsUser
             .observe(on: MainScheduler.instance)
-            .subscribe { exists in
-                
+            .take(1)
+            .subscribe(onNext: { exists in
                 if exists {
                     self.existingAlert(type: .exists)
                     self.useEmailButton.isHidden = true
@@ -214,12 +223,11 @@ class EmailConfirmViewController: UIViewController {
                     self.useEmailButton.isHidden = false
                     self.emailTextField.isUserInteractionEnabled = false
                 }
-                
-            }.disposed(by: disposeBag)
+            }).disposed(by: disposeBag)
     }
     
     // MARK: Alert Method
-    private func existingAlert(type: emailExists) {
+    private func existingAlert(type: EmailExists) {
         
         let alert: UIAlertController
         
@@ -234,5 +242,6 @@ class EmailConfirmViewController: UIViewController {
         
         present(alert, animated: false)
     }
+    
 }
 

@@ -12,6 +12,8 @@
 		B031A1BF2991F73800C51B5A /* Letters for Learners.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */; };
 		B07391572993601000903C1F /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07391562993601000903C1F /* FirebaseService.swift */; };
 		B07391592993634B00903C1F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07391582993634B00903C1F /* User.swift */; };
+		B076C6CA299CACBD00EFDA7F /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B076C6C9299CACBD00EFDA7F /* UserProfile.swift */; };
+		B076C6CD299CC1CF00EFDA7F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B076C6CC299CC1CF00EFDA7F /* HomeViewModel.swift */; };
 		B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7832990DBF2008558EA /* AppDelegate.swift */; };
 		B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7852990DBF2008558EA /* SceneDelegate.swift */; };
 		B09DC78D2990DBF6008558EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B09DC78C2990DBF6008558EA /* Assets.xcassets */; };
@@ -49,6 +51,8 @@
 		B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners.ttf"; sourceTree = "<group>"; };
 		B07391562993601000903C1F /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		B07391582993634B00903C1F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		B076C6C9299CACBD00EFDA7F /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		B076C6CC299CC1CF00EFDA7F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		B09DC7802990DBF2008558EA /* WalkFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalkFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B09DC7832990DBF2008558EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B09DC7852990DBF2008558EA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -100,6 +104,14 @@
 				B69A27509896D10B1710869E /* Pods_WalkFriends.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B076C6CB299CC1C400EFDA7F /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				B076C6CC299CC1CF00EFDA7F /* HomeViewModel.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 		B09DC7772990DBF2008558EA = {
@@ -157,6 +169,7 @@
 				B0C56F322992232D004E83B8 /* LoginViewModel.swift */,
 				B0C56F3029922321004E83B8 /* RegisterViewModel.swift */,
 				B0C56F39299244D4004E83B8 /* EmailConfirmViewModel.swift */,
+				B076C6CB299CC1C400EFDA7F /* Main */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -165,6 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				B07391582993634B00903C1F /* User.swift */,
+				B076C6C9299CACBD00EFDA7F /* UserProfile.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -172,11 +186,11 @@
 		B09DC79E2990DEFB008558EA /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				B09DC79F2990E214008558EA /* MainViewController.swift */,
-				B0C273B6299B6B7C005B3AAD /* TabViewControllers */,
 				B09DC7A12990E21A008558EA /* LoginViewController.swift */,
 				B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */,
 				B0C56F3429922CCD004E83B8 /* Popup */,
+				B09DC79F2990E214008558EA /* MainViewController.swift */,
+				B0C273B6299B6B7C005B3AAD /* TabViewControllers */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -380,10 +394,12 @@
 				B07391592993634B00903C1F /* User.swift in Sources */,
 				B09DC79B2990DEA2008558EA /* MainCoordinator.swift in Sources */,
 				B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */,
+				B076C6CA299CACBD00EFDA7F /* UserProfile.swift in Sources */,
 				B0C56F332992232D004E83B8 /* LoginViewModel.swift in Sources */,
 				B0C56F3A299244D4004E83B8 /* EmailConfirmViewModel.swift in Sources */,
 				B0C56F2D2992208C004E83B8 /* DatabaseManager.swift in Sources */,
 				B0C273C0299B6BCB005B3AAD /* AlarmViewController.swift in Sources */,
+				B076C6CD299CC1CF00EFDA7F /* HomeViewModel.swift in Sources */,
 				B0C56F3129922322004E83B8 /* RegisterViewModel.swift in Sources */,
 				B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */,
 				B09DC7A02990E214008558EA /* MainViewController.swift in Sources */,

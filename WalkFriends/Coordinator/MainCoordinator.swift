@@ -26,7 +26,7 @@ class MainCoordinator: Coordinator {
     func start() {
         
         let mainViewController = MainViewController()
-//        mainViewController.delegate = self
+        mainViewController.mainDelegate = self
         
         navigationController.viewControllers = [mainViewController]
         navigationController?.setNavigationBarHidden(true, animated: false)
@@ -35,9 +35,9 @@ class MainCoordinator: Coordinator {
     
 }
 
-//extension MainCoordinator: MainViewControllerDelegate {
-//
-//    func logout() {
-//        delegate?.didLoggedOut(self)
-//    }
-//}
+extension MainCoordinator: MainViewControllerDelegate {
+
+    func logout() {
+        delegate?.didLoggedOut(self)
+    }
+}

@@ -198,7 +198,7 @@ class LoginViewController: UIViewController {
         loginViewModel.signIn(with: email, password: password)
             .observe(on: MainScheduler.instance)
             .subscribe { result in
-                print("email: \(email)")
+        
                 if result {
                     self.delegate.signIn()
                 } else {

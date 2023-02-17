@@ -6,13 +6,19 @@
 //
 
 import UIKit
+import FirebaseAuth
+
+protocol MainViewControllerDelegate {
+    func logout()
+}
 
 class MainViewController: UITabBarController {
+    
+    var mainDelegate: MainViewControllerDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -31,7 +37,7 @@ class MainViewController: UITabBarController {
         tabTwo.tabBarItem = tabTwoBarItem
         
         // Create Tab Three
-        let tabThree = HomeViewController()
+        let tabThree = HomeViewController(homeViewModel: HomeViewModel())
         let tabThreeBarItem = UITabBarItem(title: "홈", image: UIImage(systemName: "house", withConfiguration: imageConfig), selectedImage: UIImage(systemName: "house.fill", withConfiguration: imageConfig))
         tabThree.tabBarItem = tabThreeBarItem
         
@@ -42,6 +48,7 @@ class MainViewController: UITabBarController {
         
         // Create Tab Five
         let tabFive = InfoViewController()
+        tabFive.infoDelegate = self
         let tabFiveNavigationController = UINavigationController(rootViewController: tabFive)
         let tabFiveBarItem = UITabBarItem(title: "내 정보", image: UIImage(systemName: "person", withConfiguration: imageConfig), selectedImage: UIImage(systemName: "person.fill", withConfiguration: imageConfig))
         tabFiveNavigationController.tabBarItem = tabFiveBarItem
@@ -71,6 +78,12 @@ class MainViewController: UITabBarController {
         
         selectedIndex = 2
     }
+}
+
+extension MainViewController: InfoViewControllerDelegate {
     
+    func logout() {
+        mainDelegate.logout()
+    }
 }
 

@@ -27,7 +27,7 @@ class AppCoordinator: Coordinator {
     
     func start() {
         
-        if (currentUser != nil) {
+        if ( currentUser != nil) {
             showMainViewController()
         } else {
             showLoginViewController()
