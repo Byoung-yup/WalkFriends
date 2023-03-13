@@ -13,9 +13,11 @@ import FirebaseAuth
 
 class HomeViewController: UIViewController {
     
-    let homeViewModel: HomeViewModel
+    let homeViewModel: DefaultHomeViewModel
     
     let disposeBag = DisposeBag()
+    
+    // MARK: - Properties
     
     lazy var profileView: UIView = {
        let view = UIView()
@@ -23,7 +25,9 @@ class HomeViewController: UIViewController {
         return view
     }()
     
-    init(homeViewModel: HomeViewModel) {
+    // MARK: - Initialize
+    
+    init(homeViewModel: DefaultHomeViewModel) {
         self.homeViewModel = homeViewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -32,9 +36,7 @@ class HomeViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        print("HomeViewController - deinit")
-    }
+    // MARK: - viewDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,8 +44,15 @@ class HomeViewController: UIViewController {
         view.backgroundColor = .white
         
         configureUI()
-        loadUserProfile()
+//        loadUserProfile()
+        print("User Email: \(UserInfo.shared.email)")
+        print("User Uid: \(UserInfo.shared.uid!)")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
+        loadUserProfile()
     }
     
     override func viewDidLayoutSubviews() {
@@ -59,7 +68,8 @@ class HomeViewController: UIViewController {
 
     }
     
-    // MARK: Configure UI
+    // MARK: - Configure UI
+    
     private func configureUI() {
         
         view.addSubview(profileView)
@@ -72,11 +82,26 @@ class HomeViewController: UIViewController {
         
     }
     
-    // MARK: checkUserProfile
+    // MARK: - loadUserProfile
+    
     private func loadUserProfile() {
         
         homeViewModel.fetchMyProfileData()
+            .subscribe(onNext: { [weak self] userProfile in
+                
+                if userProfile != nil {
+                    
+                } else {
+                    self?.setupProfile()
+                }
+            }).disposed(by: disposeBag)
             
+    }
+    
+    // MARK: - setupProfile
+    
+    private func setupProfile() {
+        homeViewModel.setupProfileView()
     }
 
 }

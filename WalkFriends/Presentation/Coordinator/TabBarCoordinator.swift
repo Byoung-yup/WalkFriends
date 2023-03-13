@@ -17,7 +17,7 @@ class TabBarCoordinator: NSObject {
     var tabBarController: UITabBarController
     
     var childCoordinators: [NSObject] = []
-        var delegate: TabBarCoordinatorDelegate?
+    var delegate: TabBarCoordinatorDelegate?
     
     var favoriteCoordinator: FavoriteCoordinator
     var messageCoordinator: MessageCoordinator
@@ -76,8 +76,9 @@ class TabBarCoordinator: NSObject {
         let infoVC = infoCoordinator.navigationController
         let tabFiveBarItem = UITabBarItem(title: "내 정보", image: UIImage(systemName: "person", withConfiguration: imageConfig), selectedImage: UIImage(systemName: "person.fill", withConfiguration: imageConfig))
         infoVC.tabBarItem = tabFiveBarItem
-        childCoordinators.append(infoCoordinator)
         infoCoordinator.delegate = self
+        childCoordinators.append(infoCoordinator)
+        
         
         controllers.append(favoriteVC)
         controllers.append(messageVC)

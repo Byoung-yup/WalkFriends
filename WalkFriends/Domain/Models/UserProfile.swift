@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import UIKit
 
-public struct UserProfile: Codable {
+public struct UserProfile: Decodable {
     let email: String
     let nickName: String?
     let favorite: [Favorite]
@@ -25,7 +26,8 @@ struct Linking: Codable {
 }
 
 
-struct Pet: Codable {
+struct Pet: Decodable {
+    let imageUrl: String
     let name: String
     let age: Int
     let gender: String

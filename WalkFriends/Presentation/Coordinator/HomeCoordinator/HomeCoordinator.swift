@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+
 final class HomeCoordinator: NSObject {
     
     var childCoordinators: [NSObject] = []
@@ -25,13 +26,27 @@ final class HomeCoordinator: NSObject {
     
     // MARK: - HomeViewController
     
-    func makeHomeViewModel() -> HomeViewModel {
-        return DefaultHomeViewModel(fetchDataUseCase: makeFetchDataUseCase())
+    func makeHomeViewModel() -> DefaultHomeViewModel {
+        let homeViewModel = DefaultHomeViewModel(fetchDataUseCase: makeFetchDataUseCase())
+        homeViewModel.actionDelegate = self
+        return homeViewModel
     }
     
     // MARK: - Use Cases
     
     func makeFetchDataUseCase() -> FetchDataUseCase {
-        return DefaultFetchDataUseCase(dataBaseRepository: DatabaseManager())
+        return DefaultDataUseCase(dataBaseRepository: DatabaseManager())
     }
+}
+
+// MARK: - HomeViewModelActionDelegate
+
+extension HomeCoordinator: HomeViewModelActionDelegate {
+    
+    func setupProfile() {
+        let setupProfileCoordinator = SetupProfileCoordinator(navigationController: navigationController)
+        setupProfileCoordinator.start()
+        childCoordinators.append(setupProfileCoordinator)
+    }
+    
 }

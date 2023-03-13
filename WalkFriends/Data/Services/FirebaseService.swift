@@ -13,7 +13,7 @@ import RxSwift
 
 protocol FirebaseAuthService {
     func userExists(with email: String) -> Observable<Bool>
-    func createUser(with user: User) -> Observable<Bool>
+    func createUser(email: String, password: String) -> Observable<Bool>
     func signIn(with email: String, password: String) -> Observable<Bool>
 }
 
@@ -58,11 +58,11 @@ extension FirebaseService: FirebaseAuthService {
     }
 
     // MARK: Create User
-    func createUser(with user: User) -> Observable<Bool> {
+    func createUser(email: String, password: String) -> Observable<Bool> {
 
         return Observable.create { [weak self] (observer) -> Disposable in
 
-            self?.auth.createUser(withEmail: user.email, password: user.password) { authResult, error in
+            self?.auth.createUser(withEmail: email, password: password) { authResult, error in
                 
                 guard authResult != nil, error == nil else {
                     // 계정 생성 실패

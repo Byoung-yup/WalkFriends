@@ -15,8 +15,8 @@ final class UserInfo {
     
     let currentUser = FirebaseAuth.Auth.auth().currentUser
 
-    var email: String {
-        (currentUser?.email)!
+    var email: String? {
+        currentUser?.email
     }
     
     var uid: String? {

@@ -269,10 +269,8 @@ class RegisterViewController: UIViewController {
         
         guard let email = self.emailTextView.text else { return }
         guard let password = self.passwordTextField.text else { return }
-
-        let user = User(email: email, password: password)
         
-        FirebaseService.shard.createUser(with: user)
+        FirebaseService.shard.createUser(email: email, password: password)
             .subscribe(onNext: { [weak self] result in
                 
                 if result { self?.dismiss(animated: true) }

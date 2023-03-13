@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B00AADB329B9EF77008053B6 /* UserProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00AADB229B9EF77008053B6 /* UserProfileRepository.swift */; };
+		B00AADB529B9FFE8008053B6 /* ObservableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00AADB429B9FFE8008053B6 /* ObservableType.swift */; };
 		B031A1BC2991F64400C51B5A /* Letters for Learners Outline Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */; };
 		B031A1BD2991F64400C51B5A /* Letters for Learners Outline Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */; };
 		B031A1BF2991F73800C51B5A /* Letters for Learners.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */; };
@@ -18,8 +19,10 @@
 		B07391592993634B00903C1F /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07391582993634B00903C1F /* User.swift */; };
 		B076C6CA299CACBD00EFDA7F /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B076C6C9299CACBD00EFDA7F /* UserProfile.swift */; };
 		B076C6CD299CC1CF00EFDA7F /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B076C6CC299CC1CF00EFDA7F /* HomeViewModel.swift */; };
-		B07971BE29B1D1AB0038BE9D /* FetchDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07971BD29B1D1AB0038BE9D /* FetchDataUseCase.swift */; };
+		B07971BE29B1D1AB0038BE9D /* DefaultUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07971BD29B1D1AB0038BE9D /* DefaultUseCase.swift */; };
 		B07971C129B1D1FA0038BE9D /* UseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07971C029B1D1FA0038BE9D /* UseCase.swift */; };
+		B07DDB6D29BF1BB50012F26A /* SetupProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07DDB6C29BF1BB50012F26A /* SetupProfileViewModel.swift */; };
+		B07DDB6F29BF1C860012F26A /* SetupProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07DDB6E29BF1C860012F26A /* SetupProfileCoordinator.swift */; };
 		B08531CE29B87F9E00209127 /* FavoriteCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08531CD29B87F9E00209127 /* FavoriteCoordinator.swift */; };
 		B08531D029B87FA700209127 /* MessageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08531CF29B87FA700209127 /* MessageCoordinator.swift */; };
 		B08531D229B87FAF00209127 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08531D129B87FAF00209127 /* HomeCoordinator.swift */; };
@@ -39,6 +42,7 @@
 		B09DC7AC2990F3E6008558EA /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */; };
 		B09DC7AE2990FFAF008558EA /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7AD2990FFAF008558EA /* CALayer.swift */; };
 		B09DC7B129910D93008558EA /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7B029910D93008558EA /* CustomTextField.swift */; };
+		B0A2D38E29BB08F000B6412F /* SetupProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2D38D29BB08F000B6412F /* SetupProfileViewController.swift */; };
 		B0C273B8299B6B92005B3AAD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C273B7299B6B92005B3AAD /* HomeViewController.swift */; };
 		B0C273BA299B6BAC005B3AAD /* FavoriteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C273B9299B6BAC005B3AAD /* FavoriteListViewController.swift */; };
 		B0C273BC299B6BB5005B3AAD /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C273BB299B6BB5005B3AAD /* MessagesViewController.swift */; };
@@ -58,6 +62,7 @@
 /* Begin PBXFileReference section */
 		40B8E93FFDC9EEFF8BC55A5E /* Pods-WalkFriends.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WalkFriends.release.xcconfig"; path = "Target Support Files/Pods-WalkFriends/Pods-WalkFriends.release.xcconfig"; sourceTree = "<group>"; };
 		B00AADB229B9EF77008053B6 /* UserProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileRepository.swift; sourceTree = "<group>"; };
+		B00AADB429B9FFE8008053B6 /* ObservableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableType.swift; sourceTree = "<group>"; };
 		B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Light.ttf"; sourceTree = "<group>"; };
 		B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Bold.ttf"; sourceTree = "<group>"; };
 		B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners.ttf"; sourceTree = "<group>"; };
@@ -68,8 +73,10 @@
 		B07391582993634B00903C1F /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B076C6C9299CACBD00EFDA7F /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		B076C6CC299CC1CF00EFDA7F /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
-		B07971BD29B1D1AB0038BE9D /* FetchDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDataUseCase.swift; sourceTree = "<group>"; };
+		B07971BD29B1D1AB0038BE9D /* DefaultUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultUseCase.swift; sourceTree = "<group>"; };
 		B07971C029B1D1FA0038BE9D /* UseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCase.swift; sourceTree = "<group>"; };
+		B07DDB6C29BF1BB50012F26A /* SetupProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileViewModel.swift; sourceTree = "<group>"; };
+		B07DDB6E29BF1C860012F26A /* SetupProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileCoordinator.swift; sourceTree = "<group>"; };
 		B08531CD29B87F9E00209127 /* FavoriteCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCoordinator.swift; sourceTree = "<group>"; };
 		B08531CF29B87FA700209127 /* MessageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCoordinator.swift; sourceTree = "<group>"; };
 		B08531D129B87FAF00209127 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
@@ -91,6 +98,7 @@
 		B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		B09DC7AD2990FFAF008558EA /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		B09DC7B029910D93008558EA /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		B0A2D38D29BB08F000B6412F /* SetupProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileViewController.swift; sourceTree = "<group>"; };
 		B0C273B7299B6B92005B3AAD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		B0C273B9299B6BAC005B3AAD /* FavoriteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteListViewController.swift; sourceTree = "<group>"; };
 		B0C273BB299B6BB5005B3AAD /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +144,13 @@
 			path = Repository;
 			sourceTree = "<group>";
 		};
+		B00AADB629BA23A1008053B6 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
 		B072878B29A88BA200E8A085 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -147,7 +162,7 @@
 		B076C6CB299CC1C400EFDA7F /* MainViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				B076C6CC299CC1CF00EFDA7F /* HomeViewModel.swift */,
+				B0A2D38929BB017000B6412F /* HomeViewModel */,
 				B08531D729B8ADAF00209127 /* InfoViewModel.swift */,
 			);
 			path = MainViewModel;
@@ -193,7 +208,7 @@
 		B07971BC29B1D0C20038BE9D /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
-				B07971BD29B1D1AB0038BE9D /* FetchDataUseCase.swift */,
+				B07971BD29B1D1AB0038BE9D /* DefaultUseCase.swift */,
 				B07971BF29B1D1F00038BE9D /* Protocol */,
 			);
 			path = UseCase;
@@ -227,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				B08531D129B87FAF00209127 /* HomeCoordinator.swift */,
+				B07DDB6E29BF1C860012F26A /* SetupProfileCoordinator.swift */,
 			);
 			path = HomeCoordinator;
 			sourceTree = "<group>";
@@ -348,6 +364,8 @@
 				B09DC7A92990EC50008558EA /* UITextField.swift */,
 				B09DC7AD2990FFAF008558EA /* CALayer.swift */,
 				B0C56F3729924443004E83B8 /* String.swift */,
+				B00AADB429B9FFE8008053B6 /* ObservableType.swift */,
+				B00AADB629BA23A1008053B6 /* Firebase */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -362,6 +380,23 @@
 			path = CustomView;
 			sourceTree = "<group>";
 		};
+		B0A2D38929BB017000B6412F /* HomeViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				B076C6CC299CC1CF00EFDA7F /* HomeViewModel.swift */,
+				B07DDB6C29BF1BB50012F26A /* SetupProfileViewModel.swift */,
+			);
+			path = HomeViewModel;
+			sourceTree = "<group>";
+		};
+		B0A2D38C29BB08C700B6412F /* SetupProfileView */ = {
+			isa = PBXGroup;
+			children = (
+				B0A2D38D29BB08F000B6412F /* SetupProfileViewController.swift */,
+			);
+			path = SetupProfileView;
+			sourceTree = "<group>";
+		};
 		B0C273B6299B6B7C005B3AAD /* TabBarControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -370,6 +405,7 @@
 				B0C273B7299B6B92005B3AAD /* HomeViewController.swift */,
 				B0C273BF299B6BCB005B3AAD /* AlarmViewController.swift */,
 				B0C273BD299B6BC2005B3AAD /* InfoViewController.swift */,
+				B0A2D38C29BB08C700B6412F /* SetupProfileView */,
 			);
 			path = TabBarControllers;
 			sourceTree = "<group>";
@@ -520,20 +556,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				B07391572993601000903C1F /* FirebaseService.swift in Sources */,
-				B07971BE29B1D1AB0038BE9D /* FetchDataUseCase.swift in Sources */,
+				B07971BE29B1D1AB0038BE9D /* DefaultUseCase.swift in Sources */,
 				B0C56F3629922D26004E83B8 /* EmailConfirmViewController.swift in Sources */,
 				B08531D629B87FBF00209127 /* InfoCoordinator.swift in Sources */,
 				B09DC7AC2990F3E6008558EA /* RegisterViewController.swift in Sources */,
 				B09DC7B129910D93008558EA /* CustomTextField.swift in Sources */,
 				B00AADB329B9EF77008053B6 /* UserProfileRepository.swift in Sources */,
 				B09DC7A22990E21A008558EA /* LoginViewController.swift in Sources */,
+				B0A2D38E29BB08F000B6412F /* SetupProfileViewController.swift in Sources */,
 				B0C273B8299B6B92005B3AAD /* HomeViewController.swift in Sources */,
+				B00AADB529B9FFE8008053B6 /* ObservableType.swift in Sources */,
 				B09DC7992990DD7D008558EA /* AppCoordinator.swift in Sources */,
 				B072878D29A88BAC00E8A085 /* UserInfo.swift in Sources */,
 				B09DC7A42990E29F008558EA /* LoginCoordinator.swift in Sources */,
 				B09DC7AA2990EC50008558EA /* UITextField.swift in Sources */,
 				B07391592993634B00903C1F /* User.swift in Sources */,
 				B08531D229B87FAF00209127 /* HomeCoordinator.swift in Sources */,
+				B07DDB6D29BF1BB50012F26A /* SetupProfileViewModel.swift in Sources */,
+				B07DDB6F29BF1C860012F26A /* SetupProfileCoordinator.swift in Sources */,
 				B09DC79B2990DEA2008558EA /* TabBarCoordinator.swift in Sources */,
 				B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */,
 				B08531CE29B87F9E00209127 /* FavoriteCoordinator.swift in Sources */,

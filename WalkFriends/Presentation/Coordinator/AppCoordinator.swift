@@ -16,6 +16,8 @@ protocol Coordinator: AnyObject  {
 
 class AppCoordinator: Coordinator {
     
+    var currentUser: User?
+    
     var childCoordinators: [NSObject] = []
     
     let window: UIWindow
@@ -67,6 +69,7 @@ extension AppCoordinator: LoginCoordinatorDelegate {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
         showMainViewController()
         
+        currentUser = FirebaseAuth.Auth.auth().currentUser
     }
 }
 

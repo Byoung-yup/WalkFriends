@@ -6,7 +6,8 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol UserProfileRepository {
-    func fetchUserProfile()
+    func fetchUserProfile(completion: @escaping (Result<UserProfile, DatabaseError>) -> Void)
 }
