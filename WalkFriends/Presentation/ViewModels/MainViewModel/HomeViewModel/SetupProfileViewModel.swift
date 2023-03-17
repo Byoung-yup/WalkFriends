@@ -6,18 +6,61 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
 
-protocol SetupProfileViewModelInput {
-    func setupProfile()
+protocol SetupProfileViewModelActionDelegate {
+    func createProfile()
 }
 
-final class SetupProfileViewModel {
+
+final class SetupProfileViewModel: ViewModel {
     
+    struct Input {
+        let usernickName: Driver<String>
+        let userGender: Driver<Int>
+        let createTrigger: Driver<Void>
+    }
+    
+    struct Output {
+        let dismiss: Driver<Void>
+        let createBtdEnabled: Driver<Bool>
+    }
+    
+    private let dataUseCase: DataUseCase
+    
+    var actionDelegate: SetupProfileViewModelActionDelegate?
+    
+    
+    // MARK: - Initialize
+    
+    init(dataUseCase: DataUseCase) {
+        self.dataUseCase = dataUseCase
+    }
     
 }
 
-extension SetupProfileViewModel: SetupProfileViewModelInput {
-    func setupProfile() {
+extension SetupProfileViewModel {
+    
+    func transform(input: Input) -> Output {
         
+        let gender = input.userGender.map { $0 == 0 ? "남자" : "여자" }
+        
+        let userProfile = Driver.combineLatest(input.usernickName, gender)
+        
+        let canCreate = Driver.combineLatest(input.usernickName, input.userGender) {
+            return !$0.isEmpty && !($1 == -1)
+        }
+        
+        let create = input.createTrigger.withLatestFrom(userProfile)
+            .map { (nickName, gender) in
+                return UserProfile(imageUrl: "none", email: UserInfo.shared.email!, nickName: nickName, gender: gender)
+            }
+            .flatMapLatest { [weak self] in
+                return (self?.dataUseCase.createProfile(with: $0)
+                    .asDriver(onErrorJustReturn: ()))!
+            }
+
+        return Output(dismiss: create, createBtdEnabled: canCreate)
     }
 }

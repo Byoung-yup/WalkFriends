@@ -8,9 +8,16 @@
 import Foundation
 import UIKit
 
+protocol SetupProfileCoordinatorDelegate {
+    func createProfile(_ coordinator: SetupProfileCoordinator)
+}
+
 final class SetupProfileCoordinator: NSObject {
     
     let navigationController: UINavigationController
+//    var setupProfileVC: SetupProfileViewController
+    
+    var delegate: SetupProfileCoordinatorDelegate?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -25,12 +32,29 @@ final class SetupProfileCoordinator: NSObject {
 
 extension SetupProfileCoordinator {
     
-    // MARK: SetupProfileViewController
+    // MARK: - SetupProfileViewController
+    
     func makeSetupProfileViewModel() -> SetupProfileViewModel{
-        let setupProfileViewModel = SetupProfileViewModel()
+        let setupProfileViewModel = SetupProfileViewModel(dataUseCase: makeDataUseCase())
+        setupProfileViewModel.actionDelegate = self
         return setupProfileViewModel
     }
     
-    // MARK: Create User Use Case
+    // MARK: - Create User Use Case
     
+    func makeDataUseCase() -> DataUseCase {
+        return DefaultDataUseCase(dataBaseRepository: DatabaseManager())
+    }
+}
+
+// MARK: - SetupProfileViewModelActionDelegate
+
+extension SetupProfileCoordinator: SetupProfileViewModelActionDelegate {
+    
+    func createProfile() {
+        print("SetupProfileCoordinator - createProfile")
+        navigationController.popViewController(animated: true)
+        navigationController.tabBarController?.tabBar.isHidden = false
+        delegate?.createProfile(self)
+    }
 }

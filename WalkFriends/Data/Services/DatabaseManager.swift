@@ -19,7 +19,6 @@ final class DatabaseManager {
     
     private let db = Firestore.firestore()
 
-    
 }
 
 // MARK: - UserProfileRepository
@@ -46,6 +45,20 @@ extension DatabaseManager: UserProfileRepository {
             }
         }
             
+    }
+    
+    func createUserProfile(with userProfile: UserProfile) {
+        
+        db.collection("Users").document(UserInfo.shared.uid!).setData(userProfile.toDomain()) { err in
+            
+            guard err == nil else {
+                print("Set Data Error: \(err?.localizedDescription)")
+                return
+            }
+            print("Set Data success")
+            return
+        }
+
     }
     
 }

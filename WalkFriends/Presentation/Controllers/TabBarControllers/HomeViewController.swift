@@ -40,11 +40,10 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = .white
         
         configureUI()
-//        loadUserProfile()
         print("User Email: \(UserInfo.shared.email)")
         print("User Uid: \(UserInfo.shared.uid!)")
     }

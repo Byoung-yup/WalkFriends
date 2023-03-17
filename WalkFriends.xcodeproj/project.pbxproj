@@ -13,6 +13,7 @@
 		B031A1BD2991F64400C51B5A /* Letters for Learners Outline Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */; };
 		B031A1BF2991F73800C51B5A /* Letters for Learners.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */; };
 		B0638BA1299FCFBA001776F5 /* CustomLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0638BA0299FCFBA001776F5 /* CustomLabelView.swift */; };
+		B06B456D29C4347300B0AED2 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06B456C29C4347200B0AED2 /* ViewModel.swift */; };
 		B072878D29A88BAC00E8A085 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072878C29A88BAC00E8A085 /* UserInfo.swift */; };
 		B072878F29A8B57F00E8A085 /* SetupProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072878E29A8B57F00E8A085 /* SetupProfileView.swift */; };
 		B07391572993601000903C1F /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07391562993601000903C1F /* FirebaseService.swift */; };
@@ -29,6 +30,7 @@
 		B08531D429B87FB600209127 /* AlarmCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08531D329B87FB600209127 /* AlarmCoordinator.swift */; };
 		B08531D629B87FBF00209127 /* InfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08531D529B87FBF00209127 /* InfoCoordinator.swift */; };
 		B08531D829B8ADAF00209127 /* InfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08531D729B8ADAF00209127 /* InfoViewModel.swift */; };
+		B09A3B1429C0ABA3004BBD24 /* Pet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09A3B1329C0ABA3004BBD24 /* Pet.swift */; };
 		B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7832990DBF2008558EA /* AppDelegate.swift */; };
 		B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7852990DBF2008558EA /* SceneDelegate.swift */; };
 		B09DC78D2990DBF6008558EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B09DC78C2990DBF6008558EA /* Assets.xcassets */; };
@@ -67,6 +69,7 @@
 		B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Bold.ttf"; sourceTree = "<group>"; };
 		B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners.ttf"; sourceTree = "<group>"; };
 		B0638BA0299FCFBA001776F5 /* CustomLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabelView.swift; sourceTree = "<group>"; };
+		B06B456C29C4347200B0AED2 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		B072878C29A88BAC00E8A085 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		B072878E29A8B57F00E8A085 /* SetupProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileView.swift; sourceTree = "<group>"; };
 		B07391562993601000903C1F /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
@@ -83,6 +86,7 @@
 		B08531D329B87FB600209127 /* AlarmCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmCoordinator.swift; sourceTree = "<group>"; };
 		B08531D529B87FBF00209127 /* InfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCoordinator.swift; sourceTree = "<group>"; };
 		B08531D729B8ADAF00209127 /* InfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewModel.swift; sourceTree = "<group>"; };
+		B09A3B1329C0ABA3004BBD24 /* Pet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pet.swift; sourceTree = "<group>"; };
 		B09DC7802990DBF2008558EA /* WalkFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalkFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B09DC7832990DBF2008558EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B09DC7852990DBF2008558EA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -199,7 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				B07971BC29B1D0C20038BE9D /* UseCase */,
-				B09DC79D2990DEF4008558EA /* Models */,
+				B09DC79D2990DEF4008558EA /* Entities */,
 				B00AADB129B9EF5D008053B6 /* Repository */,
 			);
 			path = Domain;
@@ -319,6 +323,7 @@
 		B09DC79C2990DEE3008558EA /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				B06B456C29C4347200B0AED2 /* ViewModel.swift */,
 				B0C56F322992232D004E83B8 /* LoginViewModel.swift */,
 				B0C56F3029922321004E83B8 /* RegisterViewModel.swift */,
 				B0C56F39299244D4004E83B8 /* EmailConfirmViewModel.swift */,
@@ -327,13 +332,14 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		B09DC79D2990DEF4008558EA /* Models */ = {
+		B09DC79D2990DEF4008558EA /* Entities */ = {
 			isa = PBXGroup;
 			children = (
 				B07391582993634B00903C1F /* User.swift */,
+				B09A3B1329C0ABA3004BBD24 /* Pet.swift */,
 				B076C6C9299CACBD00EFDA7F /* UserProfile.swift */,
 			);
-			path = Models;
+			path = Entities;
 			sourceTree = "<group>";
 		};
 		B09DC79E2990DEFB008558EA /* Controllers */ = {
@@ -569,6 +575,7 @@
 				B09DC7992990DD7D008558EA /* AppCoordinator.swift in Sources */,
 				B072878D29A88BAC00E8A085 /* UserInfo.swift in Sources */,
 				B09DC7A42990E29F008558EA /* LoginCoordinator.swift in Sources */,
+				B06B456D29C4347300B0AED2 /* ViewModel.swift in Sources */,
 				B09DC7AA2990EC50008558EA /* UITextField.swift in Sources */,
 				B07391592993634B00903C1F /* User.swift in Sources */,
 				B08531D229B87FAF00209127 /* HomeCoordinator.swift in Sources */,
@@ -588,6 +595,7 @@
 				B0C273C0299B6BCB005B3AAD /* AlarmViewController.swift in Sources */,
 				B0638BA1299FCFBA001776F5 /* CustomLabelView.swift in Sources */,
 				B076C6CD299CC1CF00EFDA7F /* HomeViewModel.swift in Sources */,
+				B09A3B1429C0ABA3004BBD24 /* Pet.swift in Sources */,
 				B0C56F3129922322004E83B8 /* RegisterViewModel.swift in Sources */,
 				B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */,
 				B072878F29A8B57F00E8A085 /* SetupProfileView.swift in Sources */,

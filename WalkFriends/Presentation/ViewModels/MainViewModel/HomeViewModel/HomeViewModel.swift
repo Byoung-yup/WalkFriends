@@ -27,7 +27,7 @@ class DefaultHomeViewModel: HomeViewModel {
     
     var actionDelegate: HomeViewModelActionDelegate?
 
-    private let fetchDataUseCase: FetchDataUseCase
+    private let dataUseCase: DataUseCase
     
     let disposeBag = DisposeBag()
     
@@ -36,8 +36,8 @@ class DefaultHomeViewModel: HomeViewModel {
     
     // MARK: - Initailize
     
-    init(fetchDataUseCase: FetchDataUseCase) {
-        self.fetchDataUseCase = fetchDataUseCase
+    init(dataUseCase: DataUseCase) {
+        self.dataUseCase = dataUseCase
     }
     
 }
@@ -48,7 +48,7 @@ extension DefaultHomeViewModel {
     
     func fetchMyProfileData() -> Observable<UserProfile?> {
         
-        return fetchDataUseCase.excuteProfile()
+        return dataUseCase.excuteProfile()
             
     }
     

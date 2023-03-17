@@ -10,8 +10,9 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-protocol FetchDataUseCase {
+protocol DataUseCase {
     func excuteProfile() -> Observable<UserProfile?>
+    func createProfile(with userProfile: UserProfile) -> Observable<Void>
 }
 
 class DefaultDataUseCase {
@@ -24,7 +25,12 @@ class DefaultDataUseCase {
     
 }
 
-extension DefaultDataUseCase: FetchDataUseCase {
+extension DefaultDataUseCase: DataUseCase {
+    
+    func createProfile(with userProfile: UserProfile) -> Observable<Void> {
+        return Observable.just(dataBaseRepository.createUserProfile(with: userProfile))
+    }
+    
     
     func excuteProfile() -> Observable<UserProfile?> {
         
