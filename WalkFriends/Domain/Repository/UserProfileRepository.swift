@@ -10,5 +10,5 @@ import RxSwift
 
 protocol UserProfileRepository {
     func fetchUserProfile(completion: @escaping (Result<UserProfile, DatabaseError>) -> Void)
-    func createUserProfile(with userProfile: UserProfile)
+    func createUserProfile(with userProfile: UserProfile) -> Observable<Bool>
 }

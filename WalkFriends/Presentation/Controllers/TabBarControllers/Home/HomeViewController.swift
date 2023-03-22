@@ -9,11 +9,10 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-import FirebaseAuth
 
 class HomeViewController: UIViewController {
     
-    let homeViewModel: DefaultHomeViewModel
+    let homeViewModel: HomeViewModel
     
     let disposeBag = DisposeBag()
     
@@ -25,9 +24,15 @@ class HomeViewController: UIViewController {
         return view
     }()
     
+    lazy var homeListView: HomeListView = {
+        let view = HomeListView()
+        view.backgroundColor = .blue
+        return view
+    }()
+    
     // MARK: - Initialize
     
-    init(homeViewModel: DefaultHomeViewModel) {
+    init(homeViewModel: HomeViewModel) {
         self.homeViewModel = homeViewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -44,14 +49,8 @@ class HomeViewController: UIViewController {
         view.backgroundColor = .white
         
         configureUI()
-        print("User Email: \(UserInfo.shared.email)")
-        print("User Uid: \(UserInfo.shared.uid!)")
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        loadUserProfile()
+//        loadUserProfile()
+        Binding()
     }
     
     override func viewDidLayoutSubviews() {
@@ -78,6 +77,24 @@ class HomeViewController: UIViewController {
             make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
             make.height.equalTo(200)
         }
+        
+        view.addSubview(homeListView)
+        homeListView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.top.equalTo(profileView.safeAreaLayoutGuide.snp.bottom).offset(20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(80)
+        }
+    }
+    
+    // MARK: - Binding
+    
+    private func Binding() {
+        
+        homeViewModel.items
+            .bind(to: homeListView.collectionView.rx.items(cellIdentifier: "HomeListCell", cellType: HomeListCell.self)) { (row, text, cell) in
+                print("row: \(row), text: \(text), cell: \(cell)")
+                cell.label.text = "\(text)"
+            }.disposed(by: disposeBag)
         
     }
     

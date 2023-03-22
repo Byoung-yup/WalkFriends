@@ -52,8 +52,7 @@ extension SetupProfileCoordinator {
 extension SetupProfileCoordinator: SetupProfileViewModelActionDelegate {
     
     func createProfile() {
-        print("SetupProfileCoordinator - createProfile")
-        navigationController.popViewController(animated: true)
+        navigationController.popViewController(animated: true) 
         navigationController.tabBarController?.tabBar.isHidden = false
         delegate?.createProfile(self)
     }

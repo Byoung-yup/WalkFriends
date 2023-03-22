@@ -26,8 +26,8 @@ final class HomeCoordinator: NSObject {
     
     // MARK: - HomeViewController
     
-    func makeHomeViewModel() -> DefaultHomeViewModel {
-        let homeViewModel = DefaultHomeViewModel(dataUseCase: makeDataUseCase())
+    func makeHomeViewModel() -> HomeViewModel {
+        let homeViewModel = HomeViewModel(dataUseCase: makeDataUseCase())
         homeViewModel.actionDelegate = self
         return homeViewModel
     }
@@ -55,8 +55,6 @@ extension HomeCoordinator: HomeViewModelActionDelegate {
 extension HomeCoordinator: SetupProfileCoordinatorDelegate {
     
     func createProfile(_ coordinator: SetupProfileCoordinator) {
-        print("HomeCoordinator - createProfile")
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
-        print("childCoordinators: \(childCoordinators)")
     }
 }

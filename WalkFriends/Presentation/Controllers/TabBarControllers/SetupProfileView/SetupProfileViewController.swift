@@ -236,8 +236,7 @@ class SetupProfileViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.dismiss
-            .drive(onNext: { [weak self] element in
-                print(element)
+            .drive(onNext: { [weak self] _ in
                 self?.viewModel.actionDelegate?.createProfile()
             }).disposed(by: disposeBag)
     }

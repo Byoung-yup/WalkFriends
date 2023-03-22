@@ -18,7 +18,7 @@ enum DatabaseError: Error {
 final class DatabaseManager {
     
     private let db = Firestore.firestore()
-
+    
 }
 
 // MARK: - UserProfileRepository
@@ -44,21 +44,25 @@ extension DatabaseManager: UserProfileRepository {
                 completion(.failure(DatabaseError.FetchError))
             }
         }
-            
+        
     }
     
-    func createUserProfile(with userProfile: UserProfile) {
+    func createUserProfile(with userProfile: UserProfile) -> Observable<Bool> {
         
-        db.collection("Users").document(UserInfo.shared.uid!).setData(userProfile.toDomain()) { err in
-            
-            guard err == nil else {
-                print("Set Data Error: \(err?.localizedDescription)")
-                return
+        return Observable.create({ [weak self] (observer) -> Disposable in
+            self?.db.collection("Users").document(UserInfo.shared.uid!).setData(userProfile.toDomain()) { err in
+                
+                guard err == nil else {
+                    print("Set Data Error")
+                    observer.onError(err!)
+                    return
+                }
+                print("Set Data success")
+                observer.onNext(true)
+                observer.onCompleted()
             }
-            print("Set Data success")
-            return
-        }
-
+            return Disposables.create()
+        })     
     }
     
 }

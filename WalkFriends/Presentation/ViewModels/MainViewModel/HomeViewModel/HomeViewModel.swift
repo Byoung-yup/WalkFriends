@@ -13,17 +13,7 @@ protocol HomeViewModelActionDelegate {
     func setupProfile()
 }
 
-protocol HomeViewModelInput {
-    func fetchMyProfileData() -> Observable<UserProfile?>
-}
-
-protocol HomeViewModelOutput {
-    
-}
-
-protocol HomeViewModel: HomeViewModelInput, HomeViewModelOutput {}
-
-class DefaultHomeViewModel: HomeViewModel {
+class HomeViewModel: ViewModel {
     
     var actionDelegate: HomeViewModelActionDelegate?
 
@@ -31,8 +21,19 @@ class DefaultHomeViewModel: HomeViewModel {
     
     let disposeBag = DisposeBag()
     
+    let items = Observable.just(["Run", "Menu", "None", "Profile"])
+    
+    // MARK: - INPUT
+    
+    struct Input {
+        
+    }
+    
     // MARK: - OUTPUT
     
+    struct Output {
+        
+    }
     
     // MARK: - Initailize
     
@@ -40,11 +41,16 @@ class DefaultHomeViewModel: HomeViewModel {
         self.dataUseCase = dataUseCase
     }
     
+    func transform(input: Input) -> Output {
+        return Output()
+    }
+    
+    
 }
 
 // MARK: - INPUT. View event methods
 
-extension DefaultHomeViewModel {
+extension HomeViewModel {
     
     func fetchMyProfileData() -> Observable<UserProfile?> {
         
@@ -56,7 +62,7 @@ extension DefaultHomeViewModel {
 
 // MARK: - Action Delegate
 
-extension DefaultHomeViewModel {
+extension HomeViewModel {
     
     func setupProfileView() {
         actionDelegate?.setupProfile()

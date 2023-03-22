@@ -12,7 +12,7 @@ import RxCocoa
 
 protocol DataUseCase {
     func excuteProfile() -> Observable<UserProfile?>
-    func createProfile(with userProfile: UserProfile) -> Observable<Void>
+    func createProfile(with userProfile: UserProfile) -> Observable<Bool>
 }
 
 class DefaultDataUseCase {
@@ -27,8 +27,8 @@ class DefaultDataUseCase {
 
 extension DefaultDataUseCase: DataUseCase {
     
-    func createProfile(with userProfile: UserProfile) -> Observable<Void> {
-        return Observable.just(dataBaseRepository.createUserProfile(with: userProfile))
+    func createProfile(with userProfile: UserProfile) -> Observable<Bool> {
+        return (dataBaseRepository.createUserProfile(with: userProfile))
     }
     
     

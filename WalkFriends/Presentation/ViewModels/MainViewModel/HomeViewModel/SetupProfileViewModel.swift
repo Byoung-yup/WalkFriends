@@ -13,7 +13,6 @@ protocol SetupProfileViewModelActionDelegate {
     func createProfile()
 }
 
-
 final class SetupProfileViewModel: ViewModel {
     
     struct Input {
@@ -23,7 +22,7 @@ final class SetupProfileViewModel: ViewModel {
     }
     
     struct Output {
-        let dismiss: Driver<Void>
+        let dismiss: Driver<Bool>
         let createBtdEnabled: Driver<Bool>
     }
     
@@ -58,7 +57,7 @@ extension SetupProfileViewModel {
             }
             .flatMapLatest { [weak self] in
                 return (self?.dataUseCase.createProfile(with: $0)
-                    .asDriver(onErrorJustReturn: ()))!
+                    .asDriver(onErrorJustReturn: false))!
             }
 
         return Output(dismiss: create, createBtdEnabled: canCreate)
