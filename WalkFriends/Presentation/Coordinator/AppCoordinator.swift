@@ -20,11 +20,17 @@ class AppCoordinator: Coordinator {
     
     var childCoordinators: [NSObject] = []
     
-    let window: UIWindow
+    private let navigationController: UINavigationController!
     
-    init(window: UIWindow) {
-        self.window = window
+    init(navigationController: UINavigationController) {
+        self.navigationController = navigationController
     }
+    
+//    let window: UIWindow
+//
+//    init(window: UIWindow) {
+//        self.window = window
+//    }
     
     func start() {
         
@@ -37,22 +43,27 @@ class AppCoordinator: Coordinator {
     
     private func showMainViewController() {
         
-        let rootViewController = UITabBarController()
-        window.rootViewController = rootViewController
-        
-        let coordinator = TabBarCoordinator(tabBarController: rootViewController)
-        coordinator.delegate = self
+        let coordinator = HomeCoordinator(navigationController: navigationController)
         coordinator.start()
         
         childCoordinators.append(coordinator)
+        
+//        let rootViewController = UITabBarController()
+//        window.rootViewController = rootViewController
+//
+//        let coordinator = TabBarCoordinator(tabBarController: rootViewController)
+//        coordinator.delegate = self
+//        coordinator.start()
+        
+//        childCoordinators.append(coordinator)
     }
     
     private func showLoginViewController() {
         
-        let rootViewController = UINavigationController()
-        window.rootViewController = rootViewController
+//        let rootViewController = UINavigationController()
+//        window.rootViewController = rootViewController
         
-        let coordinator = LoginCoordinator(navigationController: rootViewController)
+        let coordinator = LoginCoordinator(navigationController: navigationController)
         coordinator.delegate = self
         coordinator.start()
         
@@ -73,11 +84,11 @@ extension AppCoordinator: LoginCoordinatorDelegate {
     }
 }
 
-extension AppCoordinator: TabBarCoordinatorDelegate {
-    
-    func didLoggedOut(_ coordinator: TabBarCoordinator) {
-        
-        childCoordinators = childCoordinators.filter { $0 !== coordinator }
-        showLoginViewController()
-    }
-}
+//extension AppCoordinator: TabBarCoordinatorDelegate {
+//
+//    func didLoggedOut(_ coordinator: TabBarCoordinator) {
+//        
+//        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+//        showLoginViewController()
+//    }
+//}

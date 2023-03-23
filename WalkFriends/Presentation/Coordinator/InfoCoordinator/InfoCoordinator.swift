@@ -23,7 +23,7 @@ final class InfoCoordinator: NSObject {
     
     func start() {
         let vc = InfoViewController(viewModel: makeInfoViewModel())
-        navigationController.setViewControllers([vc], animated: false)
+        navigationController.pushViewController(vc, animated: true)
     }
     
 }

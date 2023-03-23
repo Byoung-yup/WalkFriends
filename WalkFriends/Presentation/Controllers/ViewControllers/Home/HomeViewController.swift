@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     let homeViewModel: HomeViewModel
     
@@ -90,12 +90,21 @@ class HomeViewController: UIViewController {
     
     private func Binding() {
         
+        let input = HomeViewModel.Input(selectedMenu: homeListView.collectionView.rx.itemSelected.asDriver())
+        let output = homeViewModel.transform(input: input)
+        
+        output.trigger
+            .drive()
+            .disposed(by: disposeBag)
+            
         homeViewModel.items
             .bind(to: homeListView.collectionView.rx.items(cellIdentifier: "HomeListCell", cellType: HomeListCell.self)) { (row, text, cell) in
-                print("row: \(row), text: \(text), cell: \(cell)")
                 cell.label.text = "\(text)"
             }.disposed(by: disposeBag)
         
+        homeListView.collectionView.rx.setDelegate(self)
+            .disposed(by: disposeBag)
+    
     }
     
     // MARK: - loadUserProfile

@@ -50,6 +50,22 @@ extension HomeCoordinator: HomeViewModelActionDelegate {
         childCoordinators.append(setupProfileCoordinator)
     }
     
+    func present(from presenter: Presenter) {
+        
+        switch presenter {
+        case .Run:
+            let coordinator = RunCoordinator(navigationController: navigationController)
+            coordinator.start()
+        case .Menu:
+            break
+        case .None:
+            break
+        case .Profile:
+            let coordinator = InfoCoordinator(navigationController: navigationController)
+            coordinator.start()
+        }
+    }
+    
 }
 
 extension HomeCoordinator: SetupProfileCoordinatorDelegate {

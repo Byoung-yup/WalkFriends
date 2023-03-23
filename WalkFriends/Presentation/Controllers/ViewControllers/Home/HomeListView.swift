@@ -13,7 +13,7 @@ class HomeListView: UIView {
     
     // MARK: - Properties
     
-//    let items: Observable<String> = Observable.of("Menu", "Profile", "Run", "None")
+
     
     // MARK: - UI Properties
     
