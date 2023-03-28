@@ -6,19 +6,23 @@
 //
 
 import Foundation
+import CoreLocation
+import RxSwift
+import RxCocoa
 
 final class RunViewModel: ViewModel {
     
     // MARK: - Input
     
     struct Input {
-        
+        let run: Driver<Void>
+        let stop: Driver<Void>
     }
     
     // MARK: - Output
     
     struct Output {
-        
+        let runTrigger: Driver<Void>
     }
     
     // MARK: - Properties
@@ -29,11 +33,17 @@ final class RunViewModel: ViewModel {
     
     init(dataUseCase: DataUseCase) {
         self.dataUseCase = dataUseCase
+        
     }
     
     // MARK: - Transform
     
     func transform(input: Input) -> Output {
-        return Output()
+        
+        let trigger = input.run
+        
+        return Output(runTrigger: trigger)
     }
+    
 }
+

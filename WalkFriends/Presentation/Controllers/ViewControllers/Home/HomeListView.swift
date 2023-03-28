@@ -27,6 +27,7 @@ class HomeListView: UIView {
         layout.itemSize = CGSize(width: cellSize - 40, height: 100)
         // MARK: CollectionView
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .white
         collectionView.register(HomeListCell.self, forCellWithReuseIdentifier: "HomeListCell")
         return collectionView
     }()
