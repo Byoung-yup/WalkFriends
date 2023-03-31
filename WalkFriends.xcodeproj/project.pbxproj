@@ -12,6 +12,8 @@
 		B031A1BC2991F64400C51B5A /* Letters for Learners Outline Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */; };
 		B031A1BD2991F64400C51B5A /* Letters for Learners Outline Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */; };
 		B031A1BF2991F73800C51B5A /* Letters for Learners.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */; };
+		B0483CFF29D6BC4E001941C1 /* ShareInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0483CFE29D6BC4E001941C1 /* ShareInfoViewController.swift */; };
+		B0483D0229D6BCAC001941C1 /* ShareInfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0483D0129D6BCAC001941C1 /* ShareInfoCoordinator.swift */; };
 		B0638BA1299FCFBA001776F5 /* CustomLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0638BA0299FCFBA001776F5 /* CustomLabelView.swift */; };
 		B065C42529CB3424005AC8E2 /* HomeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B065C42429CB3424005AC8E2 /* HomeListView.swift */; };
 		B065C42829CB5C5B005AC8E2 /* HomeListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B065C42629CB5C5B005AC8E2 /* HomeListCell.swift */; };
@@ -71,6 +73,8 @@
 		B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Light.ttf"; sourceTree = "<group>"; };
 		B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Bold.ttf"; sourceTree = "<group>"; };
 		B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners.ttf"; sourceTree = "<group>"; };
+		B0483CFE29D6BC4E001941C1 /* ShareInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoViewController.swift; sourceTree = "<group>"; };
+		B0483D0129D6BCAC001941C1 /* ShareInfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoCoordinator.swift; sourceTree = "<group>"; };
 		B0638BA0299FCFBA001776F5 /* CustomLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabelView.swift; sourceTree = "<group>"; };
 		B065C42429CB3424005AC8E2 /* HomeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListView.swift; sourceTree = "<group>"; };
 		B065C42629CB5C5B005AC8E2 /* HomeListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListCell.swift; sourceTree = "<group>"; };
@@ -161,6 +165,14 @@
 			path = Firebase;
 			sourceTree = "<group>";
 		};
+		B0483D0029D6BC74001941C1 /* RunViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				B097425029CC2C76002AD53A /* RunViewModel.swift */,
+			);
+			path = RunViewModel;
+			sourceTree = "<group>";
+		};
 		B065C41F29CAF3E3005AC8E2 /* Home */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,7 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				B0A2D38929BB017000B6412F /* HomeViewModel */,
-				B097425029CC2C76002AD53A /* RunViewModel.swift */,
+				B0483D0029D6BC74001941C1 /* RunViewModel */,
 				B08531D729B8ADAF00209127 /* InfoViewModel.swift */,
 			);
 			path = MainViewModel;
@@ -249,6 +261,7 @@
 			isa = PBXGroup;
 			children = (
 				B08531CD29B87F9E00209127 /* RunCoordinator.swift */,
+				B0483D0129D6BCAC001941C1 /* ShareInfoCoordinator.swift */,
 			);
 			path = RunCoordinator;
 			sourceTree = "<group>";
@@ -290,6 +303,7 @@
 			isa = PBXGroup;
 			children = (
 				B0C273B9299B6BAC005B3AAD /* RunViewController.swift */,
+				B0483CFE29D6BC4E001941C1 /* ShareInfoViewController.swift */,
 			);
 			path = Run;
 			sourceTree = "<group>";
@@ -627,7 +641,9 @@
 				B09A3B1429C0ABA3004BBD24 /* Pet.swift in Sources */,
 				B0C56F3129922322004E83B8 /* RegisterViewModel.swift in Sources */,
 				B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */,
+				B0483D0229D6BCAC001941C1 /* ShareInfoCoordinator.swift in Sources */,
 				B0C56F3829924443004E83B8 /* String.swift in Sources */,
+				B0483CFF29D6BC4E001941C1 /* ShareInfoViewController.swift in Sources */,
 				B09DC7AE2990FFAF008558EA /* CALayer.swift in Sources */,
 				B0C273BA299B6BAC005B3AAD /* RunViewController.swift in Sources */,
 				B0C56F2F29922094004E83B8 /* StorageManager.swift in Sources */,

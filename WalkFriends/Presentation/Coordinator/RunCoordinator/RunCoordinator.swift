@@ -26,15 +26,27 @@ final class RunCoordinator: NSObject {
     // MARK: - HomeViewController
     
     func makeRunViewModel() -> RunViewModel {
-        let runViewModel = RunViewModel(dataUseCase: makeDataUseCase())
+        let runViewModel = RunViewModel()
+        runViewModel.actionDelegate = self
         return runViewModel
     }
     
-    // MARK: - Use Cases
+}
+
+extension RunCoordinator: RunViewModelActionDelegate {
     
-    func makeDataUseCase() -> DataUseCase {
-        return DefaultDataUseCase(dataBaseRepository: DatabaseManager())
+    func dismiss(with saved: Bool, snapshot: UIImage?) {
+        
+        guard saved == true else {
+            navigationController.popViewController(animated: true)
+            return
+        }
+        
+        navigationController.popViewController(animated: true)
+        
+        let coordiantor = ShareInfoCoordinator(navigationController: navigationController, snapshot: snapshot!)
+        coordiantor.start()
+        childCoordinators.append(coordiantor)
     }
-    
 }
 

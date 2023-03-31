@@ -59,7 +59,13 @@ class RunViewController: UIViewController {
         manager.delegate = self
         return manager
     }()
+    
+    private var startCoordinate = BehaviorSubject<CLLocationCoordinate2D>(value: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
     private var previousCoordinate: CLLocationCoordinate2D?
+    private var destinationCoordinate = BehaviorSubject<CLLocationCoordinate2D>(value: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
+    private var coordinators: [CLLocationCoordinate2D] = []
+    
+    private var isSavedStatus: PublishSubject = PublishSubject<Bool>()
     
     private let disposeBag = DisposeBag()
     
@@ -74,12 +80,18 @@ class RunViewController: UIViewController {
         binding()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        locationManager.stopUpdatingLocation()
+    }
+    
     // MARK: - viewDidLayoutSubviews
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        contentView.layer.cornerRadius = 30
+        contentView.layer.cornerRadius = 40
         
         runBtn.layer.borderColor = UIColor.green.cgColor
         runBtn.layer.borderWidth = 0.5
@@ -136,7 +148,11 @@ class RunViewController: UIViewController {
     private func binding() {
         
         let input = RunViewModel.Input(run: runBtn.rx.tap.asDriver(),
-                                       stop: stopBtn.rx.tap.asDriver())
+                                       stop: stopBtn.rx.tap.asDriver(),
+                                       startCoordinate: startCoordinate.asObservable(),
+                                       destinationCoordinate: destinationCoordinate.asObservable(),
+                                       saved: isSavedStatus.asObservable(),
+                                       test: destinationCoordinate.asObservable())
         let output = runViewModel.transform(input: input)
         
         output.runTrigger
@@ -144,7 +160,19 @@ class RunViewController: UIViewController {
                 self?.checkForCLAuthorizationStatus()
             }).disposed(by: disposeBag)
         
+        output.stopTrigger
+            .drive(onNext: { [weak self] _ in
+                self?.stop()
+            }).disposed(by: disposeBag)
         
+        output.dismissTrigger
+            .subscribe()
+            .disposed(by: disposeBag)
+        
+        output.test
+            .subscribe(onNext: { point in
+                print("des point: \(point)")
+            }).disposed(by: disposeBag)
     }
     
 }
@@ -210,6 +238,15 @@ extension RunViewController {
         present(requestLocationServiceAlert, animated: true)
     }
     
+    func showInfoAlert() {
+        
+        let alert = UIAlertController(title: "안내", message: "기념 풍경 사진을 남겨두세요!", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "확인", style: .cancel))
+        
+        present(alert, animated: true)
+    }
+    
     func checkForCLAuthorizationStatus() {
         
         let authorizationStatus: CLAuthorizationStatus
@@ -223,8 +260,6 @@ extension RunViewController {
         
         if authorizationStatus == .authorizedWhenInUse  {
             setCurrentPosition()
-            runBtn.isHidden = true
-            stopBtn.isHidden = false
         } else {
             showRequestLocationServiceAlert()
         }
@@ -232,20 +267,52 @@ extension RunViewController {
     
     func setCurrentPosition() {
         
-        guard let center = previousCoordinate else { return }
+        runBtn.isHidden = true
+        stopBtn.isHidden = false
         
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+        guard let startPoint = previousCoordinate else { return }
+        startCoordinate.onNext(startPoint)
+        
+        let region = MKCoordinateRegion(center: startPoint, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.005))
         mapView.setRegion(region, animated: true)
-        setAnnotation()
+
+        setAnnotation(startPoint)
+        
+        showInfoAlert()
     }
     
-    private func setAnnotation() {
-        
-        guard let center = previousCoordinate else { return }
+    private func setAnnotation(_ coordinate: CLLocationCoordinate2D) {
         
         let point = MKPointAnnotation()
-        point.coordinate = center
+        point.coordinate = coordinate
         mapView.addAnnotation(point)
+    }
+    
+    private func stop() {
+        
+//        let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02))
+//        mapView.setRegion(region, animated: true)
+        
+        if let previousCoordinate = self.previousCoordinate {
+            runViewModel.coordinators = coordinators
+            runViewModel.size = mapView.frame.size
+            destinationCoordinate.onNext(previousCoordinate)
+        }
+        
+        locationManager.stopUpdatingLocation()
+        
+        // 저장 여부 결정
+        
+        let alert = UIAlertController(title: "안내", message: "해당 코스를 공유 하시겠습니까?", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+            self?.isSavedStatus.onNext(true)
+        }))
+        alert.addAction(UIAlertAction(title: "취소", style: .default, handler: { [weak self] _ in
+            self?.isSavedStatus.onNext(false)
+        }))
+        
+        present(alert, animated: true)
     }
 }
 
@@ -257,6 +324,8 @@ extension RunViewController: CLLocationManagerDelegate {
         
         let latitude = location.coordinate.latitude
         let longtitude = location.coordinate.longitude
+        
+        coordinators.append(CLLocationCoordinate2D(latitude: latitude, longitude: longtitude))
         
         if let previousCoordinate = self.previousCoordinate {
             
@@ -272,8 +341,7 @@ extension RunViewController: CLLocationManagerDelegate {
             self.mapView.addOverlay(lineDraw)
         }
         
-        self.previousCoordinate = location.coordinate
-        
+        previousCoordinate = location.coordinate
     }
     
 }
