@@ -273,7 +273,7 @@ extension RunViewController {
         guard let startPoint = previousCoordinate else { return }
         startCoordinate.onNext(startPoint)
         
-        let region = MKCoordinateRegion(center: startPoint, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.005))
+        let region = MKCoordinateRegion(center: startPoint, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
         mapView.setRegion(region, animated: true)
 
         setAnnotation(startPoint)
@@ -290,13 +290,20 @@ extension RunViewController {
     
     private func stop() {
         
-//        let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02))
-//        mapView.setRegion(region, animated: true)
+        // Test 37.337425, -122.032116
+        let testStartPoint1 = CLLocationCoordinate2D(latitude: 37.33233141, longitude: -122.0312186)
+        let testDesPoint1 = CLLocationCoordinate2D(latitude: 37.337425, longitude: -122.032116)
+        
+        // Test 37.291298, 126.995740 / 37.294380, 126.993895
+        let testStartPoint2 = CLLocationCoordinate2D(latitude: 37.291298, longitude: 126.995740)
+        let testDesPoint2 = CLLocationCoordinate2D(latitude: 37.294380, longitude: 126.993895)
         
         if let previousCoordinate = self.previousCoordinate {
             runViewModel.coordinators = coordinators
             runViewModel.size = mapView.frame.size
-            destinationCoordinate.onNext(previousCoordinate)
+            destinationCoordinate.onNext(testDesPoint2)
+            runViewModel.coordinators?.append(testStartPoint2)
+            runViewModel.coordinators?.append(testDesPoint2)
         }
         
         locationManager.stopUpdatingLocation()
@@ -325,7 +332,7 @@ extension RunViewController: CLLocationManagerDelegate {
         let latitude = location.coordinate.latitude
         let longtitude = location.coordinate.longitude
         
-        coordinators.append(CLLocationCoordinate2D(latitude: latitude, longitude: longtitude))
+//        coordinators.append(CLLocationCoordinate2D(latitude: latitude, longitude: longtitude))
         
         if let previousCoordinate = self.previousCoordinate {
             

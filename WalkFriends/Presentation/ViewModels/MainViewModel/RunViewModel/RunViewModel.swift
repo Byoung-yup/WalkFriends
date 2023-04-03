@@ -49,6 +49,9 @@ final class RunViewModel: ViewModel {
         
         let runTrigger = input.run
         
+        // Test 37.337425, -122.032116
+        //        let testPoint = Observable.just(CLLocationCoordinate2D(latitude: 37.337425, longitude: -122.032116))
+        
         let center = Observable.combineLatest(input.startCoordinate, input.destinationCoordinate)
             .map { [weak self] in
                 self?.centerPoint(start: $0, des: $1)
@@ -60,7 +63,7 @@ final class RunViewModel: ViewModel {
         
         
         
-        return Output(runTrigger: runTrigger, stopTrigger: input.stop, dismissTrigger: dismiss, test: input.test)
+        return Output(runTrigger: runTrigger, stopTrigger: input.stop, dismissTrigger: dismiss, test: input.startCoordinate)
     }
     
     // MARK: - Center Coordinate2D
@@ -69,7 +72,9 @@ final class RunViewModel: ViewModel {
         
         let centerX = start.latitude + (des.latitude - start.latitude) / 2
         let centerY = start.longitude + (des.longitude - start.longitude) / 2
-        //        print("centerX: \(centerX), centerY: \(centerY))")
+        
+        print("centerX: \(centerX), centerY: \(centerY)")
+        
         return CLLocationCoordinate2D(latitude: centerX, longitude: centerY)
     }
     
@@ -83,37 +88,34 @@ final class RunViewModel: ViewModel {
         }
         
         // MKMapSnapshot
+        let mapSnapshotOptions = MKMapSnapshotter.Options()
         
-        if let coordinators = coordinators {
-            
-            let mapSnapshotOptions = MKMapSnapshotter.Options()
-            
-            // Set the region of the map that is rendered. (by polyline)
-            let polyLine = MKPolyline(coordinates: coordinators, count: coordinators.count)
-            let region = MKCoordinateRegion(polyLine.boundingMapRect)
-            
-            mapSnapshotOptions.region = region
-            
-            // Set the scale of the image. We'll just use the scale of the current device, which is 2x scale on Retina screens.
-            mapSnapshotOptions.scale = UIScreen.main.scale
-            
-            // Set the size of the image output.
-            mapSnapshotOptions.size = size
-            
-            // Show buildings and Points of Interest on the snapshot
-            mapSnapshotOptions.showsBuildings = true
-            
-            let snapShotter = MKMapSnapshotter(options: mapSnapshotOptions)
-            
-            snapShotter.start() { [weak self] snapshot, error in
-                guard let snapshot = snapshot else {
-                    return
-                }
-                // Don't just pass snapshot.image, pass snapshot itself!
-                let image = self?.drawLineOnImage(snapshot: snapshot)
-                self?.actionDelegate?.dismiss(with: saved, snapshot: image)
+        // Set the region of the map that is rendered. (by polyline)
+        let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+        
+        mapSnapshotOptions.region = region
+        
+        // Set the scale of the image. We'll just use the scale of the current device, which is 2x scale on Retina screens.
+        mapSnapshotOptions.scale = UIScreen.main.scale
+        
+        // Set the size of the image output.
+        mapSnapshotOptions.size = size
+        
+        // Show buildings and Points of Interest on the snapshot
+        mapSnapshotOptions.showsBuildings = true
+        
+        let snapShotter = MKMapSnapshotter(options: mapSnapshotOptions)
+        
+        snapShotter.start() { [weak self] snapshot, error in
+            guard let snapshot = snapshot else {
+                return
             }
+            
+            // Don't just pass snapshot.image, pass snapshot itself!
+            let image = self?.drawLineOnImage(snapshot: snapshot)
+            self?.actionDelegate?.dismiss(with: saved, snapshot: image)
         }
+        
     }
     
     func drawLineOnImage(snapshot: MKMapSnapshotter.Snapshot) -> UIImage {
