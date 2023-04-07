@@ -20,7 +20,14 @@ final class ShareInfoCoordinator: NSObject {
     }
     
     func start() {
-        let vc = ShareInfoViewController(snapshot: snapshot)
+        let vc = ShareInfoViewController(viewModel: makeShareInfoViewModel(), snapshot: snapshot)
         navigationController.pushViewController(vc, animated: true)
+    }
+
+    // MARK: - ShareInfoViewController
+    
+    private func makeShareInfoViewModel() -> ShareInfoViewModel {
+        let viewModel = ShareInfoViewModel()
+        return viewModel
     }
 }

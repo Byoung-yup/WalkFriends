@@ -8,21 +8,11 @@
 import Foundation
 import UIKit
 
-public struct UserProfile: Codable {
-    let imageUrl: String
+public struct UserProfile  {
+    let image: UIImage
     let email: String
     let nickName: String
     let gender: String
-    
-    enum CodingKeys: CodingKey {
-        case imageUrl
-        case email
-        case nickName
-        case gender
-    }
-//    let favorite: [Favorite?]
-//    let liking: Linking
-//    let pet: Pet
 }
 //
 //struct Favorite: Codable {
@@ -46,7 +36,6 @@ extension UserProfile {
     func toDomain() -> [String: Any] {
         
         return [
-            "imageUrl": imageUrl,
             "email": email,
             "nickName": nickName,
             "gender": gender

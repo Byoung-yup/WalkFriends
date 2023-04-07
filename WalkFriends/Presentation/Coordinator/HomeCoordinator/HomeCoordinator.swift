@@ -35,7 +35,7 @@ final class HomeCoordinator: NSObject {
     // MARK: - Use Cases
     
     func makeDataUseCase() -> DataUseCase {
-        return DefaultDataUseCase(dataBaseRepository: DatabaseManager())
+        return DefaultDataUseCase(dataBaseRepository: DatabaseManager(), storageRepository: StorageManager())
     }
 }
 

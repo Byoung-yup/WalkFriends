@@ -9,6 +9,10 @@ import Foundation
 import RxSwift
 
 protocol UserProfileRepository {
-    func fetchUserProfile(completion: @escaping (Result<UserProfile, DatabaseError>) -> Void)
-    func createUserProfile(with userProfile: UserProfile) -> Observable<Bool>
+    func fetchUserProfile(completion: @escaping (Result<Bool, DatabaseError>) -> Void)
+    func createUserProfile(with userProfile: UserProfile, completion: @escaping (Bool) -> Void)
+}
+
+protocol UserProfileImageRepository {
+    func uploadImageData(with data: Data, completion: @escaping (Bool) -> Void)
 }

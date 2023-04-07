@@ -43,7 +43,7 @@ extension SetupProfileCoordinator {
     // MARK: - Create User Use Case
     
     func makeDataUseCase() -> DataUseCase {
-        return DefaultDataUseCase(dataBaseRepository: DatabaseManager())
+        return DefaultDataUseCase(dataBaseRepository: DatabaseManager(), storageRepository: StorageManager())
     }
 }
 
@@ -53,7 +53,7 @@ extension SetupProfileCoordinator: SetupProfileViewModelActionDelegate {
     
     func createProfile() {
         navigationController.popViewController(animated: true) 
-        navigationController.tabBarController?.tabBar.isHidden = false
         delegate?.createProfile(self)
     }
+    
 }

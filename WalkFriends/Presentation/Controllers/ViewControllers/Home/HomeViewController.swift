@@ -18,11 +18,11 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     // MARK: - Properties
     
-    lazy var profileView: UIView = {
-       let view = UIView()
-        view.backgroundColor = .orange
-        return view
-    }()
+//    lazy var profileView: ProfileView = {
+//       let view = ProfileView()
+//        view.backgroundColor = .orange
+//        return view
+//    }()
     
     lazy var homeListView: HomeListView = {
         let view = HomeListView()
@@ -49,20 +49,20 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = .white
         
         configureUI()
-//        loadUserProfile()
+        loadUserProfile()
         Binding()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        profileView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        profileView.layer.cornerRadius = 20
+//        profileView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+//        profileView.layer.cornerRadius = 20
         
-        profileView.layer.shadowColor = UIColor.gray.cgColor
-        profileView.layer.shadowRadius = 20
-        profileView.layer.shadowOffset = CGSize(width: 0, height: 10)
-        profileView.layer.shadowOpacity = 0.5
+//        profileView.layer.shadowColor = UIColor.gray.cgColor
+//        profileView.layer.shadowRadius = 20
+//        profileView.layer.shadowOffset = CGSize(width: 0, height: 10)
+//        profileView.layer.shadowOpacity = 0.5
 
     }
     
@@ -70,19 +70,19 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     private func configureUI() {
         
-        view.addSubview(profileView)
-        profileView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
-            make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
-            make.height.equalTo(200)
-        }
+//        view.addSubview(profileView)
+//        profileView.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+//            make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
+//            make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
+//            make.height.equalTo(200)
+//        }
         
         view.addSubview(homeListView)
         homeListView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
-            make.top.equalTo(profileView.safeAreaLayoutGuide.snp.bottom).offset(20)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(80)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(80)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
     }
     
@@ -112,9 +112,9 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     private func loadUserProfile() {
         
         homeViewModel.fetchMyProfileData()
-            .subscribe(onNext: { [weak self] userProfile in
+            .subscribe(onNext: { [weak self] result in
                 
-                if userProfile != nil {
+                if result {
                     
                 } else {
                     self?.setupProfile()

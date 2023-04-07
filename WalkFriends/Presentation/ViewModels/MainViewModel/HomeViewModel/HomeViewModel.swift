@@ -67,7 +67,7 @@ class HomeViewModel: ViewModel {
 
 extension HomeViewModel {
     
-    func fetchMyProfileData() -> Observable<UserProfile?> {
+    func fetchMyProfileData() -> Observable<Bool> {
         
         return dataUseCase.excuteProfile()
         
