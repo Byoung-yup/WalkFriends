@@ -12,7 +12,7 @@ import RxSwift
 
 class InfoViewController: UIViewController {
     
-    let viewModel: InfoViewModel
+    let infoViewModel: InfoViewModel
     
     let disposeBag = DisposeBag()
     
@@ -36,7 +36,7 @@ class InfoViewController: UIViewController {
         title = "내 정보"
         
         ConfigureUI()
-        bindingEvents()
+        binding()
     }
 
     override func viewDidLayoutSubviews() {
@@ -48,8 +48,8 @@ class InfoViewController: UIViewController {
     }
     
     // MARK: Initialize
-    init(viewModel: InfoViewModel) {
-        self.viewModel = viewModel
+    init(infoViewModel: InfoViewModel) {
+        self.infoViewModel = infoViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -69,14 +69,16 @@ class InfoViewController: UIViewController {
         
     }
     
-    // MARK: - Binding events
+    // MARK: - Binding
     
-    private func bindingEvents() {
+    private func binding() {
         
-        logoutButton.rx.tap
-            .bind{ [weak self] in
-                self?.viewModel.logOut()
-            }.disposed(by: disposeBag)
+        let input = InfoViewModel.Input(logout: logoutButton.rx.tap.asDriver())
+        let output = infoViewModel.transform(input: input)
+        
+        output.dismiss
+            .drive()
+            .disposed(by: disposeBag)
     }
 
 }

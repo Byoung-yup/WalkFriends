@@ -141,8 +141,12 @@ class SetupProfileViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.dismiss
-            .drive()
-            .disposed(by: disposeBag)
+            .drive(onNext: { [weak self] result in
+                if result == false {
+                    // 에러 메시지
+                    
+                }
+            }).disposed(by: disposeBag)
         
         imageView.rx.tapGesture()
             .when(.recognized)

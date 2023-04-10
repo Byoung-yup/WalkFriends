@@ -9,17 +9,11 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import RxGesture
 
 class RegisterViewController: UIViewController {
     
     let registerViewModel: RegiterViewModel
-    
-    var emailText: PublishSubject<String> = PublishSubject<String>()
-    var emailTextObservable: Observable<String> {
-        emailText.asObserver()
-    }
-    
-    var checkedEmail: BehaviorSubject<Bool> = BehaviorSubject(value: true)
     
     let disposebag = DisposeBag()
     
@@ -151,8 +145,7 @@ class RegisterViewController: UIViewController {
         view.backgroundColor = .white
         
         configureUI()
-        addTarget()
-        viewModelBinding()
+        binding()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -238,69 +231,19 @@ class RegisterViewController: UIViewController {
     }
     
     // MARK: Binding
-    private func viewModelBinding() {
+    private func binding() {
         
-        let tapGesture = UITapGestureRecognizer()
-        emailTextView.addGestureRecognizer(tapGesture)
+        let input = RegiterViewModel.Input(emailConfirm: emailTextView.rx.tapGesture().when(.recognized).asObservable(),
+                                           back: backToButton.rx.tap.asDriver())
+        let output = registerViewModel.transform(input: input)
         
-        tapGesture.rx.event.bind(onNext: { [weak self] _ in
-            self?.showPopupView()
-        }).disposed(by: disposebag)
-        
-        checkedEmail.bind(to: emailSymbol.rx.isHidden).disposed(by: disposebag)
-        
-        emailTextObservable.bind(to: registerViewModel.email).disposed(by: disposebag)
-        
-        passwordTextField.rx.text.map { $0 ?? "" }.bind(to: registerViewModel.password).disposed(by: disposebag)
-        registerViewModel.isValidPassword.bind(to: passwordSymbol.rx.isHidden).disposed(by: disposebag)
-        
-        confirmPasswordTextField.rx.text.map { $0 ?? "" }.bind(to: registerViewModel.confirmPassword).disposed(by: disposebag)
-        registerViewModel.isEuqalPassword.bind(to: confirmPasswordSymbol.rx.isHidden).disposed(by: disposebag)
-        
-        registerViewModel.isValidRegister.bind(to: registerButton.rx.isEnabled).disposed(by: disposebag)
-        
-        registerButton.rx.tap
-            .subscribe(onNext: { [weak self] in
-                self?.register()
-            }).disposed(by: disposebag)
+        output.dismiss
+            .drive()
+            .disposed(by: disposebag)
     }
-    
-    private func register() {
-        
-        guard let email = self.emailTextView.text else { return }
-        guard let password = self.passwordTextField.text else { return }
-        
-        FirebaseService.shard.createUser(email: email, password: password)
-            .subscribe(onNext: { [weak self] result in
+
                 
-                if result { self?.dismiss(animated: true) }
-                else { self?.showAlert()}
-                
-            }).disposed(by: disposebag)
-    }
-    
-    // MARK: AddTarget
-    private func addTarget() {
-        
-        backToButton.addTarget(self, action: #selector(toBack(_ :)), for: .touchUpInside)
-        backToLoginButton.addTarget(self, action: #selector(toBack(_ :)), for: .touchUpInside)
-        //        registerButton.addTarget(self, action: #selector(registerBinding), for: .touchUpInside)
-    }
-    
-    // MARK: objc Method
-    @objc private func toBack(_ sender: UIButton) {
-        dismiss(animated: true)
-    }
-    
-    // MARK: Show PopupView
-    private func showPopupView() {
-        
-        let popUpView = EmailConfirmViewController(viewModel: EmailConfirmViewModel())
-        popUpView.delegate = self
-        popUpView.modalPresentationStyle = .overCurrentContext
-        present(popUpView, animated: false)
-    }
-    
+
     // MARK: Alert Method
     private func showAlert() {
         let alert = UIAlertController(title: "안내", message: "올바른 이메일 형식이 아닙니다.", preferredStyle: .alert)
@@ -309,14 +252,4 @@ class RegisterViewController: UIViewController {
         
         present(alert, animated: false)
     }
-}
-
-extension RegisterViewController: submitEmailDelegate {
-    
-    func submitEmail(with email: String, exists: Bool) {
-        emailTextView.text = email
-        emailText.onNext(email)
-        checkedEmail.onNext(exists)
-    }
-    
 }

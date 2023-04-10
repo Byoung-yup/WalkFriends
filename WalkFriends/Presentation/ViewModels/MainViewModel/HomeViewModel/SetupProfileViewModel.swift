@@ -48,7 +48,7 @@ extension SetupProfileViewModel {
         
         let userProfile = Driver.combineLatest(input.profileImage, input.usernickName, gender) { (image, nickname, gender) in
             return UserProfile(image: image, email: UserInfo.shared.email!, nickName: nickname, gender: gender)
-        }.asDriver()
+        }
         
         let canCreate = Driver.combineLatest(input.usernickName, input.userGender) {
             return !$0.isEmpty && !($1 == -1)

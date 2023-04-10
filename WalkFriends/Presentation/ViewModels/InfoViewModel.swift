@@ -6,22 +6,43 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
 
 protocol InfoViewControllerActionDelegate {
     func logOut() 
 }
 
-final class InfoViewModel {
+final class InfoViewModel: ViewModel {
+    
+    // MARK: - Input
+    
+    struct Input {
+        let logout: Driver<Void>
+    }
+    
+    // MARK: - Output
+    
+    struct Output {
+        let dismiss: Driver<Void>
+        
+    }
+    
+    // MARK: - Properties
     
     var actionDelegate: InfoViewControllerActionDelegate?
     
-}
-
-extension InfoViewModel {
+    // MARK: - Transform Method
     
-    // MARK: - View event methods
-    
-    func logOut() {
-        actionDelegate?.logOut()
+    func transform(input: Input) -> Output {
+        
+        let logout = input.logout
+            .do(onNext: { [weak self] in
+                self?.actionDelegate?.logOut()
+            })
+        
+        return Output(dismiss: logout)
     }
 }
+
+

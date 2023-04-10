@@ -18,7 +18,7 @@ final class UserInfo {
     
     static let shared = UserInfo()
     
-    let currentUser = FirebaseAuth.Auth.auth().currentUser
+    var currentUser: User?
 
     var email: String? {
         currentUser?.email

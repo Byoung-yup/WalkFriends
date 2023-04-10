@@ -14,7 +14,7 @@ import RxSwift
 protocol FirebaseAuthService {
     func userExists(with email: String) -> Observable<Bool>
     func createUser(email: String, password: String) -> Observable<Bool>
-    func signIn(with email: String, password: String) -> Observable<Bool>
+    func signIn(with userInfo: UserLoginInfo) -> Observable<Bool>
 }
 
 final class FirebaseService {
@@ -79,17 +79,18 @@ extension FirebaseService: FirebaseAuthService {
     }
 
     // MARK: signIn
-    func signIn(with email: String, password: String) -> Observable<Bool> {
+    func signIn(with userInfo: UserLoginInfo) -> Observable<Bool> {
 
         return Observable.create { [weak self] (observer) -> Disposable in
             
-            self?.auth.signIn(withEmail: email, password: password) { authResult, error in
+            self?.auth.signIn(withEmail: userInfo.email, password: userInfo.password) { authResult, error in
                 
                 guard authResult != nil, error == nil else {
                     observer.onNext(false)
                     return
                 }
                 
+                UserInfo.shared.currentUser = authResult?.user
                 observer.onNext(true)
             }
             return Disposables.create()

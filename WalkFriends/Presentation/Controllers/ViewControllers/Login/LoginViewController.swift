@@ -9,20 +9,12 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-import FirebaseAuth
-
-protocol LoginViewControllerDelegate {
-    func showRegisterVC()
-    func signIn()
-}
 
 class LoginViewController: UIViewController {
     
     let loginViewModel: LoginViewModel
     
     let disposeBag = DisposeBag()
-    
-    var delegate: LoginViewControllerDelegate!
     
     // MARK: UI Properties
     lazy var loginLabel: UILabel = {
@@ -68,8 +60,8 @@ class LoginViewController: UIViewController {
         btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 25)
         btn.setTitleColor(.white, for: .normal)
         btn.backgroundColor = .orange
-        btn.clipsToBounds = true
         btn.layer.cornerRadius = 25
+        btn.isEnabled = false
         return btn
     }()
     
@@ -108,8 +100,7 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .white
         
         configureUI()
-        addTarget()
-        Binding()
+        binding()
         
 //        for family in UIFont.familyNames.sorted() {
 //            let names = UIFont.fontNames(forFamilyName: family)
@@ -172,48 +163,28 @@ class LoginViewController: UIViewController {
             make.left.equalTo(registerInfoLabel.snp.right).offset(5)
         }
     }
-    
-    private func addTarget() {
-        
-        registerInfoButton.addTarget(self, action: #selector(showRegisterVC), for: .touchUpInside)
-//        loginButton.addTarget(self, action: #selector(loginButtonBinding), for: .touchUpInside)
-    }
-    
+
     // MARK: Binding
-    private func Binding() {
+    private func binding() {
         
-        emailTextField.rx.text.map { $0 ?? "" }.bind(to: loginViewModel.email).disposed(by: disposeBag)
-        passwordTextField.rx.text.map { $0 ?? "" }.bind(to: loginViewModel.password).disposed(by: disposeBag)
+        let input = LoginViewModel.Input(email: emailTextField.rx.text.orEmpty.asDriver(),
+                                         password: passwordTextField.rx.text.orEmpty.asDriver(),
+                                         login: loginButton.rx.tap.asDriver(),
+                                         register: registerInfoButton.rx.tap.asDriver())
+        let output = loginViewModel.transform(input: input)
         
-        loginViewModel.isValidInput.bind(to: loginButton.rx.isEnabled).disposed(by: disposeBag)
-        
-        loginButton.rx.tap
-            .bind{ [weak self] in
-                self?.signIn()
-            }.disposed(by: disposeBag)
-        
-        loginViewModel.signInSubject
-            .subscribe(onNext: { [weak self] result in
-                if result {
-                    self?.delegate.signIn() }
-                else {}
-            }).disposed(by: disposeBag)
-    }
-    
-    // MARK: objc Method
-    @objc private func showRegisterVC() {
-        delegate.showRegisterVC()
-    }
-    
-    // MARK: signIn
-    private func signIn() {
-
-        guard let email = emailTextField.text else { return }
-        guard let password = passwordTextField.text else { return }
-
-        FirebaseService.shard.signIn(with: email, password: password)
-            .bind(to: loginViewModel.signInSubject)
+        output.loginEnabled
+            .drive(loginButton.rx.isEnabled)
             .disposed(by: disposeBag)
+            
+        output.present
+            .drive()
+            .disposed(by: disposeBag)
+        
+        output.loginTrigger
+            .drive(onNext: { result in
+                print("Login result: \(result)")
+            }).disposed(by: disposeBag)
     }
     
 }

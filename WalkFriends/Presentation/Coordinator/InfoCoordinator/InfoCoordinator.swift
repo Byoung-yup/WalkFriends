@@ -9,20 +9,22 @@ import Foundation
 import UIKit
 
 protocol InfoCoordinatorDelegate {
-    func logout()
+    func logout(_ coordinator: InfoCoordinator)
 }
 
-final class InfoCoordinator: NSObject {
+final class InfoCoordinator: NSObject, Coordinator {
+    
+    var childCoordinators: [NSObject] = []
+    var delegate: InfoCoordinatorDelegate?
     
     let navigationController: UINavigationController
-    var delegate: InfoCoordinatorDelegate?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
     func start() {
-        let vc = InfoViewController(viewModel: makeInfoViewModel())
+        let vc = InfoViewController(infoViewModel: makeInfoViewModel())
         navigationController.pushViewController(vc, animated: true)
     }
     
@@ -47,7 +49,7 @@ extension InfoCoordinator: InfoViewControllerActionDelegate {
     
     func logOut() {
         FirebaseService.shard.logout { [weak self] _ in
-            self?.delegate?.logout()
+            self?.delegate?.logout(self!)
         }
     }
 }

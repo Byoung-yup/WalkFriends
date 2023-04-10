@@ -12,19 +12,18 @@ protocol SetupProfileCoordinatorDelegate {
     func createProfile(_ coordinator: SetupProfileCoordinator)
 }
 
-final class SetupProfileCoordinator: NSObject {
+final class SetupProfileCoordinator: NSObject, Coordinator {
+    
+    var childCoordinators: [NSObject] = []
+    var delegate: SetupProfileCoordinatorDelegate?
     
     let navigationController: UINavigationController
-//    var setupProfileVC: SetupProfileViewController
-    
-    var delegate: SetupProfileCoordinatorDelegate?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
     
     func start() {
-        navigationController.tabBarController?.tabBar.isHidden = true
         let setupProfileVC = SetupProfileViewController(viewModel: makeSetupProfileViewModel())
         navigationController.pushViewController(setupProfileVC, animated: true)
     }

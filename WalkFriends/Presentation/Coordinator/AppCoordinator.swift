@@ -24,12 +24,6 @@ class AppCoordinator: Coordinator {
         self.navigationController = navigationController
     }
     
-//    let window: UIWindow
-//
-//    init(window: UIWindow) {
-//        self.window = window
-//    }
-    
     func start() {
         
         if (UserInfo.shared.currentUser != nil) {
@@ -42,24 +36,14 @@ class AppCoordinator: Coordinator {
     private func showMainViewController() {
         
         let coordinator = HomeCoordinator(navigationController: navigationController)
+        coordinator.delegate = self
         coordinator.start()
         
         childCoordinators.append(coordinator)
-        
-//        let rootViewController = UITabBarController()
-//        window.rootViewController = rootViewController
-//
-//        let coordinator = TabBarCoordinator(tabBarController: rootViewController)
-//        coordinator.delegate = self
-//        coordinator.start()
-        
-//        childCoordinators.append(coordinator)
+    
     }
     
     private func showLoginViewController() {
-        
-//        let rootViewController = UINavigationController()
-//        window.rootViewController = rootViewController
         
         let coordinator = LoginCoordinator(navigationController: navigationController)
         coordinator.delegate = self
@@ -81,11 +65,11 @@ extension AppCoordinator: LoginCoordinatorDelegate {
     }
 }
 
-//extension AppCoordinator: TabBarCoordinatorDelegate {
-//
-//    func didLoggedOut(_ coordinator: TabBarCoordinator) {
-//        
-//        childCoordinators = childCoordinators.filter { $0 !== coordinator }
-//        showLoginViewController()
-//    }
-//}
+extension AppCoordinator: HomeCoordinatorDelegate {
+
+    func didLoggedOut(_ coordinator: HomeCoordinator) {
+        
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+        showLoginViewController()
+    }
+}

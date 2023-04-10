@@ -8,10 +8,15 @@
 import Foundation
 import UIKit
 
+protocol HomeCoordinatorDelegate {
+    func didLoggedOut(_ coordinator: HomeCoordinator)
+}
 
-final class HomeCoordinator: NSObject {
+
+final class HomeCoordinator: NSObject, Coordinator {
     
     var childCoordinators: [NSObject] = []
+    var delegate: HomeCoordinatorDelegate?
     
     let navigationController: UINavigationController
     
@@ -62,15 +67,27 @@ extension HomeCoordinator: HomeViewModelActionDelegate {
             break
         case .Profile:
             let coordinator = InfoCoordinator(navigationController: navigationController)
+            childCoordinators.append(coordinator)
+            coordinator.delegate = self
             coordinator.start()
         }
     }
     
 }
 
+// MARK: - SetupProfileCoordinatorDelegate
+
 extension HomeCoordinator: SetupProfileCoordinatorDelegate {
     
     func createProfile(_ coordinator: SetupProfileCoordinator) {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
+    }
+}
+
+extension HomeCoordinator: InfoCoordinatorDelegate {
+    
+    func logout(_ coordinator: InfoCoordinator) {
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+        delegate?.didLoggedOut(self)
     }
 }

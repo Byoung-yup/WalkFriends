@@ -8,7 +8,9 @@
 import Foundation
 import UIKit
 
-final class ShareInfoCoordinator: NSObject {
+final class ShareInfoCoordinator: NSObject, Coordinator {
+    
+    var childCoordinators: [NSObject] = []
     
     private let navigationController: UINavigationController
     

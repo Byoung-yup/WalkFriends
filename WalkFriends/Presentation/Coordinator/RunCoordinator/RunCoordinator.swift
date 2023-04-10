@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class RunCoordinator: NSObject {
+final class RunCoordinator: NSObject, Coordinator {
     
     var childCoordinators: [NSObject] = []
     
