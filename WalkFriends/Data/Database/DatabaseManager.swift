@@ -23,11 +23,11 @@ final class DatabaseManager {
 
 // MARK: - UserProfileRepository
 
-extension DatabaseManager: UserProfileRepository {
+extension DatabaseManager: DataRepository {
     
     func fetchUserProfile(completion: @escaping (Result<Bool, DatabaseError>) -> Void) {
         print("fetchUserProfile")
-        db.collection("Users").document(UserInfo.shared.uid!).getDocument { document, error in
+        db.collection("Users").document(FirebaseService.shard.currentUser.uid).getDocument { document, error in
             
             if let document = document, document.exists {
                 let data = document.data()
@@ -44,13 +44,14 @@ extension DatabaseManager: UserProfileRepository {
                 print("Data fetch error")
                 completion(.failure(DatabaseError.FetchError))
             }
+            return
         }
         
     }
     
     func createUserProfile(with userProfile: UserProfile, completion: @escaping (Bool) -> Void) {
         
-        db.collection("Users").document(UserInfo.shared.uid!).setData(userProfile.toDomain()) { err in
+        db.collection("Users").document(FirebaseService.shard.currentUser.uid).setData(userProfile.toDomain()) { err in
             
             guard err == nil else {
                 print("Set Data Error")
@@ -59,8 +60,25 @@ extension DatabaseManager: UserProfileRepository {
             }
             print("Set Data success")
             completion(true)
+            return
         }
+    }
+    
+    func createMapData(with userData: UserMap, completion: @escaping (String) -> Void) {
         
+        let uid = UUID().uuidString
+
+        db.collection("Maps").document(uid).setData(userData.toDomain(uid: uid)) { error in
+            
+            guard error == nil else {
+                print("Set Data Error")
+                return
+            }
+            
+            print("Set Data success")
+            completion(uid)
+            return
+        }
         
     }
     

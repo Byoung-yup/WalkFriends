@@ -56,10 +56,13 @@ class ShareInfoViewController: UIViewController {
     let shareInfoViewModel: ShareInfoViewModel
     
     let snapshotImage: UIImage
+    let address: String
     
     let disposeBag = DisposeBag()
     
-    var userSelectedImages: PublishSubject = PublishSubject<[UIImage]>()
+    var mapImageRelay: BehaviorRelay = BehaviorRelay<[UIImage]>(value: [UIImage()])
+    var addressRelay: BehaviorRelay = BehaviorRelay<String>(value: "")
+    var userSelectedImages: PublishRelay = PublishRelay<[UIImage]>()
     
     var defaultImage: UIImage {
         let config = UIImage.SymbolConfiguration(pointSize: 30, weight: .bold)
@@ -80,9 +83,10 @@ class ShareInfoViewController: UIViewController {
     
     // MARK: - Initiallize
     
-    init(viewModel: ShareInfoViewModel, snapshot: UIImage) {
+    init(viewModel: ShareInfoViewModel, snapshot: UIImage, addressInfo: String) {
         shareInfoViewModel = viewModel
         snapshotImage = snapshot
+        address = addressInfo
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -104,9 +108,10 @@ class ShareInfoViewController: UIViewController {
         
         imageView.image = snapshotImage
         
-        scrollView.zoomScale = 1.0
-        scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = 2.0
+        
+//        scrollView.zoomScale = 1.0
+//        scrollView.minimumZoomScale = 1.0
+//        scrollView.maximumZoomScale = 2.0
         
         //        view.addSubview(scrollView)
         //        scrollView.snp.makeConstraints { make in
@@ -137,13 +142,22 @@ class ShareInfoViewController: UIViewController {
     
     private func binding() {
         
+        let input = ShareInfoViewModel.Input(addressText: addressRelay.asDriver(),
+                                             selectedImages: mapImageRelay.asDriver(),
+                                             titleText: shareInfoView.titleTextField.rx.text.orEmpty.asDriver(),
+                                             memoText: shareInfoView.memoTextField.rx.text.orEmpty.asDriver(),
+                                             submit: shareInfoView.submitBtn.rx.tap.asDriver(),
+                                             cancel: shareInfoView.cancelBtn.rx.tap.asDriver())
+        let output = shareInfoViewModel.transform(input: input)
+        
         addPhotoBtn.rx.tap
-            .bind(onNext: { [weak self] in
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] in
                 self?.updateUI()
             }).disposed(by: disposeBag)
         
         shareInfoView.addPhotoBtnView.rx.tap
-            .observe(on: MainScheduler.instance)
+//            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] in
                 self?.presentImagePicker()
             }).disposed(by: disposeBag)
@@ -151,11 +165,24 @@ class ShareInfoViewController: UIViewController {
         userSelectedImages.bind(to: shareInfoView.photoCollectionView.rx.items(cellIdentifier: PhotoListCell.identifier, cellType: PhotoListCell.self)) { row ,element , cell in
             cell.imageView.image = element
         }.disposed(by: disposeBag)
+        
+        output.save
+            .drive(onNext: { [weak self] result in
+                print("result: \(result)")
+            }).disposed(by: disposeBag)
+        
+        output.dismiss
+            .drive()
+            .disposed(by: disposeBag)
     }
     
     private func updateUI() {
         
         addPhotoBtn.isHidden = true
+        shareInfoView.addressView.text = address
+        
+        mapImageRelay.accept([snapshotImage])
+        addressRelay.accept(address)
         
         bottomView.snp.remakeConstraints { make in
             make.top.equalTo(imageView.safeAreaLayoutGuide.snp.top).offset(60)
@@ -193,8 +220,8 @@ extension ShareInfoViewController {
         imagePicker.settings.theme.selectionStyle = .numbered
         imagePicker.settings.theme.selectionFillColor = .orange
         imagePicker.doneButton.tintColor = .orange
-        imagePicker.doneButtonTitle = "확인"
-        imagePicker.cancelButton.title = "닫기"
+//        imagePicker.doneButtonTitle = "확인"
+//        imagePicker.cancelButton.title = "닫기"
         imagePicker.cancelButton.tintColor = .orange
         imagePicker.settings.fetch.assets.supportedMediaTypes = [.image]
         
@@ -235,7 +262,7 @@ extension ShareInfoViewController {
                 
                 var thumbnail = UIImage()
                 
-                imageManager.requestImage(for: AssetImages[i], targetSize: CGSize(width: 200, height: 100), contentMode: .aspectFill, options: option) {
+                imageManager.requestImage(for: AssetImages[i], targetSize: CGSize(width: 200, height: 100), contentMode: .aspectFit, options: option) {
                     (result, info) in
                     thumbnail = result!
                 }
@@ -246,7 +273,8 @@ extension ShareInfoViewController {
                 images.append(newImage! as UIImage)
             }
             
-            userSelectedImages.onNext(images)
+            userSelectedImages.accept(images)
+            mapImageRelay.accept(mapImageRelay.value + images)
         }
     }
 }

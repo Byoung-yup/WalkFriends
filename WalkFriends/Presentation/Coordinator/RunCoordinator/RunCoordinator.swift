@@ -8,11 +8,16 @@
 import Foundation
 import UIKit
 
+protocol RunCoordinatorDelegate {
+    func dismiss(_ coordinator: RunCoordinator)
+}
+
 final class RunCoordinator: NSObject, Coordinator {
     
     var childCoordinators: [NSObject] = []
     
     let navigationController: UINavigationController
+    var delegate: RunCoordinatorDelegate?
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -35,7 +40,7 @@ final class RunCoordinator: NSObject, Coordinator {
 
 extension RunCoordinator: RunViewModelActionDelegate {
     
-    func dismiss(with saved: Bool, snapshot: UIImage?) {
+    func dismiss(with saved: Bool, snapshot: UIImage?, address: String) {
         
         guard saved == true else {
             navigationController.popViewController(animated: true)
@@ -44,9 +49,18 @@ extension RunCoordinator: RunViewModelActionDelegate {
         
         navigationController.popViewController(animated: true)
         
-        let coordiantor = ShareInfoCoordinator(navigationController: navigationController, snapshot: snapshot!)
+        let coordiantor = ShareInfoCoordinator(navigationController: navigationController, snapshot: snapshot!, address: address)
+        coordiantor.delegate = self
         coordiantor.start()
         childCoordinators.append(coordiantor)
     }
 }
 
+extension RunCoordinator: ShareInfoCoordinatorDelegate {
+    
+    func dismiss(_ coordinator: ShareInfoCoordinator) {
+        
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+        
+    }
+}

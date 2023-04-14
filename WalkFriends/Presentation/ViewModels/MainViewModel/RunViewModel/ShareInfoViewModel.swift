@@ -10,72 +10,64 @@ import UIKit
 import RxCocoa
 import RxSwift
 
+protocol ShareInfoViewModelActionDelegate {
+    func dismiss()
+}
+
 final class ShareInfoViewModel: ViewModel {
     
     // MARK: - Input
     
     struct Input {
+        let addressText: Driver<String>
         let selectedImages: Driver<[UIImage]>
         let titleText: Driver<String>
         let memoText: Driver<String>
         let submit: Driver<Void>
+        let cancel: Driver<Void>
     }
     
     // MARK: - Output
     
     struct Output {
-        let updateImages: Driver<[UIImage]>
+        let save: Driver<Bool>
+        let dismiss: Driver<Void>
     }
     
     // MARK: - Properties
     
+    private let dataUseCase: DataUseCase
+    
+    var actionDelegate: ShareInfoViewModelActionDelegate?
+    
+    // MARK:  - Initialize
+    
+    init(dataUseCase: DataUseCase) {
+        self.dataUseCase = dataUseCase
+    }
     
     // MARK: - Transform
     
     func transform(input: Input) -> Output {
         
-        return Output(updateImages: input.selectedImages)
+        let data = Driver.combineLatest(input.addressText, input.selectedImages, input.titleText, input.memoText) {
+            return UserMap(address: $0, images: $1, title: $2, subTitle: $3)
+        }
+        
+        let save = input.submit.withLatestFrom(data)
+            .flatMapLatest { [weak self] in
+                (self?.dataUseCase.shareData(with: $0)
+                    .asDriver(onErrorJustReturn: false))!
+            }.do(onNext: { [weak self] _ in
+                self?.actionDelegate?.dismiss()
+            })
+            
+        let dismiss = input.cancel
+            .do(onNext: { [weak self] _ in
+                self?.actionDelegate?.dismiss()
+            })
+        
+        return Output(save: save, dismiss: dismiss)
     }
 }
-//
-//// MARK: - UITableViewDataSource
-//
-//extension ShareInfoViewModel: UITableViewDataSource {
-//
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 2
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//
-//        if section == 0 {
-//            return 1
-//        } else {
-//            return
-//        }
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//
-//        if indexPath.section == 0 {
-//            let cell = tableView.dequeueReusableCell(withIdentifier: DefaultPhotoViewCell.identifier, for: indexPath) as! DefaultPhotoViewCell
-//            cell.isHighlighted = false
-//            return cell
-//        } else {
-//            let cell = tableView.dequeueReusableCell(withIdentifier: PhotoListCell.identifier, for: indexPath) as! PhotoListCell
-//            cell.isHighlighted = false
-//            return cell
-//        }
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 200
-//    }
-//
-//}
-//
-//// MARK: - UITableViewDelegate
-//
-//extension ShareInfoViewModel: UITableViewDelegate {
-//
-//}
+

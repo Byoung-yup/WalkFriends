@@ -23,7 +23,7 @@ extension StorageManager {
         let metaData = StorageMetadata()
         metaData.contentType = "image/png"
         
-        let fileRef = storage.reference().child("images/\(UserInfo.shared.uid!)_profile.jng")
+        let fileRef = storage.reference().child("images/\(UserInfo.shared.uid!)_profile.jpg")
         
         fileRef.putData(data, metadata: metaData) { _, error in
             
@@ -36,6 +36,30 @@ extension StorageManager {
             print("Storage Fetch Success")
             completion(true)
             return
+        }
+    }
+    
+    func uploadImageArrayData(with data: [Data], uid: String, completion: @escaping (Bool) -> Void) {
+        
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/png"
+        
+        data.enumerated().forEach { (index, data) in
+            
+            let fileRef = storage.reference().child("Maps/\(uid)_\(index).jpg")
+            
+            fileRef.putData(data, metadata: metaData) { _, error in
+                
+                guard error == nil else {
+                    print("Storage Fetch Error")
+                    completion(false)
+                    return
+                }
+                
+                print("Storage Fetch Success")
+                completion(true)
+                return
+            }
         }
     }
 }

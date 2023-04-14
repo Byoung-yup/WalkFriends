@@ -26,7 +26,7 @@ class AppCoordinator: Coordinator {
     
     func start() {
         
-        if (UserInfo.shared.currentUser != nil) {
+        if (FirebaseAuth.Auth.auth().currentUser != nil) {
             showMainViewController()
         } else {
             showLoginViewController()

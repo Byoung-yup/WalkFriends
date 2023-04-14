@@ -13,14 +13,16 @@ import RxCocoa
 protocol DataUseCase {
     func excuteProfile() -> Observable<Bool>
     func createProfile(with userProfile: UserProfile) -> Observable<Bool>
+    func shareData(with userData: UserMap) -> Observable<Bool>
+    func fetchMapListData() -> Observable<Result<[MapList], DatabaseError>>
 }
 
 class DefaultDataUseCase {
     
-    private let dataBaseRepository: UserProfileRepository
+    private let dataBaseRepository: DataRepository
     private let storageRepository: UserProfileImageRepository
     
-    init(dataBaseRepository: UserProfileRepository, storageRepository: UserProfileImageRepository) {
+    init(dataBaseRepository: DataRepository, storageRepository: UserProfileImageRepository) {
         self.dataBaseRepository = dataBaseRepository
         self.storageRepository = storageRepository
     }
@@ -30,7 +32,7 @@ class DefaultDataUseCase {
 extension DefaultDataUseCase: DataUseCase {
     
     func createProfile(with userProfile: UserProfile) -> Observable<Bool> {
-        let jpegData = convertData(with: userProfile.image)
+        let jpegData = userProfile.image.convertData()
         
         return Observable.create { [weak self] (observer) in
             
@@ -53,20 +55,6 @@ extension DefaultDataUseCase: DataUseCase {
             
             return Disposables.create()
         }
-        
-//        storageRepository.uploadImageData(with: jpegData) { [weak self] _ in
-//
-//            return Observable.create { (observer) in
-//
-//                self?.dataBaseRepository.createUserProfile(with: userProfile) { result in
-//                    if result { observer.onNext(true) }
-//                    else { observer.onNext(false) }
-//                    observer.onCompleted()
-//                }
-//
-//                return Disposables.create()
-//            }
-//        }
     }
     
     
@@ -87,16 +75,33 @@ extension DefaultDataUseCase: DataUseCase {
             return Disposables.create()
         }
     }
-}
-
-// MARK: - convert image to jpegData
-
-extension DefaultDataUseCase {
     
-    func convertData(with image: UIImage) -> Data {
+    func shareData(with userData: UserMap) -> Observable<Bool> {
         
-        var data = Data()
-        data = image.jpegData(compressionQuality: 0.8)!
-        return data
+        let jpegDatas = userData.images.map { $0.convertData() }
+        
+        return Observable.create { [weak self] (observer) in
+            
+            self?.dataBaseRepository.createMapData(with: userData, completion: { uid in
+                
+                self?.storageRepository.uploadImageArrayData(with: jpegDatas, uid: uid, completion: { result in
+                    
+                    if result {
+                        observer.onNext(true)
+                    } else {
+                        observer.onNext(false)
+                    }
+                    observer.onCompleted()
+                })
+            })
+            
+            return Disposables.create()
+        }
+        
+    }
+    
+    func fetchMapListData() -> Observable<Result<[MapList], DatabaseError>> {
+        
+        
     }
 }

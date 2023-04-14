@@ -14,22 +14,6 @@ public struct UserProfile  {
     let nickName: String
     let gender: String
 }
-//
-//struct Favorite: Codable {
-//    let uid: String?
-//}
-//
-//struct Linking: Codable {
-//    let up: Int
-//    let down: Int
-//}
-//
-//
-//struct Pet: Decodable {
-//    let name: String
-//    let age: Int
-//    let gender: String
-//}
 
 extension UserProfile {
     

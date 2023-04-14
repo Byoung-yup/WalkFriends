@@ -23,6 +23,10 @@ final class FirebaseService {
 
     private let auth = FirebaseAuth.Auth.auth()
     
+    public var currentUser: User {
+        auth.currentUser!
+    }
+    
     private init() {}
 
 }
@@ -89,8 +93,7 @@ extension FirebaseService: FirebaseAuthService {
                     observer.onNext(false)
                     return
                 }
-                
-                UserInfo.shared.currentUser = authResult?.user
+
                 observer.onNext(true)
             }
             return Disposables.create()

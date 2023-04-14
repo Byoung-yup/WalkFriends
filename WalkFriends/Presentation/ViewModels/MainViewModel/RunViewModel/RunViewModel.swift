@@ -12,7 +12,7 @@ import RxCocoa
 import MapKit
 
 protocol RunViewModelActionDelegate {
-    func dismiss(with saved: Bool, snapshot: UIImage?)
+    func dismiss(with saved: Bool, snapshot: UIImage?, address: String)
 }
 
 final class RunViewModel: ViewModel {
@@ -25,7 +25,6 @@ final class RunViewModel: ViewModel {
         let startCoordinate: Observable<CLLocationCoordinate2D>
         let destinationCoordinate: Observable<CLLocationCoordinate2D>
         let saved: Observable<Bool>
-        let test: Observable<CLLocationCoordinate2D>
     }
     
     // MARK: - Output
@@ -34,7 +33,6 @@ final class RunViewModel: ViewModel {
         let runTrigger: Driver<Void>
         let stopTrigger: Driver<Void>
         let dismissTrigger: Observable<Void?>
-        let test: Observable<CLLocationCoordinate2D>
     }
     
     // MARK: - Properties
@@ -47,11 +45,6 @@ final class RunViewModel: ViewModel {
     
     func transform(input: Input) -> Output {
         
-        let runTrigger = input.run
-        
-        // Test 37.337425, -122.032116
-        //        let testPoint = Observable.just(CLLocationCoordinate2D(latitude: 37.337425, longitude: -122.032116))
-        
         let center = Observable.combineLatest(input.startCoordinate, input.destinationCoordinate)
             .map { [weak self] in
                 self?.centerPoint(start: $0, des: $1)
@@ -63,7 +56,7 @@ final class RunViewModel: ViewModel {
         
         
         
-        return Output(runTrigger: runTrigger, stopTrigger: input.stop, dismissTrigger: dismiss, test: input.startCoordinate)
+        return Output(runTrigger: input.run, stopTrigger: input.stop, dismissTrigger: dismiss)
     }
     
     // MARK: - Center Coordinate2D
@@ -73,7 +66,7 @@ final class RunViewModel: ViewModel {
         let centerX = start.latitude + (des.latitude - start.latitude) / 2
         let centerY = start.longitude + (des.longitude - start.longitude) / 2
         
-        print("centerX: \(centerX), centerY: \(centerY)")
+//        print("centerX: \(centerX), centerY: \(centerY)")
         
         return CLLocationCoordinate2D(latitude: centerX, longitude: centerY)
     }
@@ -83,7 +76,7 @@ final class RunViewModel: ViewModel {
     func takeSnapshot(with saved: Bool, coordinate: CLLocationCoordinate2D) {
         
         guard saved == true else {
-            actionDelegate?.dismiss(with: saved, snapshot: nil)
+            actionDelegate?.dismiss(with: saved, snapshot: nil, address: "")
             return
         }
         
@@ -113,7 +106,7 @@ final class RunViewModel: ViewModel {
             
             // Don't just pass snapshot.image, pass snapshot itself!
             let image = self?.drawLineOnImage(snapshot: snapshot)
-            self?.actionDelegate?.dismiss(with: saved, snapshot: image)
+            self?.reverseGeocoding(saved: saved, image: image!, coordinate: coordinate)
         }
         
     }
@@ -157,6 +150,23 @@ final class RunViewModel: ViewModel {
         UIGraphicsEndImageContext()
         
         return resultImage!
+    }
+    
+    // MARK: - Get Placemark city address
+    
+    private func reverseGeocoding(saved: Bool, image: UIImage, coordinate: CLLocationCoordinate2D) {
+        
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        let geocoder = CLGeocoder()
+        let locale = Locale(identifier: "Ko-kr")
+        
+        geocoder.reverseGeocodeLocation(location, preferredLocale: locale) { [weak self] placemark, error in
+            
+            guard let placemarks = placemark, let placemarkInfo = placemarks.last else { return }
+            
+            self?.actionDelegate?.dismiss(with: saved, snapshot: image, address: placemarkInfo.address!)
+            return
+        }
     }
 }
 

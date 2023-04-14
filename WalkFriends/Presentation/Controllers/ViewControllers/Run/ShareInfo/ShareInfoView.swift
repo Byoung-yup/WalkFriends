@@ -26,6 +26,15 @@ class ShareInfoView: UIView {
         return view
     }()
     
+    lazy var addressView: UILabel = {
+        let lbl = UILabel()
+        lbl.font = UIFont(name: "LettersforLearners", size: 20)
+        lbl.textColor = .black
+        lbl.contentMode = .center
+        lbl.backgroundColor = .white
+        return lbl
+    }()
+    
     lazy var addPhotoBtnView: UIButton = {
         let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
         let image = UIImage(systemName: "plus.circle", withConfiguration: config)
@@ -93,6 +102,14 @@ class ShareInfoView: UIView {
         return btn
     }()
     
+    lazy var cancelBtn: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("취소하기", for: .normal)
+        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 20)
+        btn.setTitleColor(.orange, for: .normal)
+        return btn
+    }()
+    
     // MARK: - Initialize
     
     override init(frame: CGRect) {
@@ -128,9 +145,17 @@ class ShareInfoView: UIView {
             make.centerX.top.bottom.equalToSuperview()
         }
         
+        contentView.addSubview(addressView)
+        addressView.snp.makeConstraints { make in
+            make.top.equalTo(contentView.safeAreaLayoutGuide.snp.top)
+            make.left.equalTo(contentView.safeAreaLayoutGuide.snp.left)
+            make.right.equalTo(contentView.safeAreaLayoutGuide.snp.right)
+            make.height.equalTo(70)
+        }
+        
         contentView.addSubview(addPhotoBtnView)
         addPhotoBtnView.snp.makeConstraints { make in
-            make.top.equalTo(contentView.safeAreaLayoutGuide.snp.top)
+            make.top.equalTo(addressView.safeAreaLayoutGuide.snp.bottom).offset(15)
             make.left.equalTo(contentView.safeAreaLayoutGuide.snp.left)
             make.right.equalTo(contentView.safeAreaLayoutGuide.snp.right)
             make.height.equalTo(200)
@@ -187,12 +212,17 @@ class ShareInfoView: UIView {
         
         submitView.addSubview(submitBtn)
         submitBtn.snp.makeConstraints { make in
+            make.left.equalTo(submitView.safeAreaLayoutGuide.snp.left).offset(50)
             make.center.equalToSuperview()
+            make.width.equalToSuperview().dividedBy(2)
+        }
+        
+        submitView.addSubview(cancelBtn)
+        cancelBtn.snp.makeConstraints { make in
+            make.right.equalTo(submitView.safeAreaLayoutGuide.snp.right).offset(-50)
+            make.center.equalToSuperview()
+            make.width.equalToSuperview().dividedBy(2)
         }
     }
     
-    private func binding() {
-        
-        
-    }
 }

@@ -60,9 +60,9 @@ class RunViewController: UIViewController {
         return manager
     }()
     
-    private var startCoordinate = BehaviorSubject<CLLocationCoordinate2D>(value: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
     private var previousCoordinate: CLLocationCoordinate2D?
-    private var destinationCoordinate = BehaviorSubject<CLLocationCoordinate2D>(value: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
+    private var startCoordinate = BehaviorRelay<CLLocationCoordinate2D>(value: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
+    private var destinationCoordinate = BehaviorRelay<CLLocationCoordinate2D>(value: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
     private var coordinators: [CLLocationCoordinate2D] = []
     
     private var isSavedStatus: PublishSubject = PublishSubject<Bool>()
@@ -151,8 +151,7 @@ class RunViewController: UIViewController {
                                        stop: stopBtn.rx.tap.asDriver(),
                                        startCoordinate: startCoordinate.asObservable(),
                                        destinationCoordinate: destinationCoordinate.asObservable(),
-                                       saved: isSavedStatus.asObservable(),
-                                       test: destinationCoordinate.asObservable())
+                                       saved: isSavedStatus.asObservable())
         let output = runViewModel.transform(input: input)
         
         output.runTrigger
@@ -169,10 +168,7 @@ class RunViewController: UIViewController {
             .subscribe()
             .disposed(by: disposeBag)
         
-        output.test
-            .subscribe(onNext: { point in
-                print("des point: \(point)")
-            }).disposed(by: disposeBag)
+
     }
     
 }
@@ -271,7 +267,7 @@ extension RunViewController {
         stopBtn.isHidden = false
         
         guard let startPoint = previousCoordinate else { return }
-        startCoordinate.onNext(startPoint)
+        startCoordinate.accept(startPoint)
         
         let region = MKCoordinateRegion(center: startPoint, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
         mapView.setRegion(region, animated: true)
@@ -301,9 +297,9 @@ extension RunViewController {
         if let previousCoordinate = self.previousCoordinate {
             runViewModel.coordinators = coordinators
             runViewModel.size = mapView.frame.size
-            destinationCoordinate.onNext(testDesPoint2)
-            runViewModel.coordinators?.append(testStartPoint2)
-            runViewModel.coordinators?.append(testDesPoint2)
+            destinationCoordinate.accept(previousCoordinate)
+//            runViewModel.coordinators?.append(testStartPoint2)
+//            runViewModel.coordinators?.append(testDesPoint2)
         }
         
         locationManager.stopUpdatingLocation()
@@ -323,6 +319,8 @@ extension RunViewController {
     }
 }
 
+// MARK: - CLLocationManagerDelegate
+
 extension RunViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -332,7 +330,7 @@ extension RunViewController: CLLocationManagerDelegate {
         let latitude = location.coordinate.latitude
         let longtitude = location.coordinate.longitude
         
-//        coordinators.append(CLLocationCoordinate2D(latitude: latitude, longitude: longtitude))
+        coordinators.append(CLLocationCoordinate2D(latitude: latitude, longitude: longtitude))
         
         if let previousCoordinate = self.previousCoordinate {
             
@@ -352,6 +350,8 @@ extension RunViewController: CLLocationManagerDelegate {
     }
     
 }
+
+// MARK: - MKMapViewDelegate
 
 extension RunViewController: MKMapViewDelegate {
     

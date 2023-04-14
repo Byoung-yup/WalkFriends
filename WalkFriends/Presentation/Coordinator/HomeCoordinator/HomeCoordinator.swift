@@ -60,16 +60,20 @@ extension HomeCoordinator: HomeViewModelActionDelegate {
         switch presenter {
         case .Run:
             let coordinator = RunCoordinator(navigationController: navigationController)
+            coordinator.delegate = self
             coordinator.start()
+            childCoordinators.append(coordinator)
         case .Menu:
-            break
+            let coordinator = MapListCoordinator(navigationController: navigationController)
+            coordinator.start()
+            childCoordinators.append(coordinator)
         case .None:
             break
         case .Profile:
             let coordinator = InfoCoordinator(navigationController: navigationController)
-            childCoordinators.append(coordinator)
             coordinator.delegate = self
             coordinator.start()
+            childCoordinators.append(coordinator)
         }
     }
     
@@ -89,5 +93,12 @@ extension HomeCoordinator: InfoCoordinatorDelegate {
     func logout(_ coordinator: InfoCoordinator) {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
         delegate?.didLoggedOut(self)
+    }
+}
+
+extension HomeCoordinator: RunCoordinatorDelegate {
+    
+    func dismiss(_ coordinator: RunCoordinator) {
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
     }
 }
