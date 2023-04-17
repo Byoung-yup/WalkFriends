@@ -12,6 +12,7 @@ protocol DataRepository {
     func fetchUserProfile(completion: @escaping (Result<Bool, DatabaseError>) -> Void)
     func createUserProfile(with userProfile: UserProfile, completion: @escaping (Bool) -> Void)
     func createMapData(with userData: UserMap, completion: @escaping (String) -> Void)
+    func fetchMapListData(completion: @escaping (Result<[MapList], DatabaseError>) -> Void)
 }
 
 protocol UserProfileImageRepository {

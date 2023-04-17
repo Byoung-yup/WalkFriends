@@ -33,13 +33,13 @@ extension DatabaseManager: DataRepository {
                 let data = document.data()
                 print("data exists")
                 completion(.success(true))
-                //                do {
-                //                    let jsonData = try JSONSerialization.data(withJSONObject: data!)
-                //                    let decoded = try JSONDecoder().decode(UserProfile.self, from: jsonData)
-                //                    completion(.success(decoded))
-                //                } catch {
-                //                    print("Decode error")
-                //                }
+//                                do {
+//                                    let jsonData = try JSONSerialization.data(withJSONObject: data!)
+//                                    let decoded = try JSONDecoder().decode(UserProfile.self, from: jsonData)
+//                                    completion(.success(decoded))
+//                                } catch {
+//                                    print("Decode error")
+//                                }
             } else {
                 print("Data fetch error")
                 completion(.failure(DatabaseError.FetchError))
@@ -80,6 +80,33 @@ extension DatabaseManager: DataRepository {
             return
         }
         
+    }
+    
+    func fetchMapListData(completion: @escaping (Result<[MapList], DatabaseError>) -> Void) {
+        
+        db.collection("Maps").getDocuments { snapshot, error in
+            
+            guard let documents = snapshot?.documents else {
+                completion(.failure(DatabaseError.FetchError))
+                return
+            }
+            
+            var mapList: [MapList] = []
+            
+            for document in documents {
+                let data = document.data()
+
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: data, options: .fragmentsAllowed)
+                    let decoded = try JSONDecoder().decode(MapList.self, from: jsonData)
+                    mapList.append(decoded)
+                } catch let err {
+                    print("Decode error: \(err)")
+                }
+            }
+            
+            completion(.success(mapList))
+        }
     }
     
 }

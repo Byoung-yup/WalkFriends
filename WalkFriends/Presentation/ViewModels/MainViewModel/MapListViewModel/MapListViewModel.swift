@@ -14,13 +14,13 @@ final class MapListViewModel: ViewModel {
     // MARK: - Input
     
     struct Input {
-        
+//        let viewWillAppear: Driver<Bool>
     }
     
     // MARK: - Output
     
     struct Output {
-        
+        let mapList: Observable<[MapList]>
     }
     
     // MARK: - Properties
@@ -36,13 +36,16 @@ final class MapListViewModel: ViewModel {
     // MARK: - Transform
     
     func transform(input: Input) -> Output {
-        return Output()
+        
+        let mapListData = fetchMapListData()
+        
+        return Output(mapList: mapListData)
     }
     
     // MARK: FetchMapListData
     
-    func fetchMapListData() {
+    func fetchMapListData() -> Observable<[MapList]> {
         
-        dataUseCase
+        return dataUseCase.fetchMapListData()
     }
 }

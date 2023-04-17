@@ -27,8 +27,6 @@ class HomeViewModel: ViewModel {
     
     private let dataUseCase: DataUseCase
     
-    let disposeBag = DisposeBag()
-    
     let items = Observable.just(["Run", "Menu", "None", "Profile"])
     
     // MARK: - INPUT

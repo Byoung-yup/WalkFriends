@@ -7,11 +7,21 @@
 
 import Foundation
 
-struct MapList {
+struct MapList: Codable {
     let uid: String
-    let date: String
     let address: String
-    let images: [Data]?
+//    let images: [Data]?
     let title: String
     let subTitle: String
+    let date: String
+    let email: String
+    
+    enum CodingKeys: String, CodingKey {
+        case uid = "uid"
+        case address = "address"
+        case title = "title"
+        case subTitle = "subTitle"
+        case date = "time"
+        case email = "email"
+    }
 }

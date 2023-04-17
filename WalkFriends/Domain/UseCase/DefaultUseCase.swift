@@ -14,7 +14,7 @@ protocol DataUseCase {
     func excuteProfile() -> Observable<Bool>
     func createProfile(with userProfile: UserProfile) -> Observable<Bool>
     func shareData(with userData: UserMap) -> Observable<Bool>
-    func fetchMapListData() -> Observable<Result<[MapList], DatabaseError>>
+    func fetchMapListData() -> Observable<[MapList]>
 }
 
 class DefaultDataUseCase {
@@ -100,8 +100,23 @@ extension DefaultDataUseCase: DataUseCase {
         
     }
     
-    func fetchMapListData() -> Observable<Result<[MapList], DatabaseError>> {
+    func fetchMapListData() -> Observable<[MapList]> {
         
-        
+        return Observable.create { [weak self] (observer) in
+            
+            self?.dataBaseRepository.fetchMapListData(completion: { result in
+                
+                switch result {
+                case .success(let mapList):
+                    observer.onNext(mapList)
+                case .failure(let err):
+                    observer.onError(err)
+                }
+                
+                observer.onCompleted()
+            })
+            
+            return Disposables.create()
+        }
     }
 }
