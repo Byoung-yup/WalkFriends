@@ -18,6 +18,7 @@ enum Presenter: Int {
 
 protocol HomeViewModelActionDelegate {
     func setupProfile()
+    func error()
     func present(from: Presenter)
 }
 
@@ -39,6 +40,7 @@ class HomeViewModel: ViewModel {
     
     struct Output {
         let trigger: Driver<Presenter?>
+        let fetchTrigger: Driver<Result<Bool, DatabaseError>>
     }
     
     // MARK: - Initailize
@@ -48,6 +50,10 @@ class HomeViewModel: ViewModel {
     }
     
     func transform(input: Input) -> Output {
+        
+        let fetch = dataUseCase.start()
+            .asDriver(onErrorJustReturn: .failure(DatabaseError.DatabaseFetchError))
+        
         let dismiss = input.selectedMenu
             .map {
                 return Presenter(rawValue: $0[1] )
@@ -55,29 +61,29 @@ class HomeViewModel: ViewModel {
                 self?.actionDelegate?.present(from: presenter!)
             }).asDriver()
                 
-        return Output(trigger: dismiss)
-    }
-    
-    
-}
-
-// MARK: - INPUT. View event methods
-
-extension HomeViewModel {
-    
-    func fetchMyProfileData() -> Observable<Bool> {
-        
-        return dataUseCase.excuteProfile()
-        
+        return Output(trigger: dismiss,
+                      fetchTrigger: fetch)
     }
     
 }
-
-// MARK: - Action Delegate
-
-extension HomeViewModel {
-    
-    func setupProfileView() {
-        actionDelegate?.setupProfile()
-    }
-}
+//
+//// MARK: - INPUT. View event methods
+//
+//extension HomeViewModel {
+//
+//    func fetchMyProfileData() -> Observable<Bool> {
+//
+//        return dataUseCase.excuteProfile()
+//        
+//    }
+//
+//}
+//
+//// MARK: - Action Delegate
+//
+//extension HomeViewModel {
+//
+//    func setupProfileView() {
+//        actionDelegate?.setupProfile()
+//    }
+//}

@@ -12,11 +12,13 @@ import RxCocoa
 
 class LoginViewController: UIViewController {
     
+    // MARK: - Properties
+    
     let loginViewModel: LoginViewModel
     
     let disposeBag = DisposeBag()
     
-    // MARK: UI Properties
+    // MARK: - UI Properties
     lazy var loginLabel: UILabel = {
        let lbl = UILabel()
         lbl.text = "Login"
@@ -112,7 +114,8 @@ class LoginViewController: UIViewController {
         self.view.endEditing(true)
     }
     
-    // MARK: UI Configure
+    // MARK: - UI Configure
+    
     private func configureUI() {
         
         view.addSubview(loginLabel)
@@ -164,13 +167,14 @@ class LoginViewController: UIViewController {
         }
     }
 
-    // MARK: Binding
+    // MARK: - Binding
+    
     private func binding() {
         
-        let input = LoginViewModel.Input(email: emailTextField.rx.text.orEmpty.asDriver(),
-                                         password: passwordTextField.rx.text.orEmpty.asDriver(),
-                                         login: loginButton.rx.tap.asDriver(),
-                                         register: registerInfoButton.rx.tap.asDriver())
+        let input = LoginViewModel.Input(email: emailTextField.rx.text.orEmpty.asObservable(),
+                                         password: passwordTextField.rx.text.orEmpty.asObservable(),
+                                         login: loginButton.rx.tap.asObservable(),
+                                         register: registerInfoButton.rx.tap.asObservable())
         let output = loginViewModel.transform(input: input)
         
         output.loginEnabled
@@ -178,14 +182,23 @@ class LoginViewController: UIViewController {
             .disposed(by: disposeBag)
             
         output.present
-            .drive()
+            .subscribe()
             .disposed(by: disposeBag)
         
         output.loginTrigger
-            .drive(onNext: { result in
-                print("Login result: \(result)")
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] result in
+                
+                guard let strongSelf = self else { return }
+                
+                switch result {
+                case .success(_):
+                    strongSelf.loginViewModel.actionDelegate?.signIn()
+                case .failure(let err):
+                    strongSelf.showFBAuthErrorAlert(error: err)
+                }
+                
             }).disposed(by: disposeBag)
     }
     
 }
-

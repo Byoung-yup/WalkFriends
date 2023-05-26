@@ -10,6 +10,7 @@ import UIKit
 
 protocol HomeCoordinatorDelegate {
     func didLoggedOut(_ coordinator: HomeCoordinator)
+    func error(_ coordinator: HomeCoordinator)
 }
 
 
@@ -75,6 +76,10 @@ extension HomeCoordinator: HomeViewModelActionDelegate {
             coordinator.start()
             childCoordinators.append(coordinator)
         }
+    }
+    
+    func error() {
+        delegate?.error(self)
     }
     
 }

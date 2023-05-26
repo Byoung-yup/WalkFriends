@@ -26,13 +26,13 @@ class LoginCoordinator: NSObject, Coordinator {
     func start() {
         
         let loginViewController = LoginViewController(loginViewModel: makeLoginViewModel())
-        navigationController.viewControllers = [loginViewController]
+        navigationController.setViewControllers([loginViewController], animated: false)
         
     }
     
     // MARK: - LoginViewController
     
-    func makeLoginViewModel() -> LoginViewModel {
+    private func makeLoginViewModel() -> LoginViewModel {
         let homeViewModel = LoginViewModel()
         homeViewModel.actionDelegate = self
         return homeViewModel

@@ -19,15 +19,23 @@ final class RegiterViewModel: ViewModel {
     // MARK: - Input
     
     struct Input {
-        let emailConfirm: Observable<UITapGestureRecognizer>
-        let back: Driver<Void>
+        let email: Observable<String>
+        let password: Observable<String>
+        let confirmPassword: Observable<String>
+        let register: Observable<Void>
+        let naviback: Observable<Void>
+        let toBack: Observable<Void>
     }
     
     // MARK: - Output
     
     struct Output {
-//        let present: Driver<Void>
-        let dismiss: Driver<Void>
+        let isValidEmail: Driver<Bool>
+        let isValidPassword: Driver<Bool>
+        let isValidConfirmPassword: Driver<Bool>
+        let isValidRegister: Driver<Bool>
+        let dismiss: Observable<Void>
+        let registerTrigger: Observable<Result<Bool, FirebaseAuthError>>
     }
     
     // MARK: - Properties
@@ -38,15 +46,35 @@ final class RegiterViewModel: ViewModel {
     
     func transform(input: Input) -> Output {
         
-        let trigger = input.emailConfirm
+        let checkEmail = input.email.map { $0.isValidEmail() }.asDriver(onErrorJustReturn: false)
         
-        let dismiss = input.back
+        let checkPassword = input.password.map { $0.isValidPassword() }.asDriver(onErrorJustReturn: false)
+        
+        let checkConfirmPassword = Observable.combineLatest(input.password, input.confirmPassword) { $0 == $1  && $1.count > 0 }.asDriver(onErrorJustReturn: false)
+        
+        let checkRegister = Driver.combineLatest(checkEmail, checkPassword, checkConfirmPassword) { $0 && $1 && $2 }
+        
+        
+        let user = Observable.combineLatest(input.email, input.password) { UserLoginInfo(email: $0, password: $1) }
+        
+        let register = input.register.withLatestFrom(user)
+            .flatMapLatest {
+                return FirebaseService.shard.createUser(user: $0)
+            }
+        //
+        
+        
+        let dismiss = Observable.merge(input.naviback, input.toBack)
             .do(onNext: { [weak self] in
                 self?.actionDelegate?.toBack()
             })
-            
-        
-        return Output(dismiss: dismiss)
+                
+                return Output(isValidEmail: checkEmail,
+                              isValidPassword: checkPassword,
+                              isValidConfirmPassword: checkConfirmPassword,
+                              isValidRegister: checkRegister,
+                              dismiss: dismiss,
+                              registerTrigger: register)
     }
     
 }

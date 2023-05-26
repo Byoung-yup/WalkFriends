@@ -18,15 +18,20 @@
 		B031A1BC2991F64400C51B5A /* Letters for Learners Outline Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */; };
 		B031A1BD2991F64400C51B5A /* Letters for Learners Outline Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */; };
 		B031A1BF2991F73800C51B5A /* Letters for Learners.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */; };
+		B03310242A0E61020081528D /* EmailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03310232A0E61020081528D /* EmailCoordinator.swift */; };
 		B034D94C29E1568700B90AB2 /* RegisterCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B034D94B29E1568700B90AB2 /* RegisterCoordinator.swift */; };
 		B0483CFF29D6BC4E001941C1 /* ShareInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0483CFE29D6BC4E001941C1 /* ShareInfoViewController.swift */; };
 		B0483D0229D6BCAC001941C1 /* ShareInfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0483D0129D6BCAC001941C1 /* ShareInfoCoordinator.swift */; };
 		B05B7F6729ED02F100685D6F /* Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B7F6629ED02F100685D6F /* Reactive.swift */; };
+		B05C3D9C2A176F8C00D23AB7 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05C3D9B2A176F8C00D23AB7 /* UIViewController.swift */; };
+		B062D8092A0B6451005C9FD3 /* MapListDetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B062D8072A0B6451005C9FD3 /* MapListDetailViewCell.swift */; };
+		B062D80A2A0B6451005C9FD3 /* MapListDetailViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B062D8082A0B6451005C9FD3 /* MapListDetailViewCell.xib */; };
 		B0638BA1299FCFBA001776F5 /* CustomLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0638BA0299FCFBA001776F5 /* CustomLabelView.swift */; };
 		B065C42529CB3424005AC8E2 /* HomeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B065C42429CB3424005AC8E2 /* HomeListView.swift */; };
 		B065C42829CB5C5B005AC8E2 /* HomeListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B065C42629CB5C5B005AC8E2 /* HomeListCell.swift */; };
 		B065C42929CB5C5B005AC8E2 /* HomeListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B065C42729CB5C5B005AC8E2 /* HomeListCell.xib */; };
 		B06B456D29C4347300B0AED2 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06B456C29C4347200B0AED2 /* ViewModel.swift */; };
+		B06E9FBF2A039C2D00512F49 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B06E9FBE2A039C2D00512F49 /* NetworkService.swift */; };
 		B072878D29A88BAC00E8A085 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B072878C29A88BAC00E8A085 /* UserInfo.swift */; };
 		B07391572993601000903C1F /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07391562993601000903C1F /* FirebaseService.swift */; };
 		B076311E29E671DB009B39C0 /* CLPlacemark.swift in Sources */ = {isa = PBXBuildFile; fileRef = B076311D29E671DB009B39C0 /* CLPlacemark.swift */; };
@@ -45,6 +50,10 @@
 		B090808929DEB86700DDAEBC /* ShareInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B090808829DEB86700DDAEBC /* ShareInfoView.swift */; };
 		B090808C29DECC6400DDAEBC /* PhotoListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B090808A29DECC6400DDAEBC /* PhotoListCell.swift */; };
 		B090808D29DECC6400DDAEBC /* PhotoListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B090808B29DECC6400DDAEBC /* PhotoListCell.xib */; };
+		B0909F0529EE24DA00CFE7B1 /* MapListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0909F0429EE24DA00CFE7B1 /* MapListDetailViewController.swift */; };
+		B0909F0729EE254A00CFE7B1 /* MapListDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0909F0629EE254A00CFE7B1 /* MapListDetailViewModel.swift */; };
+		B0909F0929EE26B800CFE7B1 /* MapListDetailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0909F0829EE26B800CFE7B1 /* MapListDetailCoordinator.swift */; };
+		B0936E6A2A20A8EB00EB03A5 /* UserLoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0936E692A20A8EB00EB03A5 /* UserLoginModel.swift */; };
 		B097425129CC2C76002AD53A /* RunViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B097425029CC2C76002AD53A /* RunViewModel.swift */; };
 		B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7832990DBF2008558EA /* AppDelegate.swift */; };
 		B09DC7862990DBF2008558EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7852990DBF2008558EA /* SceneDelegate.swift */; };
@@ -88,15 +97,20 @@
 		B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Light.ttf"; sourceTree = "<group>"; };
 		B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Bold.ttf"; sourceTree = "<group>"; };
 		B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners.ttf"; sourceTree = "<group>"; };
+		B03310232A0E61020081528D /* EmailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailCoordinator.swift; sourceTree = "<group>"; };
 		B034D94B29E1568700B90AB2 /* RegisterCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCoordinator.swift; sourceTree = "<group>"; };
 		B0483CFE29D6BC4E001941C1 /* ShareInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoViewController.swift; sourceTree = "<group>"; };
 		B0483D0129D6BCAC001941C1 /* ShareInfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoCoordinator.swift; sourceTree = "<group>"; };
 		B05B7F6629ED02F100685D6F /* Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reactive.swift; sourceTree = "<group>"; };
+		B05C3D9B2A176F8C00D23AB7 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
+		B062D8072A0B6451005C9FD3 /* MapListDetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListDetailViewCell.swift; sourceTree = "<group>"; };
+		B062D8082A0B6451005C9FD3 /* MapListDetailViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapListDetailViewCell.xib; sourceTree = "<group>"; };
 		B0638BA0299FCFBA001776F5 /* CustomLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabelView.swift; sourceTree = "<group>"; };
 		B065C42429CB3424005AC8E2 /* HomeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListView.swift; sourceTree = "<group>"; };
 		B065C42629CB5C5B005AC8E2 /* HomeListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListCell.swift; sourceTree = "<group>"; };
 		B065C42729CB5C5B005AC8E2 /* HomeListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeListCell.xib; sourceTree = "<group>"; };
 		B06B456C29C4347200B0AED2 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		B06E9FBE2A039C2D00512F49 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		B072878C29A88BAC00E8A085 /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		B07391562993601000903C1F /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		B076311D29E671DB009B39C0 /* CLPlacemark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLPlacemark.swift; sourceTree = "<group>"; };
@@ -115,6 +129,10 @@
 		B090808829DEB86700DDAEBC /* ShareInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoView.swift; sourceTree = "<group>"; };
 		B090808A29DECC6400DDAEBC /* PhotoListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListCell.swift; sourceTree = "<group>"; };
 		B090808B29DECC6400DDAEBC /* PhotoListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoListCell.xib; sourceTree = "<group>"; };
+		B0909F0429EE24DA00CFE7B1 /* MapListDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListDetailViewController.swift; sourceTree = "<group>"; };
+		B0909F0629EE254A00CFE7B1 /* MapListDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListDetailViewModel.swift; sourceTree = "<group>"; };
+		B0909F0829EE26B800CFE7B1 /* MapListDetailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListDetailCoordinator.swift; sourceTree = "<group>"; };
+		B0936E692A20A8EB00EB03A5 /* UserLoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLoginModel.swift; sourceTree = "<group>"; };
 		B097425029CC2C76002AD53A /* RunViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunViewModel.swift; sourceTree = "<group>"; };
 		B09DC7802990DBF2008558EA /* WalkFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WalkFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B09DC7832990DBF2008558EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -188,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				B02828D929E93EF4008B22CF /* MapListCoordinator.swift */,
+				B0909F0829EE26B800CFE7B1 /* MapListDetailCoordinator.swift */,
 			);
 			path = MapListCoordinator;
 			sourceTree = "<group>";
@@ -196,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				B02828DF29E93FC6008B22CF /* MapListViewModel.swift */,
+				B0909F0629EE254A00CFE7B1 /* MapListDetailViewModel.swift */,
 			);
 			path = MapListViewModel;
 			sourceTree = "<group>";
@@ -204,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				B02828DD29E93F8E008B22CF /* MapListViewController.swift */,
+				B0909F0429EE24DA00CFE7B1 /* MapListDetailViewController.swift */,
 				B02828E129E941F4008B22CF /* Cell */,
 			);
 			path = MapList;
@@ -214,6 +235,8 @@
 			children = (
 				B02828E229E94207008B22CF /* MapListViewCell.swift */,
 				B02828E329E94207008B22CF /* MapListViewCell.xib */,
+				B062D8072A0B6451005C9FD3 /* MapListDetailViewCell.swift */,
+				B062D8082A0B6451005C9FD3 /* MapListDetailViewCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -231,6 +254,7 @@
 			children = (
 				B09DC7A32990E29F008558EA /* LoginCoordinator.swift */,
 				B034D94B29E1568700B90AB2 /* RegisterCoordinator.swift */,
+				B03310232A0E61020081528D /* EmailCoordinator.swift */,
 			);
 			path = LoginCoordinator;
 			sourceTree = "<group>";
@@ -274,6 +298,14 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		B06E9FBD2A03770300512F49 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				B06E9FBE2A039C2D00512F49 /* NetworkService.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		B072878B29A88BA200E8A085 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -306,6 +338,7 @@
 		B07971B929B1CF5B0038BE9D /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				B06E9FBD2A03770300512F49 /* Network */,
 				B07971BA29B1CFD20038BE9D /* Storage */,
 				B0C56F2B29922079004E83B8 /* Database */,
 				B014403029E00B6B000E4EB3 /* FirebaseService */,
@@ -380,6 +413,14 @@
 				B090808829DEB86700DDAEBC /* ShareInfoView.swift */,
 			);
 			path = ShareInfo;
+			sourceTree = "<group>";
+		};
+		B0936E6B2A20A8F300EB03A5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B0936E692A20A8EB00EB03A5 /* UserLoginModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		B097424F29CC2C24002AD53A /* Run */ = {
@@ -487,6 +528,7 @@
 		B09DC79E2990DEFB008558EA /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B0936E6B2A20A8F300EB03A5 /* Model */,
 				B0C273B6299B6B7C005B3AAD /* ViewControllers */,
 			);
 			path = Controllers;
@@ -513,6 +555,7 @@
 				B076312129E6A84A009B39C0 /* UIImage.swift */,
 				B02828D629E93BA0008B22CF /* Date.swift */,
 				B05B7F6629ED02F100685D6F /* Reactive.swift */,
+				B05C3D9B2A176F8C00D23AB7 /* UIViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -650,6 +693,7 @@
 				B09DC78D2990DBF6008558EA /* Assets.xcassets in Resources */,
 				B065C42929CB5C5B005AC8E2 /* HomeListCell.xib in Resources */,
 				B0C56F2A29921413004E83B8 /* GoogleService-Info.plist in Resources */,
+				B062D80A2A0B6451005C9FD3 /* MapListDetailViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -702,6 +746,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0909F0529EE24DA00CFE7B1 /* MapListDetailViewController.swift in Sources */,
 				B02828DE29E93F8E008B22CF /* MapListViewController.swift in Sources */,
 				B07391572993601000903C1F /* FirebaseService.swift in Sources */,
 				B07971BE29B1D1AB0038BE9D /* DefaultUseCase.swift in Sources */,
@@ -720,7 +765,9 @@
 				B065C42829CB5C5B005AC8E2 /* HomeListCell.swift in Sources */,
 				B065C42529CB3424005AC8E2 /* HomeListView.swift in Sources */,
 				B09DC7992990DD7D008558EA /* AppCoordinator.swift in Sources */,
+				B0936E6A2A20A8EB00EB03A5 /* UserLoginModel.swift in Sources */,
 				B097425129CC2C76002AD53A /* RunViewModel.swift in Sources */,
+				B0909F0929EE26B800CFE7B1 /* MapListDetailCoordinator.swift in Sources */,
 				B076312029E6A050009B39C0 /* UserMap.swift in Sources */,
 				B072878D29A88BAC00E8A085 /* UserInfo.swift in Sources */,
 				B09DC7A42990E29F008558EA /* LoginCoordinator.swift in Sources */,
@@ -739,9 +786,12 @@
 				B076C6CA299CACBD00EFDA7F /* UserProfile.swift in Sources */,
 				B08531D829B8ADAF00209127 /* InfoViewModel.swift in Sources */,
 				B0C56F332992232D004E83B8 /* LoginViewModel.swift in Sources */,
+				B06E9FBF2A039C2D00512F49 /* NetworkService.swift in Sources */,
 				B0C56F3A299244D4004E83B8 /* EmailConfirmViewModel.swift in Sources */,
 				B07971C129B1D1FA0038BE9D /* UseCase.swift in Sources */,
+				B062D8092A0B6451005C9FD3 /* MapListDetailViewCell.swift in Sources */,
 				B090808C29DECC6400DDAEBC /* PhotoListCell.swift in Sources */,
+				B03310242A0E61020081528D /* EmailCoordinator.swift in Sources */,
 				B0C56F2D2992208C004E83B8 /* DatabaseManager.swift in Sources */,
 				B0638BA1299FCFBA001776F5 /* CustomLabelView.swift in Sources */,
 				B02828D729E93BA0008B22CF /* Date.swift in Sources */,
@@ -752,8 +802,10 @@
 				B0C56F3829924443004E83B8 /* String.swift in Sources */,
 				B0483CFF29D6BC4E001941C1 /* ShareInfoViewController.swift in Sources */,
 				B05B7F6729ED02F100685D6F /* Reactive.swift in Sources */,
+				B0909F0729EE254A00CFE7B1 /* MapListDetailViewModel.swift in Sources */,
 				B09DC7AE2990FFAF008558EA /* CALayer.swift in Sources */,
 				B0C273BA299B6BAC005B3AAD /* RunViewController.swift in Sources */,
+				B05C3D9C2A176F8C00D23AB7 /* UIViewController.swift in Sources */,
 				B0C56F2F29922094004E83B8 /* StorageManager.swift in Sources */,
 				B0C273BE299B6BC2005B3AAD /* InfoViewController.swift in Sources */,
 				B076311E29E671DB009B39C0 /* CLPlacemark.swift in Sources */,

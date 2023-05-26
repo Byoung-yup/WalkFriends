@@ -30,7 +30,7 @@ final class ShareInfoViewModel: ViewModel {
     // MARK: - Output
     
     struct Output {
-        let save: Driver<Bool>
+        let save: Driver<[String]>
         let dismiss: Driver<Void>
     }
     
@@ -56,12 +56,11 @@ final class ShareInfoViewModel: ViewModel {
         
         let save = input.submit.withLatestFrom(data)
             .flatMapLatest { [weak self] in
-                (self?.dataUseCase.shareData(with: $0)
-                    .asDriver(onErrorJustReturn: false))!
+                (self?.dataUseCase.shareData(with: $0).asDriver(onErrorJustReturn: [""]))!
             }.do(onNext: { [weak self] _ in
-                self?.actionDelegate?.dismiss()
+                self?.actionDelegate!.dismiss()
             })
-            
+//
         let dismiss = input.cancel
             .do(onNext: { [weak self] _ in
                 self?.actionDelegate?.dismiss()

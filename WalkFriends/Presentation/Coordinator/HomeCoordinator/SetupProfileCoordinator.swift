@@ -26,6 +26,7 @@ final class SetupProfileCoordinator: NSObject, Coordinator {
     func start() {
         let setupProfileVC = SetupProfileViewController(viewModel: makeSetupProfileViewModel())
         navigationController.pushViewController(setupProfileVC, animated: true)
+        navigationController.navigationBar.isHidden = true
     }
 }
 

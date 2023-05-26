@@ -17,7 +17,7 @@ struct UserMap {
 
 extension UserMap {
     
-    func toDomain(uid: String) -> [String: Any] {
+    func toDomain(uid: String, urls: [String]) -> [String: Any] {
         
         return [
            "uid": uid,
@@ -25,7 +25,8 @@ extension UserMap {
            "address": address,
            "title": title,
            "subTitle": subTitle,
-           "time": Date().getCurrenTime()
+           "time": Date().getCurrenTime(),
+           "imageUrls": urls
         ]
     }
 }

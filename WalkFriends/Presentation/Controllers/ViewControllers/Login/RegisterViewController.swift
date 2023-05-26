@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-import RxGesture
 
 class RegisterViewController: UIViewController {
     
@@ -35,19 +34,14 @@ class RegisterViewController: UIViewController {
         return lbl
     }()
     
-    lazy var emailTextView: CustomLabelView = {
-        let lbl = CustomLabelView()
-        let attributedString = NSMutableAttributedString(string: "")
-        let imageAttachment = NSTextAttachment()
-        let imageConfig = UIImage.SymbolConfiguration(paletteColors: [.systemGray])
-        imageAttachment.image = UIImage(systemName: "envelope", withConfiguration: imageConfig)
-        attributedString.append(NSAttributedString(attachment: imageAttachment))
-        attributedString.append(NSAttributedString(string: " Email"))
-        lbl.attributedText = attributedString
-        lbl.textColor = .systemGray
-        lbl.font = UIFont(name: "LettersforLearners", size: 20)
-        lbl.isUserInteractionEnabled = true
-        return lbl
+    lazy var emailTextField: CustomTextField = {
+        let tf = CustomTextField()
+        tf.addleftimage(image: UIImage(systemName: "envelope")!)
+        tf.font = UIFont(name: "LettersforLearners", size: 20)
+        tf.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [.foregroundColor: UIColor.systemGray])
+        tf.textColor = .black
+        tf.autocapitalizationType = .none
+        return tf
     }()
     
     lazy var emailSymbol: UIButton = {
@@ -130,6 +124,7 @@ class RegisterViewController: UIViewController {
     }()
     
     // MARK: - Initialize
+    
     init(registerViewModel: RegiterViewModel) {
         self.registerViewModel = registerViewModel
         super.init(nibName: nil, bundle: nil)
@@ -152,7 +147,8 @@ class RegisterViewController: UIViewController {
         self.view.endEditing(true)
     }
     
-    // MARK: UI Configure
+    // MARK: - UI Configure
+    
     private func configureUI() {
         
         view.addSubview(backToButton)
@@ -167,8 +163,8 @@ class RegisterViewController: UIViewController {
             make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(25)
         }
         
-        view.addSubview(emailTextView)
-        emailTextView.snp.makeConstraints { make in
+        view.addSubview(emailTextField)
+        emailTextField.snp.makeConstraints { make in
             make.top.equalTo(registerLabel.snp.bottom).offset(40)
             make.left.equalTo(registerLabel.snp.left)
             make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-25)
@@ -177,17 +173,17 @@ class RegisterViewController: UIViewController {
         
         view.addSubview(passwordTextField)
         passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(emailTextView.snp.bottom).offset(20)
-            make.left.equalTo(emailTextView.snp.left)
-            make.right.equalTo(emailTextView.snp.right)
+            make.top.equalTo(emailTextField.snp.bottom).offset(20)
+            make.left.equalTo(emailTextField.snp.left)
+            make.right.equalTo(emailTextField.snp.right)
             make.height.equalTo(50)
         }
         
         view.addSubview(confirmPasswordTextField)
         confirmPasswordTextField.snp.makeConstraints { make in
             make.top.equalTo(passwordTextField.snp.bottom).offset(20)
-            make.left.equalTo(emailTextView.snp.left)
-            make.right.equalTo(emailTextView.snp.right)
+            make.left.equalTo(emailTextField.snp.left)
+            make.right.equalTo(emailTextField.snp.right)
             make.height.equalTo(50)
         }
         
@@ -211,10 +207,10 @@ class RegisterViewController: UIViewController {
             make.left.equalTo(noRegisterLabel.snp.right).offset(5)
         }
         
-        emailTextView.addSubview(emailSymbol)
+        emailTextField.addSubview(emailSymbol)
         emailSymbol.snp.makeConstraints { make in
-            make.centerY.equalTo(emailTextView.snp.centerY)
-            make.right.equalTo(emailTextView.safeAreaLayoutGuide.snp.right).offset(-15)
+            make.centerY.equalTo(emailTextField.snp.centerY)
+            make.right.equalTo(emailTextField.safeAreaLayoutGuide.snp.right).offset(-15)
         }
         
         passwordTextField.addSubview(passwordSymbol)
@@ -230,26 +226,74 @@ class RegisterViewController: UIViewController {
         }
     }
     
-    // MARK: Binding
+    // MARK: - Binding
+    
     private func binding() {
         
-        let input = RegiterViewModel.Input(emailConfirm: emailTextView.rx.tapGesture().when(.recognized).asObservable(),
-                                           back: backToButton.rx.tap.asDriver())
+        let input = RegiterViewModel.Input(email: emailTextField.rx.text.orEmpty.asObservable(),
+                                           password: passwordTextField.rx.text.orEmpty.asObservable(),
+                                           confirmPassword: confirmPasswordTextField.rx.text.orEmpty.asObservable(),
+                                           register: registerButton.rx.tap.asObservable(),
+                                           naviback: backToButton.rx.tap.asObservable(),
+                                           toBack: backToLoginButton.rx.tap.asObservable())
         let output = registerViewModel.transform(input: input)
         
-        output.dismiss
-            .drive()
-            .disposed(by: disposebag)
-    }
-
+        output.isValidEmail
+            .drive(onNext: { [weak self] status in
                 
-
-    // MARK: Alert Method
-    private func showAlert() {
-        let alert = UIAlertController(title: "안내", message: "올바른 이메일 형식이 아닙니다.", preferredStyle: .alert)
+                guard let strongSelf = self else { return }
+                
+                strongSelf.emailSymbol.isHidden = !status
+                
+            }).disposed(by: disposebag)
         
-        alert.addAction(UIAlertAction(title: "확인", style: .cancel))
+        output.isValidPassword
+            .drive(onNext: { [weak self] status in
+                
+                guard let strongSelf = self else { return }
+                
+                strongSelf.passwordSymbol.isHidden = !status
+                
+            }).disposed(by: disposebag)
         
-        present(alert, animated: false)
+        output.isValidConfirmPassword
+            .drive(onNext: { [weak self] status in
+                
+                guard let strongSelf = self else { return }
+                
+                strongSelf.confirmPasswordSymbol.isHidden = !status
+                
+            }).disposed(by: disposebag)
+        
+        output.isValidRegister
+            .drive(onNext: { [weak self] status in
+                
+                guard let strongSelf = self else { return }
+                
+                strongSelf.registerButton.isEnabled = status
+                
+            }).disposed(by: disposebag)
+        
+        output.dismiss
+            .subscribe()
+            .disposed(by: disposebag)
+        
+        output.registerTrigger
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] result in
+                
+                guard let strongSelf = self else { return }
+                
+                switch result {
+                case .success(_):
+                    strongSelf.registerViewModel.actionDelegate?.toBack()
+                    strongSelf.showFBAuthAlert()
+                    
+                case .failure(let err):
+                    strongSelf.showFBAuthErrorAlert(error: err)
+                }
+                
+            }).disposed(by: disposebag)
     }
+            
 }

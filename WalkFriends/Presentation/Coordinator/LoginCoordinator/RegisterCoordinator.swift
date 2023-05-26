@@ -17,6 +17,7 @@ class RegisterCoordinator: NSObject, Coordinator {
     var childCoordinators: [NSObject] = []
     var delegate: RegisterCoordinatorDelegate?
     
+//    private var registerViewController: RegisterViewController!
     private let navigationController: UINavigationController!
     
     init(navigationController: UINavigationController) {
@@ -26,6 +27,7 @@ class RegisterCoordinator: NSObject, Coordinator {
     func start() {
         
         let registerViewController = RegisterViewController(registerViewModel: makeRegisterViewModel())
+//        self.registerViewController = registerViewController
         navigationController.pushViewController(registerViewController, animated: true)
         navigationController.navigationBar.isHidden = true
         
@@ -47,4 +49,10 @@ extension RegisterCoordinator: RegisterViewModelActionDelegate {
         navigationController.popViewController(animated: true)
         delegate?.toBack(self)
     }
+    
+//    func showEmailConfirmVC() {
+//        let coordinator = EmailCoordinator(viewcontroller: registerViewController)
+//        coordinator.start()
+//        childCoordinators.append(coordinator)
+//    }
 }

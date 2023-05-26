@@ -11,5 +11,5 @@ import UIKit
 
 protocol UseCase {
 
-    func start()
+    func start() -> Observable<Result<Bool, DatabaseError>>
 }

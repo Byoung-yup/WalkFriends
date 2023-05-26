@@ -168,7 +168,7 @@ class ShareInfoViewController: UIViewController {
         
         output.save
             .drive(onNext: { [weak self] result in
-                print("result: \(result)")
+                print("urls: \(result)")
             }).disposed(by: disposeBag)
         
         output.dismiss

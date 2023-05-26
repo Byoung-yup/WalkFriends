@@ -49,7 +49,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = .white
         
         configureUI()
-        loadUserProfile()
+//        loadUserProfile()
         Binding()
     }
     
@@ -96,6 +96,27 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         output.trigger
             .drive()
             .disposed(by: disposeBag)
+        
+        output.fetchTrigger
+            .drive(onNext: { [weak self] result in
+                
+                guard let strongSelf = self else { return }
+                
+                switch result {
+                case .success(_):
+                    break
+                case .failure(let err):
+                    
+                    if err == .NotFoundUserError {
+                        strongSelf.homeViewModel.actionDelegate?.setupProfile()
+                    }
+                    else {
+                        strongSelf.homeViewModel.actionDelegate?.error()
+                        strongSelf.showAlert(error: err)
+                    }
+                }
+                
+            }).disposed(by: disposeBag)
             
         homeViewModel.items
             .bind(to: homeListView.collectionView.rx.items(cellIdentifier: "HomeListCell", cellType: HomeListCell.self)) { (row, text, cell) in
@@ -107,26 +128,26 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     }
     
-    // MARK: - loadUserProfile
-    
-    private func loadUserProfile() {
-        
-        homeViewModel.fetchMyProfileData()
-            .subscribe(onNext: { [weak self] result in
-                
-                if result {
-                    
-                } else {
-                    self?.setupProfile()
-                }
-            }).disposed(by: disposeBag)
-            
-    }
-    
-    // MARK: - setupProfile
-    
-    private func setupProfile() {
-        homeViewModel.setupProfileView()
-    }
+//    // MARK: - loadUserProfile
+//
+//    private func loadUserProfile() {
+//
+//        homeViewModel.fetchMyProfileData()
+//            .subscribe(onNext: { [weak self] result in
+//
+//                if result {
+//                    
+//                } else {
+//                    self?.setupProfile()
+//                }
+//            }).disposed(by: disposeBag)
+//
+//    }
+//
+//    // MARK: - setupProfile
+//
+//    private func setupProfile() {
+//        homeViewModel.setupProfileView()
+//    }
 
 }

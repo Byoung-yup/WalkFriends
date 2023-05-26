@@ -27,7 +27,7 @@ final class MapListCoordinator: NSObject, Coordinator {
     
     private func makeMapListViewModel() -> MapListViewModel {
         let viewModel = MapListViewModel(dataUseCase: makeDataUseCase())
-//        viewModel.actionDelegate = self
+        viewModel.actionDelegate = self
         return viewModel
     }
     
@@ -35,5 +35,14 @@ final class MapListCoordinator: NSObject, Coordinator {
     
     func makeDataUseCase() -> DataUseCase {
         return DefaultDataUseCase(dataBaseRepository: DatabaseManager(), storageRepository: StorageManager())
+    }
+}
+
+extension MapListCoordinator: MapListViewModelActionDelegate {
+    
+    func showDetailVC(with item: MapList) {
+        let coordinator = MapListDetailCoordinator(navigationController: navigationController, item: item)
+        coordinator.start()
+        childCoordinators.append(coordinator)
     }
 }

@@ -44,6 +44,7 @@ extension RunCoordinator: RunViewModelActionDelegate {
         
         guard saved == true else {
             navigationController.popViewController(animated: true)
+            delegate?.dismiss(self)
             return
         }
         
@@ -61,6 +62,6 @@ extension RunCoordinator: ShareInfoCoordinatorDelegate {
     func dismiss(_ coordinator: ShareInfoCoordinator) {
         
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
-        
+        delegate?.dismiss(self)
     }
 }

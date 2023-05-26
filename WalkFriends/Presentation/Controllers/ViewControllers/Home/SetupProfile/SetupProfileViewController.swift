@@ -136,23 +136,23 @@ class SetupProfileViewController: UIViewController {
                                                 createTrigger: createProfileBtn.rx.tap.asDriver())
         let output = viewModel.transform(input: input)
         
-        output.createBtdEnabled
-            .drive(createProfileBtn.rx.isEnabled)
-            .disposed(by: disposeBag)
-        
-        output.dismiss
-            .drive(onNext: { [weak self] result in
-                if result == false {
-                    // 에러 메시지
-                    
-                }
-            }).disposed(by: disposeBag)
-        
-        imageView.rx.tapGesture()
-            .when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                self?.imagePicker()
-            }).disposed(by: disposeBag)
+//        output.createBtdEnabled
+//            .drive(createProfileBtn.rx.isEnabled)
+//            .disposed(by: disposeBag)
+//
+//        output.dismiss
+//            .drive(onNext: { [weak self] result in
+//                if result == false {
+//                    // 에러 메시지
+//
+//                }
+//            }).disposed(by: disposeBag)
+//
+//        imageView.rx.tapGesture()
+//            .when(.recognized)
+//            .subscribe(onNext: { [weak self] _ in
+//                self?.imagePicker()
+//            }).disposed(by: disposeBag)
     }
 }
 

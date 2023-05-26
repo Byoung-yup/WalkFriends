@@ -1,23 +1,21 @@
 //
-//  MapListViewController.swift
+//  MapListDetailViewController.swift
 //  WalkFriends
 //
-//  Created by 김병엽 on 2023/04/14.
+//  Created by 김병엽 on 2023/04/18.
 //
 
 import Foundation
 import UIKit
-import SnapKit
 import RxSwift
 import RxCocoa
+import SnapKit
 
-class MapListViewController: UIViewController {
-    
-    // MARK: - UI Properties
+class MapListDetailViewController: UIViewController {
     
     let tableView: UITableView = {
        let view = UITableView()
-        view.register(MapListViewCell.self, forCellReuseIdentifier: MapListViewCell.identifier)
+        view.register(MapListDetailViewCell.self, forCellReuseIdentifier: MapListDetailViewCell.identifier)
         view.separatorStyle = .none
         view.backgroundColor = .white
         return view
@@ -25,7 +23,7 @@ class MapListViewController: UIViewController {
     
     // MARK: - Properties
     
-    let mapListViewModel: MapListViewModel
+    private let mapListDetailViewModel: MapListDetailViewModel
     
     let disposeBag = DisposeBag()
     
@@ -37,22 +35,17 @@ class MapListViewController: UIViewController {
         view.backgroundColor = .white
         confgureUI()
         binding()
-
     }
     
     // MARK: - Initialize
     
-    init(mapListViewModel: MapListViewModel) {
-        self.mapListViewModel = mapListViewModel
+    init(mapListDetailViewModel: MapListDetailViewModel) {
+        self.mapListDetailViewModel = mapListDetailViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        print("MapListViewController - deinit")
     }
     
     // MARK: - Configure UI
@@ -61,7 +54,7 @@ class MapListViewController: UIViewController {
         
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
             make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
@@ -72,28 +65,25 @@ class MapListViewController: UIViewController {
     
     private func binding() {
         
-        let input = MapListViewModel.Input()
-        let output = mapListViewModel.transform(input: input)
+        let input = MapListDetailViewModel.Input()
+        let output = mapListDetailViewModel.transform(input: input)
         
         tableView
             .rx
             .setDelegate(self)
             .disposed(by: disposeBag)
         
-        output.mapList.drive(tableView.rx.items(cellIdentifier: "MapListViewCell", cellType: MapListViewCell.self)) { row, element, cell in
-            cell.mapList = element
+        output.urls.drive(tableView.rx.items(cellIdentifier: "MapListDetailViewCell", cellType: MapListDetailViewCell.self)) { row, element, cell in
+            cell.configureCell(url: element)
         }.disposed(by: disposeBag)
-        
-        tableView.rx.modelSelected(MapList.self)
-            .bind { [weak self] (item) in
-                self?.mapListViewModel.actionDelegate?.showDetailVC(with: item)
-            }.disposed(by: disposeBag)
     }
+    
+    
 }
 
-extension MapListViewController: UITableViewDelegate {
+extension MapListDetailViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        return 100
     }
 }

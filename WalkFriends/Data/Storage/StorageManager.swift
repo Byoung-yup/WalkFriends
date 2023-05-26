@@ -7,14 +7,15 @@
 
 import Foundation
 import FirebaseStorage
+import RxSwift
 
-final class StorageManager: UserProfileImageRepository {
+final class StorageManager: ImageRepository {
     
     private let storage = Storage.storage()
     
 }
 
-// MARK: - UserProfileImageRepository
+// MARK: - ImageRepository
 
 extension StorageManager {
     
@@ -39,27 +40,56 @@ extension StorageManager {
         }
     }
     
-    func uploadImageArrayData(with data: [Data], uid: String, completion: @escaping (Bool) -> Void) {
+    func uploadImageArrayData(with data: [Data], uid: String) -> Observable<[String]> {
         
         let metaData = StorageMetadata()
-        metaData.contentType = "image/png"
+        metaData.contentType = "image/jpg"
         
-        data.enumerated().forEach { (index, data) in
+        var urls: [String] = []
+        
+        return Observable.create { (observer) in
             
-            let fileRef = storage.reference().child("Maps/\(uid)_\(index).jpg")
-            
-            fileRef.putData(data, metadata: metaData) { _, error in
+            data.enumerated().forEach { [weak self] (index, item) in
+                print("enumerated")
                 
-                guard error == nil else {
-                    print("Storage Fetch Error")
-                    completion(false)
-                    return
-                }
+                let fileRef = self?.storage.reference().child("Maps/\(uid)/\(index).jpg")
                 
-                print("Storage Fetch Success")
-                completion(true)
-                return
+                fileRef?.putData(item, metadata: metaData, completion: { meta, error in
+                    
+                    guard error == nil else {
+                        observer.onError(DatabaseError.NotFoundUserError)
+                        print("Storage put data error")
+                        return
+                    }
+                    
+                    DispatchQueue.main.async {
+                        
+                        fileRef?.downloadURL(completion: { url, error in
+                            
+                            guard let url = url, error == nil else {
+                                observer.onError(DatabaseError.NotFoundUserError)
+                                print("Storage download url error")
+                                return
+                            }
+                            
+                            urls.append(url.absoluteString)
+                            
+                            if urls.count == data.count {
+                                observer.onNext(urls)
+                                observer.onCompleted()
+                            }
+                        })
+                    }
+                })
             }
+            
+            
+            return Disposables.create()
         }
+        
+        
+        
     }
+    
+
 }

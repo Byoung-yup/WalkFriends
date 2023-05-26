@@ -72,4 +72,10 @@ extension AppCoordinator: HomeCoordinatorDelegate {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
         showLoginViewController()
     }
+    
+    func error(_ coordinator: HomeCoordinator) {
+        
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+        showLoginViewController()
+    }
 }

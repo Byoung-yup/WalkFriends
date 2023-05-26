@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct MapList: Codable {
+struct MapList: Decodable {
     let uid: String
     let address: String
-//    let images: [Data]?
+    let imageUrls: [String]
     let title: String
     let subTitle: String
     let date: String
@@ -21,6 +21,7 @@ struct MapList: Codable {
         case address = "address"
         case title = "title"
         case subTitle = "subTitle"
+        case imageUrls = "imageUrls"
         case date = "time"
         case email = "email"
     }

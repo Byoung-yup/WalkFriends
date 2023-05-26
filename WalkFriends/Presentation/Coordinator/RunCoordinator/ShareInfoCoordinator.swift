@@ -53,7 +53,9 @@ extension ShareInfoCoordinator: ShareInfoViewModelActionDelegate {
     
     func dismiss() {
         navigationController.popViewController(animated: true)
+        navigationController.navigationBar.isHidden = false
         delegate?.dismiss(self)
+        
     }
 }
 

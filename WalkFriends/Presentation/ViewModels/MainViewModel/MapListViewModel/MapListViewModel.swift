@@ -9,23 +9,29 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+protocol MapListViewModelActionDelegate {
+    func showDetailVC(with item: MapList)
+}
+
 final class MapListViewModel: ViewModel {
     
     // MARK: - Input
     
     struct Input {
-//        let viewWillAppear: Driver<Bool>
+        
     }
     
     // MARK: - Output
     
     struct Output {
-        let mapList: Observable<[MapList]>
+        let mapList: Driver<[MapList]>
     }
     
     // MARK: - Properties
     
     private let dataUseCase: DataUseCase
+    
+    var actionDelegate: MapListViewModelActionDelegate?
     
     // MARK: - Initialize
     
@@ -38,6 +44,7 @@ final class MapListViewModel: ViewModel {
     func transform(input: Input) -> Output {
         
         let mapListData = fetchMapListData()
+            .asDriver(onErrorRecover: { _ in fatalError() })
         
         return Output(mapList: mapListData)
     }

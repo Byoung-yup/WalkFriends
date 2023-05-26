@@ -10,15 +10,24 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-final class EmailConfirmViewModel {
+final class EmailConfirmViewModel: ViewModel {
     
-    var email: BehaviorSubject<String> = BehaviorSubject<String>(value: "")
-    
-    var isValidEmail: Observable<Bool> {
-        email.map { $0.isValidEmail() }
+    // MARK: - Input
+    struct Input {
+        let text: Driver<String>
+        let tap: Driver<Void>
     }
     
-    var existsUser: Observable<Bool> {
-        email.flatMap { FirebaseService.shard.userExists(with: $0) }
+    // MARK: - Output
+    struct Output {
+        
+    }
+    
+    // MARK: - Transform
+    func transform(input: Input) -> Output {
+        
+        
+        
+        return Output()
     }
 }
