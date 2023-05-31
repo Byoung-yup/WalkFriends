@@ -66,24 +66,3 @@ class HomeViewModel: ViewModel {
     }
     
 }
-//
-//// MARK: - INPUT. View event methods
-//
-//extension HomeViewModel {
-//
-//    func fetchMyProfileData() -> Observable<Bool> {
-//
-//        return dataUseCase.excuteProfile()
-//        
-//    }
-//
-//}
-//
-//// MARK: - Action Delegate
-//
-//extension HomeViewModel {
-//
-//    func setupProfileView() {
-//        actionDelegate?.setupProfile()
-//    }
-//}
