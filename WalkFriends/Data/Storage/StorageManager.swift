@@ -15,29 +15,28 @@ final class StorageManager: ImageRepository {
     
 }
 
+enum StorageError: Error {
+    case Error
+}
+
 // MARK: - ImageRepository
 
 extension StorageManager {
     
-    func uploadImageData(with data: Data, completion: @escaping (Bool) -> Void) {
+    func uploadImageData(with data: Data) async throws {
         
         let metaData = StorageMetadata()
         metaData.contentType = "image/png"
         
-        let fileRef = storage.reference().child("images/\(UserInfo.shared.uid!)_profile.jpg")
+        let fileRef = storage.reference().child("images/\(FirebaseService.shard.currentUser.uid)_profile.jpg")
         
-        fileRef.putData(data, metadata: metaData) { _, error in
-            
-            guard error == nil else {
-                print("Storage Fetch Error")
-                completion(false)
-                return
-            }
-            
-            print("Storage Fetch Success")
-            completion(true)
-            return
+        
+        do {
+             _ = try await fileRef.putDataAsync(data, metadata: metaData)
+        } catch {
+            throw StorageError.Error
         }
+        
     }
     
     func uploadImageArrayData(with data: [Data], uid: String) -> Observable<[String]> {

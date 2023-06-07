@@ -57,7 +57,7 @@ class SetupProfileViewController: UIViewController {
     
     let viewModel: SetupProfileViewModel
     
-    let defaultImage: BehaviorSubject<UIImage> = BehaviorSubject<UIImage>(value: UIImage(systemName: "person.crop.circle")!)
+    let defaultImage: BehaviorRelay<UIImage> = BehaviorRelay<UIImage>(value: UIImage(systemName: "person.crop.circle")!)
     
     let disposeBag = DisposeBag()
     
@@ -102,7 +102,7 @@ class SetupProfileViewController: UIViewController {
         imageView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
             make.centerX.equalTo(view.snp.centerX)
-            make.width.height.equalTo(80)
+            make.width.height.equalTo(100)
         }
         
         view.addSubview(userNicknameTextField)
@@ -143,16 +143,16 @@ class SetupProfileViewController: UIViewController {
     
     private func binding() {
         
-        let input = SetupProfileViewModel.Input(profileImage: defaultImage.asDriver(onErrorJustReturn: UIImage()),
-                                                usernickName: userNicknameTextField.rx.text.orEmpty.asDriver(),
-                                                userGender: userGenderSgControl.rx.value.asDriver(),
-                                                createTrigger: createProfileBtn.rx.tap.asDriver())
+        let input = SetupProfileViewModel.Input(profileImage: defaultImage.asObservable(),
+                                                usernickName: userNicknameTextField.rx.text.orEmpty.asObservable(),
+                                                userGender: userGenderSgControl.rx.value.asObservable(),
+                                                createTrigger: createProfileBtn.rx.tap.asObservable())
         let output = viewModel.transform(input: input)
         
-//        output.createBtdEnabled
-//            .drive(createProfileBtn.rx.isEnabled)
-//            .disposed(by: disposeBag)
-//
+        output.createEnabled
+            .drive(createProfileBtn.rx.isEnabled)
+            .disposed(by: disposeBag)
+
 //        output.dismiss
 //            .drive(onNext: { [weak self] result in
 //                if result == false {
@@ -202,21 +202,18 @@ extension SetupProfileViewController {
             
             guard let strongSelf = self else { return }
             
-            strongSelf.convertAssetToImage(asset)
+            let images = strongSelf.convertAssetToImage(asset, size: CGSize(width: 100, height: 100))
+            
+            strongSelf.defaultImage.accept(images.first!)
+            
+            DispatchQueue.main.async {
+                strongSelf.imageView.image = images.first
+            }
         }
 
     }
     
-    private func convertAssetToImage(_ assetImages: [PHAsset]) {
-        
-        guard assetImages.count != 0 else {
-            return
-        }
-        
-        let imageManager = PHImageManager()
-        
-        
-    }
+    
     
 //    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 //

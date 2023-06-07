@@ -55,7 +55,7 @@ extension FirebaseService: FirebaseAuthService {
     
     func createUser(user: UserLoginInfo) -> Observable<Result<Bool, FirebaseAuthError>> {
 
-        return Observable.create {  (observer) in
+        return Observable.create { (observer) in
             
             let task = Task { [weak self] in
                 do {

@@ -47,6 +47,7 @@
 		B08531D229B87FAF00209127 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08531D129B87FAF00209127 /* HomeCoordinator.swift */; };
 		B08531D629B87FBF00209127 /* InfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08531D529B87FBF00209127 /* InfoCoordinator.swift */; };
 		B08531D829B8ADAF00209127 /* InfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08531D729B8ADAF00209127 /* InfoViewModel.swift */; };
+		B08ED1FF2A3067A000B29112 /* UserProfileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08ED1FE2A3067A000B29112 /* UserProfileData.swift */; };
 		B090808929DEB86700DDAEBC /* ShareInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B090808829DEB86700DDAEBC /* ShareInfoView.swift */; };
 		B090808C29DECC6400DDAEBC /* PhotoListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B090808A29DECC6400DDAEBC /* PhotoListCell.swift */; };
 		B090808D29DECC6400DDAEBC /* PhotoListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B090808B29DECC6400DDAEBC /* PhotoListCell.xib */; };
@@ -126,6 +127,7 @@
 		B08531D129B87FAF00209127 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		B08531D529B87FBF00209127 /* InfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoCoordinator.swift; sourceTree = "<group>"; };
 		B08531D729B8ADAF00209127 /* InfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewModel.swift; sourceTree = "<group>"; };
+		B08ED1FE2A3067A000B29112 /* UserProfileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileData.swift; sourceTree = "<group>"; };
 		B090808829DEB86700DDAEBC /* ShareInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoView.swift; sourceTree = "<group>"; };
 		B090808A29DECC6400DDAEBC /* PhotoListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoListCell.swift; sourceTree = "<group>"; };
 		B090808B29DECC6400DDAEBC /* PhotoListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoListCell.xib; sourceTree = "<group>"; };
@@ -419,6 +421,7 @@
 			isa = PBXGroup;
 			children = (
 				B0936E692A20A8EB00EB03A5 /* UserLoginModel.swift */,
+				B076C6C9299CACBD00EFDA7F /* UserProfile.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -518,9 +521,9 @@
 		B09DC79D2990DEF4008558EA /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				B076C6C9299CACBD00EFDA7F /* UserProfile.swift */,
 				B076311F29E6A050009B39C0 /* UserMap.swift */,
 				B02828E729E94400008B22CF /* MapList.swift */,
+				B08ED1FE2A3067A000B29112 /* UserProfileData.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -772,6 +775,7 @@
 				B072878D29A88BAC00E8A085 /* UserInfo.swift in Sources */,
 				B09DC7A42990E29F008558EA /* LoginCoordinator.swift in Sources */,
 				B06B456D29C4347300B0AED2 /* ViewModel.swift in Sources */,
+				B08ED1FF2A3067A000B29112 /* UserProfileData.swift in Sources */,
 				B09DC7AA2990EC50008558EA /* UITextField.swift in Sources */,
 				B08531D229B87FAF00209127 /* HomeCoordinator.swift in Sources */,
 				B07DDB6D29BF1BB50012F26A /* SetupProfileViewModel.swift in Sources */,

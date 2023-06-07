@@ -243,11 +243,11 @@ extension ShareInfoViewController {
                 selectedAssets.append(i)
             }
             
-            self?.convertAssetToImage(selectedAssets)
+            self?.convertAssetToImages(selectedAssets)
         })
     }
     
-    private func convertAssetToImage(_ AssetImages: [PHAsset]) {
+    private func convertAssetToImages(_ AssetImages: [PHAsset]) {
         
         if AssetImages.count != 0 {
             

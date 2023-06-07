@@ -13,7 +13,7 @@ import FirebaseStorage
 
 protocol DataUseCase: UseCase {
 //    func excuteProfile() -> Observable<Bool>
-//    func createProfile(with userProfile: UserProfile) -> Observable<Bool>
+    func createProfile(with userProfile: UserProfileData) -> Observable<Result<Bool, DatabaseError>>
     func shareData(with userData: UserMap) -> Observable<[String]>
     func fetchMapListData() -> Observable<[MapList]>
 //    func downLoadImages(urls: [String]) -> Observable<[Data]>
@@ -39,6 +39,35 @@ class DefaultDataUseCase {
 }
 
 extension DefaultDataUseCase: DataUseCase {
+    
+    func createProfile(with userProfile: UserProfileData) -> Observable<Result<Bool, DatabaseError>> {
+        
+        let jpegData = userProfile.image.convertJPEGData()
+        
+        return Observable.create { [weak self] (observer) in
+            
+            guard let strongSelf = self else { return }
+            
+            let task = Task {
+                
+                do {
+                    
+                    async let dataRepo = strongSelf.dataBaseRepository.createUserProfile(with: userProfile)
+                    async let storageRepo = strongSelf.storageRepository.uploadImageData(with: jpegData)
+                    
+                } catch let err {
+                    
+                    observer.onNext(.failure(err))
+                    observer.onCompleted()
+                }
+            }
+            
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+    
     
 //    func createProfile(with userProfile: UserProfile) -> Observable<Bool> {
 //        let jpegData = userProfile.image.convertData()

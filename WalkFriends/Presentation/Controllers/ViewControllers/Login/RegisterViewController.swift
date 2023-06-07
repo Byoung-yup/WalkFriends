@@ -17,6 +17,12 @@ class RegisterViewController: UIViewController {
     let disposebag = DisposeBag()
     
     // MARK: UI Properties
+    lazy var indicatorView: UIActivityIndicatorView = {
+        let indicatorView = UIActivityIndicatorView(style: .medium)
+        indicatorView.isHidden = true
+       return indicatorView
+    }()
+    
     lazy var backToButton: UIButton = {
         let btn = UIButton()
         let ImageConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .light)
@@ -141,6 +147,7 @@ class RegisterViewController: UIViewController {
         
         configureUI()
         binding()
+
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -150,6 +157,12 @@ class RegisterViewController: UIViewController {
     // MARK: - UI Configure
     
     private func configureUI() {
+        
+        view.addSubview(indicatorView)
+        indicatorView.snp.makeConstraints { make in
+            make.width.height.equalTo(100)
+            make.center.equalToSuperview()
+        }
         
         view.addSubview(backToButton)
         backToButton.snp.makeConstraints { make in
@@ -284,6 +297,9 @@ class RegisterViewController: UIViewController {
                 
                 guard let strongSelf = self else { return }
                 
+//                strongSelf.indicatorView.startAnimating()
+                strongSelf.indicatorView.isHidden = false
+                
                 switch result {
                 case .success(_):
                     strongSelf.registerViewModel.actionDelegate?.toBack()
@@ -292,6 +308,9 @@ class RegisterViewController: UIViewController {
                 case .failure(let err):
                     strongSelf.showFBAuthErrorAlert(error: err)
                 }
+                
+//                strongSelf.indicatorView.stopAnimating()
+//                strongSelf.indicatorView.isHidden = true
                 
             }).disposed(by: disposebag)
     }

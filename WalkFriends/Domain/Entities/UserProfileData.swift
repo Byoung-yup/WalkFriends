@@ -1,22 +1,23 @@
 //
-//  UserProfile.swift
+//  UserProfileData.swift
 //  WalkFriends
 //
-//  Created by 김병엽 on 2023/02/15.
+//  Created by 김병엽 on 2023/06/07.
 //
 
 import Foundation
 import UIKit
 
-public struct UserProfile: Decodable  {
+public struct UserProfileData {
+    let image: UIImage
     let email: String
     let nickName: String
     let gender: String
 }
 
-extension UserProfile {
+extension UserProfileData {
     
-    func toDomain() -> [String: Any] {
+    func toJSON() -> [String: Any] {
         
         return [
             "email": email,

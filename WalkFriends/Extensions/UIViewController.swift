@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Photos
 
 extension UIViewController {
     
@@ -79,5 +80,51 @@ extension UIViewController {
         alert.addAction(UIAlertAction(title: "확인", style: .cancel))
         
         present(alert, animated: false)
+    }
+}
+
+// MARK: - ImageManager Method
+
+extension UIViewController {
+    
+    func convertAssetToImage(_ assetImages: [PHAsset], size: CGSize) -> [UIImage] {
+        
+        guard assetImages.count != 0 else {
+            fatalError("Asset Images not found")
+        }
+        
+        var images: [UIImage] = []
+        
+        for i in 0..<assetImages.count {
+            
+            var thumbnail = UIImage()
+            
+            let imageManager = PHImageManager.default()
+            
+            let options = PHImageRequestOptions()
+            options.isSynchronous = true
+            
+            imageManager.requestImage(for: assetImages[i], targetSize: size, contentMode: .aspectFit, options: options) { (result, info) in
+                
+                guard let result = result else {
+                    return
+                }
+                thumbnail = result
+            }
+            
+            let data = thumbnail.jpegData(compressionQuality: 0.7)
+            
+            guard let data = data else {
+                fatalError("Data not found")
+            }
+            
+            guard let image = UIImage(data: data) else {
+                fatalError("Image not found")
+            }
+            
+            images.append(image)
+        }
+        
+        return images
     }
 }

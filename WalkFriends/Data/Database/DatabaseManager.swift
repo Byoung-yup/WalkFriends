@@ -14,12 +14,12 @@ import RxCocoa
 enum DatabaseError: Error {
     case NotFoundUserError
     case DatabaseFetchError
+    case UnknownError
 }
 
 final class DatabaseManager {
     
     private let db = Firestore.firestore()
-    
 }
 
 // MARK: - UserProfileRepository
@@ -28,13 +28,14 @@ extension DatabaseManager: DataRepository {
     
     func fetchUserData() -> Observable<Result<Bool, DatabaseError>> {
         
-        return Observable.create { (observer) in
+        return Observable.create { [weak self] (observer) in
             
-            let task = Task { [weak self] in
+            
+            guard let strongSelf = self else { return }
+            
+            let task = Task {
                 do {
-                    
-                    guard let strongSelf = self else { return }
-                    
+   
                     let document = try await strongSelf.db.collection("Users").document(FirebaseService.shard.currentUser.uid).getDocument()
                     
                     guard document.exists, let data = document.data() else  {
@@ -44,7 +45,7 @@ extension DatabaseManager: DataRepository {
                     }
                     
                     let jsonData = try JSONSerialization.data(withJSONObject: data)
-                    let decoded = try JSONDecoder().decode(UserProfile.self, from: jsonData)
+                    let decoded = try JSONDecoder().decode(UserProfileData.self, from: jsonData)
                     
                     FirebaseService.shard.UserProfle = decoded
                     
@@ -88,19 +89,42 @@ extension DatabaseManager: DataRepository {
 //
 //    }
     
-    func createUserProfile(with userProfile: UserProfile, completion: @escaping (Bool) -> Void) {
+    func createUserProfile(with data: UserProfileData) async throws {
         
-        db.collection("Users").document(FirebaseService.shard.currentUser.uid).setData(userProfile.toDomain()) { err in
-            
-            guard err == nil else {
-                print("Set Data Error")
-                completion(false)
-                return
-            }
-            print("Set Data success")
-            completion(true)
-            return
+        do {
+            try await db.document("Users").setData(data.toJSON())
+        } catch {
+            throw DatabaseError.UnknownError
         }
+        
+        
+        
+        
+//        return Observable.create { [weak self] (observer) in
+//
+//            guard let strongSelf = self else { return }
+//
+//            let task = Task {
+//
+//                do {
+//
+//                    try await strongSelf.db.document("Users").setData(data.toJSON())
+//
+//                    observer.onNext(.success(true))
+//                    observer.onCompleted()
+//
+//                } catch {
+//
+//                    observer.onNext(.failure(DatabaseError.UnknownError))
+//                    observer.onCompleted()
+//
+//                }
+//            }
+//
+//            return Disposables.create {
+//                task.cancel()
+//            }
+//        }
     }
     
 //    func createMapData(with userData: UserMap, completion: @escaping (Result<String, DatabaseError>) -> Void) {

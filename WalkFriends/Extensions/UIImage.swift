@@ -10,9 +10,9 @@ import UIKit
 
 extension UIImage {
     
-    func convertData() -> Data {
+    func convertJPEGData() -> Data {
         var data = Data()
-        data = self.jpegData(compressionQuality: 0.8)!
+        data = self.jpegData(compressionQuality: 0.7)!
         return data
     }
 }
