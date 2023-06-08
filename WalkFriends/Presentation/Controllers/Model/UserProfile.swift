@@ -8,8 +8,7 @@
 import Foundation
 import UIKit
 
-public struct UserProfile {
-    let image: UIImage
+public struct UserProfile: Decodable {
     let email: String
     let nickName: String
     let gender: String

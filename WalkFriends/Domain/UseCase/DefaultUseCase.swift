@@ -41,59 +41,35 @@ class DefaultDataUseCase {
 extension DefaultDataUseCase: DataUseCase {
     
     func createProfile(with userProfile: UserProfileData) -> Observable<Result<Bool, DatabaseError>> {
-        
+
         let jpegData = userProfile.image.convertJPEGData()
-        
-        return Observable.create { [weak self] (observer) in
-            
-            guard let strongSelf = self else { return }
-            
-            let task = Task {
-                
+
+        return Observable.create { (observer) in
+
+            let task = Task { [weak self] in
+
+                guard let strongSelf = self else { return }
+
                 do {
-                    
-                    async let dataRepo = strongSelf.dataBaseRepository.createUserProfile(with: userProfile)
-                    async let storageRepo = strongSelf.storageRepository.uploadImageData(with: jpegData)
-                    
-                } catch let err {
-                    
+
+                    try await strongSelf.dataBaseRepository.createUserProfile(with: userProfile)
+                    try await strongSelf.storageRepository.uploadImageData(with: jpegData)
+
+                    observer.onNext(.success(true))
+                    observer.onCompleted()
+
+                } catch let err as DatabaseError {
+
                     observer.onNext(.failure(err))
                     observer.onCompleted()
                 }
             }
-            
+
             return Disposables.create {
                 task.cancel()
             }
         }
     }
-    
-    
-//    func createProfile(with userProfile: UserProfile) -> Observable<Bool> {
-//        let jpegData = userProfile.image.convertData()
-//
-//        return Observable.create { [weak self] (observer) in
-//
-//            self?.storageRepository.uploadImageData(with: jpegData, completion: { result in
-//
-//                if result {
-//                    self?.dataBaseRepository.createUserProfile(with: userProfile, completion: { result in
-//
-//                        if result {
-//                            observer.onNext(true)
-//                        } else {
-//                            observer.onNext(false)
-//                        }
-//                    })
-//                } else {
-//                    observer.onNext(false)
-//                }
-//                observer.onCompleted()
-//            })
-//
-//            return Disposables.create()
-//        }
-//    }
     
     
 //    func excuteProfile() -> Observable<Bool> {
@@ -116,7 +92,7 @@ extension DefaultDataUseCase: DataUseCase {
     
     func shareData(with userData: UserMap) -> Observable<[String]> {
         
-        let jpegDatas = userData.images.map { $0.convertData() }
+        let jpegDatas = userData.images.map { $0.convertJPEGData() }
         let uid = UUID().uuidString
         
         

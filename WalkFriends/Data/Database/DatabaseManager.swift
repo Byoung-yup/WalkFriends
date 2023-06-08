@@ -30,10 +30,10 @@ extension DatabaseManager: DataRepository {
         
         return Observable.create { [weak self] (observer) in
             
-            
-            guard let strongSelf = self else { return }
-            
-            let task = Task {
+            let task = Task { [weak self] in
+                
+                guard let strongSelf = self else { return }
+                
                 do {
    
                     let document = try await strongSelf.db.collection("Users").document(FirebaseService.shard.currentUser.uid).getDocument()
@@ -45,10 +45,11 @@ extension DatabaseManager: DataRepository {
                     }
                     
                     let jsonData = try JSONSerialization.data(withJSONObject: data)
-                    let decoded = try JSONDecoder().decode(UserProfileData.self, from: jsonData)
+                    let decoded = try JSONDecoder().decode(UserProfile.self, from: jsonData)
                     
                     FirebaseService.shard.UserProfle = decoded
-                    
+//                    print("Fetch User Data")
+//                    print("User: \(FirebaseService.shard.UserProfle)")
                     observer.onNext(.success(true))
                     observer.onCompleted()
                     
@@ -92,10 +93,11 @@ extension DatabaseManager: DataRepository {
     func createUserProfile(with data: UserProfileData) async throws {
         
         do {
-            try await db.document("Users").setData(data.toJSON())
+            try await db.collection("Users").document(FirebaseService.shard.currentUser.uid).setData(data.toJSON())
         } catch {
             throw DatabaseError.UnknownError
         }
+    }
         
         
         
@@ -125,7 +127,7 @@ extension DatabaseManager: DataRepository {
 //                task.cancel()
 //            }
 //        }
-    }
+//    }
     
 //    func createMapData(with userData: UserMap, completion: @escaping (Result<String, DatabaseError>) -> Void) {
 //
@@ -191,5 +193,6 @@ extension DatabaseManager: DataRepository {
             return Disposables.create()
         }
     }
-    
 }
+    
+

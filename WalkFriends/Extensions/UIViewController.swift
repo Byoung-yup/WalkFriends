@@ -72,7 +72,8 @@ extension UIViewController {
             title = "네트워크 오류 안내"
             message = "네트워크 통신이 원활하지 않습니다."
         default:
-            break
+            title = "오류 안내"
+            message = "알 수 없는 오류가 발생하였습니다."
         }
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)

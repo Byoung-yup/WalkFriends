@@ -23,7 +23,7 @@ final class SetupProfileViewModel: ViewModel {
     }
     
     struct Output {
-//        let dismiss: Driver<Bool>
+        let create: Observable<Result<Bool, DatabaseError>>
         let createEnabled: Driver<Bool>
     }
     
@@ -47,7 +47,7 @@ extension SetupProfileViewModel {
         let gender = input.userGender.map { $0 == 0 ? "남자" : "여자" }
 
         let userProfile = Observable.combineLatest(input.profileImage, input.usernickName, gender) { (image, nickname, gender) in
-            return UserProfileData(image: image, email: UserInfo.shared.email!, nickName: nickname, gender: gender)
+            return UserProfileData(image: image, email: FirebaseService.shard.currentUser.email!, nickName: nickname, gender: gender)
         }
 
         let canCreate = Observable.combineLatest(input.usernickName, input.userGender) {
@@ -55,12 +55,11 @@ extension SetupProfileViewModel {
         }.asDriver(onErrorJustReturn: false)
 
         let create = input.createTrigger.withLatestFrom(userProfile)
-            .flatMapLatest{ [weak self] userprofile in
-                
-                guard let strongSelf = self else { return }
-                
-                return strongSelf.dataUseCase.
+            .flatMapLatest { [weak self] data in
+                return (self?.dataUseCase.createProfile(with: data))!
+            }
         
-        return Output(createEnabled: canCreate)
+        return Output(create: create,
+                      createEnabled: canCreate)
     }
 }

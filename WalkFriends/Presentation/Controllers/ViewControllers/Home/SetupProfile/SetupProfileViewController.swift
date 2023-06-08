@@ -55,7 +55,7 @@ class SetupProfileViewController: UIViewController {
     
     // MARK: - Properties
     
-    let viewModel: SetupProfileViewModel
+    let setupProfileViewModel: SetupProfileViewModel
     
     let defaultImage: BehaviorRelay<UIImage> = BehaviorRelay<UIImage>(value: UIImage(systemName: "person.crop.circle")!)
     
@@ -64,7 +64,7 @@ class SetupProfileViewController: UIViewController {
     // MARK: - Initialize
     
     init(viewModel: SetupProfileViewModel) {
-        self.viewModel = viewModel
+        self.setupProfileViewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -147,20 +147,27 @@ class SetupProfileViewController: UIViewController {
                                                 usernickName: userNicknameTextField.rx.text.orEmpty.asObservable(),
                                                 userGender: userGenderSgControl.rx.value.asObservable(),
                                                 createTrigger: createProfileBtn.rx.tap.asObservable())
-        let output = viewModel.transform(input: input)
+        let output = setupProfileViewModel.transform(input: input)
         
         output.createEnabled
             .drive(createProfileBtn.rx.isEnabled)
             .disposed(by: disposeBag)
 
-//        output.dismiss
-//            .drive(onNext: { [weak self] result in
-//                if result == false {
-//                    // 에러 메시지
-//
-//                }
-//            }).disposed(by: disposeBag)
-//
+        output.create
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] result in
+
+                guard let strongSelf = self else { return }
+
+                switch result {
+                case .success(_):
+                    strongSelf.setupProfileViewModel.actionDelegate?.createProfile()
+                case .failure(let err):
+                    strongSelf.showAlert(error: err)
+                }
+
+            }).disposed(by: disposeBag)
+        
         imageView.rx.tapGesture()
             .when(.recognized)
             .subscribe(onNext: { [weak self] _ in

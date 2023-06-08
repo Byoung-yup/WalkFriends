@@ -49,7 +49,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = .white
         
         configureUI()
-//        loadUserProfile()
         Binding()
     }
     
@@ -108,7 +107,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 case .failure(let err):
                     
                     if err == .NotFoundUserError {
-//                        strongSelf.homeViewModel.actionDelegate?.setupProfile()
+                        strongSelf.homeViewModel.actionDelegate?.setupProfile()
                     }
                     else {
                         strongSelf.homeViewModel.actionDelegate?.error()

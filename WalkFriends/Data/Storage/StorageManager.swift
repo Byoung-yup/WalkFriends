@@ -15,10 +15,6 @@ final class StorageManager: ImageRepository {
     
 }
 
-enum StorageError: Error {
-    case Error
-}
-
 // MARK: - ImageRepository
 
 extension StorageManager {
@@ -26,7 +22,7 @@ extension StorageManager {
     func uploadImageData(with data: Data) async throws {
         
         let metaData = StorageMetadata()
-        metaData.contentType = "image/png"
+        metaData.contentType = "image/jpg"
         
         let fileRef = storage.reference().child("images/\(FirebaseService.shard.currentUser.uid)_profile.jpg")
         
@@ -34,7 +30,7 @@ extension StorageManager {
         do {
              _ = try await fileRef.putDataAsync(data, metadata: metaData)
         } catch {
-            throw StorageError.Error
+            throw DatabaseError.UnknownError
         }
         
     }
