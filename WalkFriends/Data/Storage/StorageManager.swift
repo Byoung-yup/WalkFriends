@@ -86,5 +86,40 @@ extension StorageManager {
         
     }
     
+    func uploadImageArrayData2(with data: [Data], uid: String) async throws -> [String] {
+        
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpg"
+        
+        return try await withThrowingTaskGroup(of: String.self) { group in
+            
+            var urls: [String] = []
+            
+            for (index, item) in data.enumerated() {
+                
+                let fileRef = storage.reference().child("Maps/\(uid)/\(index).jpg")
+                
+                group.addTask {
+                    
+                    do {
+                        _ = try await fileRef.putDataAsync(item, metadata: metaData)
+                        let url = try await fileRef.downloadURL()
+                        return url.absoluteString
+                    } catch {
+                        throw DatabaseError.UnknownError
+                    }
+                    
+                }
+                
+                for try await urlStr in group {
+                    urls.append(urlStr)
+                }
+            }
+     
+            return urls
+            
+        }
+    }
+    
 
 }

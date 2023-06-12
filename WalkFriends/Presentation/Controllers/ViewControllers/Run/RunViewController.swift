@@ -179,7 +179,6 @@ extension RunViewController {
     
     func checkUserDeviceLocationServiceAuthorization() {
         
-        
         let authorizationStatus: CLAuthorizationStatus
         
         // 앱의 권한 상태 가져오는 코드 (iOS 버전에 따라 분기처리)

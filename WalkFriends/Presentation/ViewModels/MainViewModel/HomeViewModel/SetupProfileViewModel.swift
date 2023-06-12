@@ -56,7 +56,7 @@ extension SetupProfileViewModel {
 
         let create = input.createTrigger.withLatestFrom(userProfile)
             .flatMapLatest { [weak self] data in
-                return (self?.dataUseCase.createProfile(with: data))!
+                return (self?.dataUseCase.createProfile2(with: data))!
             }
         
         return Output(create: create,

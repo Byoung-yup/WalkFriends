@@ -142,12 +142,12 @@ class ShareInfoViewController: UIViewController {
     
     private func binding() {
         
-        let input = ShareInfoViewModel.Input(addressText: addressRelay.asDriver(),
-                                             selectedImages: mapImageRelay.asDriver(),
-                                             titleText: shareInfoView.titleTextField.rx.text.orEmpty.asDriver(),
-                                             memoText: shareInfoView.memoTextField.rx.text.orEmpty.asDriver(),
-                                             submit: shareInfoView.submitBtn.rx.tap.asDriver(),
-                                             cancel: shareInfoView.cancelBtn.rx.tap.asDriver())
+        let input = ShareInfoViewModel.Input(addressText: addressRelay.asObservable(),
+                                             selectedImages: mapImageRelay.asObservable(),
+                                             titleText: shareInfoView.titleTextField.rx.text.orEmpty.asObservable(),
+                                             memoText: shareInfoView.memoTextField.rx.text.orEmpty.asObservable(),
+                                             submit: shareInfoView.submitBtn.rx.tap.asObservable(),
+                                             cancel: shareInfoView.cancelBtn.rx.tap.asObservable())
         let output = shareInfoViewModel.transform(input: input)
         
         addPhotoBtn.rx.tap
@@ -167,13 +167,24 @@ class ShareInfoViewController: UIViewController {
         }.disposed(by: disposeBag)
         
         output.save
-            .drive(onNext: { [weak self] result in
-                print("urls: \(result)")
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] result in
+                print("Result: \(result)")
+                guard let strongSelf = self else { return }
+                
+                switch result {
+                case .success(_):
+                    strongSelf.shareInfoViewModel.actionDelegate?.dismiss()
+                case .failure(let err):
+                    strongSelf.showAlert(error: err)
+                    strongSelf.shareInfoViewModel.actionDelegate?.dismiss()
+                }
+                
             }).disposed(by: disposeBag)
-        
-        output.dismiss
-            .drive()
-            .disposed(by: disposeBag)
+//
+//        output.dismiss
+//            .drive()
+//            .disposed(by: disposeBag)
     }
     
     private func updateUI() {
@@ -215,15 +226,9 @@ extension ShareInfoViewController {
     
     private func presentImagePicker() {
         
-        let imagePicker = ImagePickerController()
-        imagePicker.settings.selection.max = 3
-        imagePicker.settings.theme.selectionStyle = .numbered
-        imagePicker.settings.theme.selectionFillColor = .orange
-        imagePicker.doneButton.tintColor = .orange
-//        imagePicker.doneButtonTitle = "확인"
-//        imagePicker.cancelButton.title = "닫기"
-        imagePicker.cancelButton.tintColor = .orange
-        imagePicker.settings.fetch.assets.supportedMediaTypes = [.image]
+        var imagePicker = ImagePickerController()
+    
+        configureImagePicker(&imagePicker, selection: 3)
         
         presentImagePicker(imagePicker, select: { (asset) in
             

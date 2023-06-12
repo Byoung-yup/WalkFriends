@@ -150,7 +150,7 @@ extension DatabaseManager: DataRepository {
     
     func createMapData(with userData: UserMap, uid: String, urls: [String]) {
             
-        db.collection("Maps").document(uid).setData(userData.toDomain(uid: uid, urls: urls)) { error in
+        db.collection("Maps").document(uid).setData(userData.toJSON(uid: uid, urls: urls)) { error in
             
             guard error == nil else {
                 print("Write Data Error")
@@ -160,6 +160,15 @@ extension DatabaseManager: DataRepository {
             return
         }
         
+    }
+    
+    func uploadMapData(with userData: UserMap, uid: String, urls: [String]) async throws {
+        
+        do {
+            try await db.collection("Maps").document(uid).setData(userData.toJSON(uid: uid, urls: urls))
+        } catch {
+            throw DatabaseError.UnknownError
+        }
     }
     
     func fetchMapListData() -> Observable<[MapList]> {

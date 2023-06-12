@@ -19,19 +19,19 @@ final class ShareInfoViewModel: ViewModel {
     // MARK: - Input
     
     struct Input {
-        let addressText: Driver<String>
-        let selectedImages: Driver<[UIImage]>
-        let titleText: Driver<String>
-        let memoText: Driver<String>
-        let submit: Driver<Void>
-        let cancel: Driver<Void>
+        let addressText: Observable<String>
+        let selectedImages: Observable<[UIImage]>
+        let titleText: Observable<String>
+        let memoText: Observable<String>
+        let submit: Observable<Void>
+        let cancel: Observable<Void>
     }
     
     // MARK: - Output
     
     struct Output {
-        let save: Driver<[String]>
-        let dismiss: Driver<Void>
+        let save: Observable<Result<Bool, DatabaseError>>
+        let dismiss: Observable<Void>
     }
     
     // MARK: - Properties
@@ -50,16 +50,14 @@ final class ShareInfoViewModel: ViewModel {
     
     func transform(input: Input) -> Output {
         
-        let data = Driver.combineLatest(input.addressText, input.selectedImages, input.titleText, input.memoText) {
+        let data = Observable.combineLatest(input.addressText, input.selectedImages, input.titleText, input.memoText) {
             return UserMap(address: $0, images: $1, title: $2, subTitle: $3)
         }
         
         let save = input.submit.withLatestFrom(data)
             .flatMapLatest { [weak self] in
-                (self?.dataUseCase.shareData(with: $0).asDriver(onErrorJustReturn: [""]))!
-            }.do(onNext: { [weak self] _ in
-                self?.actionDelegate!.dismiss()
-            })
+                (self?.dataUseCase.shareData(with: $0))!
+            }
 //
         let dismiss = input.cancel
             .do(onNext: { [weak self] _ in

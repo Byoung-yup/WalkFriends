@@ -14,7 +14,9 @@ import FirebaseStorage
 protocol DataUseCase: UseCase {
 //    func excuteProfile() -> Observable<Bool>
     func createProfile(with userProfile: UserProfileData) -> Observable<Result<Bool, DatabaseError>>
-    func shareData(with userData: UserMap) -> Observable<[String]>
+    func createProfile2(with userProfile: UserProfileData) -> Observable<Result<Bool, DatabaseError>>
+    
+    func shareData(with userData: UserMap) -> Observable<Result<Bool, DatabaseError>>
     func fetchMapListData() -> Observable<[MapList]>
 //    func downLoadImages(urls: [String]) -> Observable<[Data]>
 }
@@ -45,13 +47,13 @@ extension DefaultDataUseCase: DataUseCase {
         let jpegData = userProfile.image.convertJPEGData()
 
         return Observable.create { (observer) in
-
+            
             let task = Task { [weak self] in
 
                 guard let strongSelf = self else { return }
 
                 do {
-
+                    
                     try await strongSelf.dataBaseRepository.createUserProfile(with: userProfile)
                     try await strongSelf.storageRepository.uploadImageData(with: jpegData)
 
@@ -65,6 +67,52 @@ extension DefaultDataUseCase: DataUseCase {
                 }
             }
 
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+    
+    func createProfile2(with userProfile: UserProfileData) -> Observable<Result<Bool, DatabaseError>> {
+        
+        let jpegData = userProfile.image.convertJPEGData()
+        
+        return Observable.create { (observer) in
+            
+            let task = Task { [weak self] in
+                
+                guard let strongSelf = self else { return }
+                             
+                await withThrowingTaskGroup(of: Void.self) { group in
+                    
+                        group.addTask {
+                            
+                            do {
+                                try await strongSelf.dataBaseRepository.createUserProfile(with: userProfile)
+                            } catch {
+                                observer.onNext(.failure(DatabaseError.UnknownError))
+                                observer.onCompleted()
+                            }
+                            
+                        }
+                        
+                        group.addTask {
+                            
+                            do {
+                                try await strongSelf.storageRepository.uploadImageData(with: jpegData)
+                            } catch {
+                                observer.onNext(.failure(DatabaseError.UnknownError))
+                                observer.onCompleted()
+                            }
+                            
+                        }
+                        
+                }
+                
+                observer.onNext(.success(true))
+                observer.onCompleted()
+            }
+            
             return Disposables.create {
                 task.cancel()
             }
@@ -90,16 +138,40 @@ extension DefaultDataUseCase: DataUseCase {
 //        }
 //    }
     
-    func shareData(with userData: UserMap) -> Observable<[String]> {
+    func shareData(with userData: UserMap) -> Observable<Result<Bool, DatabaseError>> {
         
         let jpegDatas = userData.images.map { $0.convertJPEGData() }
         let uid = UUID().uuidString
         
         
-        return storageRepository.uploadImageArrayData(with: jpegDatas, uid: uid)
-            .do(onNext: { [weak self] urls in
-                self?.dataBaseRepository.createMapData(with: userData, uid: uid, urls: urls)
-            })
+//        return storageRepository.uploadImageArrayData(with: jpegDatas, uid: uid)
+//            .do(onNext: { [weak self] urls in
+//                self?.dataBaseRepository.createMapData(with: userData, uid: uid, urls: urls)
+//            })
+        
+        return Observable.create { (observer) in
+            
+            let task = Task { [weak self] in
+                
+                guard let strongSelf = self else { return }
+                
+                do {
+                    let urls = try await strongSelf.storageRepository.uploadImageArrayData2(with: jpegDatas, uid: uid)
+                    try await strongSelf.dataBaseRepository.uploadMapData(with: userData, uid: uid, urls: urls)
+                } catch let err as DatabaseError {
+                    observer.onNext(.failure(err))
+                    observer.onCompleted()
+                }
+                
+                observer.onNext(.success(true))
+                observer.onCompleted()
+                
+            }
+            
+            return Disposables.create {
+                task.cancel()
+            }
+        }
         
     }
     
@@ -139,3 +211,8 @@ extension URL {
 //        return Observable.merge(observables)
 //    }
 //}
+public func measureTime(_ closure: () -> ()) -> TimeInterval {
+    let startDate = Date()
+    closure()
+    return Date().timeIntervalSince(startDate)
+}

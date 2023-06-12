@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Photos
+import BSImagePicker
 
 extension UIViewController {
     
@@ -84,9 +85,25 @@ extension UIViewController {
     }
 }
 
-// MARK: - ImageManager Method
+// MARK: - ImagePickerManager
 
 extension UIViewController {
+    
+    func configureImagePicker(_ picker: inout ImagePickerController, selection num: Int) {
+        
+        picker.settings.selection.max = num
+        picker.settings.theme.selectionStyle = .numbered
+        picker.settings.fetch.assets.supportedMediaTypes = [.image]
+        picker.settings.selection.unselectOnReachingMax = true
+        picker.doneButtonTitle = "확인"
+        picker.settings.theme.selectionStyle = .checked
+        picker.settings.theme.selectionFillColor = .white
+        picker.settings.theme.selectionStrokeColor = .orange
+        picker.settings.theme.backgroundColor = .white
+        picker.navigationBar.tintColor = .orange
+        picker.cancelButton = UIBarButtonItem(title: "닫기", style: .done, target: nil, action: nil)
+
+    }
     
     func convertAssetToImage(_ assetImages: [PHAsset], size: CGSize) -> [UIImage] {
         

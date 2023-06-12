@@ -17,7 +17,7 @@ struct UserMap {
 
 extension UserMap {
     
-    func toDomain(uid: String, urls: [String]) -> [String: Any] {
+    func toJSON(uid: String, urls: [String]) -> [String: Any] {
         
         return [
            "uid": uid,

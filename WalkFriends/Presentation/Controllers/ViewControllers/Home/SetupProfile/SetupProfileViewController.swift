@@ -173,8 +173,9 @@ class SetupProfileViewController: UIViewController {
             .subscribe(onNext: { [weak self] _ in
                 
                 guard let strongSelf = self else { return }
-                strongSelf.imagePicker()
                 
+                strongSelf.presentImagePicker()
+          
             }).disposed(by: disposeBag)
     }
 }
@@ -183,58 +184,30 @@ class SetupProfileViewController: UIViewController {
 
 extension SetupProfileViewController {
     
-    private func imagePicker() {
-        
-        let imagePicker = ImagePickerController()
-        
-        imagePicker.settings.selection.max = 1
-        imagePicker.settings.theme.selectionStyle = .numbered
-        imagePicker.settings.fetch.assets.supportedMediaTypes = [.image]
-        imagePicker.settings.selection.unselectOnReachingMax = true
-        imagePicker.doneButtonTitle = "확인"
-        imagePicker.settings.theme.selectionStyle = .checked
-        imagePicker.settings.theme.selectionFillColor = .white
-        imagePicker.settings.theme.selectionStrokeColor = .orange
-        imagePicker.settings.theme.backgroundColor = .white
-        imagePicker.navigationBar.tintColor = .orange
-        imagePicker.cancelButton = UIBarButtonItem(title: "닫기", style: .done, target: nil, action: nil)
-        
+    private func presentImagePicker() {
+
+        var imagePicker = ImagePickerController()
+
+        configureImagePicker(&imagePicker, selection: 1)
+
         self.presentImagePicker(imagePicker) { asset in
-            
+
         } deselect: { _ in
-            
+
         } cancel: { _ in
-            
+
         } finish: { [weak self] (asset) in
-            
+
             guard let strongSelf = self else { return }
-            
+
             let images = strongSelf.convertAssetToImage(asset, size: CGSize(width: 100, height: 100))
-            
+
             strongSelf.defaultImage.accept(images.first!)
-            
+
             DispatchQueue.main.async {
                 strongSelf.imageView.image = images.first
             }
         }
 
     }
-    
-    
-    
-//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-//
-//        picker.dismiss(animated: false) { [weak self] in
-//
-//            guard let strongSelf = self else { return }
-//
-//            guard let img = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
-//                return
-//            }
-//
-//            strongSelf.imageView.image = img
-//
-//            strongSelf.defaultImage.onNext(img)
-//        }
-//    }
 }
