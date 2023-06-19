@@ -100,6 +100,7 @@ extension FirebaseService: FirebaseAuthService {
         return Observable.create { (observer) in
             
             let task = Task { [weak self] in
+                
                 do {
                     
                     guard let strongSelf = self else { return }

@@ -21,25 +21,23 @@ class LoginViewController: UIViewController {
     // MARK: - UI Properties
     lazy var loginLabel: UILabel = {
        let lbl = UILabel()
-        lbl.text = "Login"
-        lbl.textColor = .black
-        lbl.font = UIFont(name: "LettersforLearners", size: 50)
-        return lbl
-    }()
-    
-    lazy var loginInfoLabel: UILabel = {
-       let lbl = UILabel()
-        lbl.text = "Please sign in to continue."
-        lbl.textColor = .gray
-        lbl.font = UIFont(name: "LettersforLearners", size: 27)
+        lbl.text = "Walk Friends"
+        let length = lbl.text!.count
+        let attribtuedString = NSMutableAttributedString(string: lbl.text ?? "")
+        let range = (lbl.text! as NSString).range(of: "Friends")
+        attribtuedString.addAttribute(.foregroundColor, value: UIColor(red: 0.98, green: 0.66, blue: 0.15, alpha: 1.00), range: range)
+        lbl.font = UIFont(name: "PartyConfetti-Regular", size: 100)
+        lbl.adjustsFontSizeToFitWidth = true
+        lbl.attributedText = attribtuedString
+        lbl.textAlignment = .center
         return lbl
     }()
     
     lazy var emailTextField: CustomTextField = {
        let tf = CustomTextField()
         tf.addleftimage(image: UIImage(systemName: "envelope")!)
-        tf.font = UIFont(name: "LettersforLearners", size: 20)
-        tf.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [.foregroundColor: UIColor.systemGray])
+        tf.font = UIFont(name: "LettersforLearners", size: 15)
+        tf.attributedPlaceholder = NSAttributedString(string: "이메일", attributes: [.foregroundColor: UIColor.systemGray])
         tf.textColor = .black
         tf.autocapitalizationType = .none
         return tf
@@ -48,8 +46,8 @@ class LoginViewController: UIViewController {
     lazy var passwordTextField: CustomTextField = {
        let tf = CustomTextField()
         tf.addleftimage(image: UIImage(systemName: "lock")!)
-        tf.font = UIFont(name: "LettersforLearners", size: 20)
-        tf.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [.foregroundColor: UIColor.systemGray])
+        tf.font = UIFont(name: "LettersforLearners", size: 15)
+        tf.attributedPlaceholder = NSAttributedString(string: "패스워드", attributes: [.foregroundColor: UIColor.systemGray])
         tf.isSecureTextEntry = true
         tf.textColor = .black
         tf.autocapitalizationType = .none
@@ -101,13 +99,21 @@ class LoginViewController: UIViewController {
 
         view.backgroundColor = .white
         
-        configureUI()
+//        configureUI()
         binding()
+        print(UIScreen.main.bounds)
         
 //        for family in UIFont.familyNames.sorted() {
 //            let names = UIFont.fontNames(forFamilyName: family)
 //            print("Family: \(family) Font names: \(names)")
 //        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        configureUI()
+        drawBackground()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -120,21 +126,16 @@ class LoginViewController: UIViewController {
         
         view.addSubview(loginLabel)
         loginLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(100)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(CGFloat(UIScreen.main.bounds.width) / 3)
             make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(25)
-        }
-        
-        view.addSubview(loginInfoLabel)
-        loginInfoLabel.snp.makeConstraints { make in
-            make.top.equalTo(loginLabel.snp.bottom).offset(15)
-            make.left.equalTo(loginLabel.snp.left)
+            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-25)
         }
         
         view.addSubview(emailTextField)
         emailTextField.snp.makeConstraints { make in
-            make.centerY.equalTo(view.snp.centerY).offset(-60)
-            make.left.equalTo(loginLabel.snp.left)
-            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-25)
+            make.top.equalTo(loginLabel.safeAreaLayoutGuide.snp.bottom).offset(40)
+            make.width.equalTo(loginLabel.snp.width)
+            make.centerX.equalToSuperview()
             make.height.equalTo(50)
         }
         

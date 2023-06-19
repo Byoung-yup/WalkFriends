@@ -20,14 +20,6 @@ protocol DataRepository {
     func fetchMapListData() -> Observable<[MapList]>
 }
 
-protocol ImageRepository {
-    func uploadImageData(with data: Data) async throws
-//    func uploadImageArrayData(with data: [Data], uid: String, completion: @escaping (Result<Bool, DatabaseError>) -> Void)
-    func uploadImageArrayData(with data: [Data], uid: String) -> Observable<[String]>
-    func uploadImageArrayData2(with data: [Data], uid: String) async throws -> [String]
-//    func downLoadImages(uid: String) -> [URL]
-}
-
 protocol NetworkService {
 //    func dataTask(url: String) -> Observable<Data>
 }

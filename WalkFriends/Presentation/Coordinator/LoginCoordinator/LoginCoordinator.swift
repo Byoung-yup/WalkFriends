@@ -27,7 +27,7 @@ class LoginCoordinator: NSObject, Coordinator {
         
         let loginViewController = LoginViewController(loginViewModel: makeLoginViewModel())
         navigationController.setViewControllers([loginViewController], animated: false)
-        
+        navigationController.navigationBar.isHidden = true
     }
     
     // MARK: - LoginViewController

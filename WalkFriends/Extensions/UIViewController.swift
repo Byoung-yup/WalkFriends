@@ -145,4 +145,41 @@ extension UIViewController {
         
         return images
     }
+    
+    // MARK: - Draw Background
+    
+    func drawBackground() {
+        
+        draw_Large_CircleBackground()
+        draw_Little_CircleBackground()
+        
+    }
+    
+    func draw_Large_CircleBackground() {
+        
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: CGFloat(UIScreen.main.bounds.width) / 2, y: -100))
+        path.addArc(withCenter: CGPoint(x: UIScreen.main.bounds.width / 2, y: -100), radius: CGFloat(UIScreen.main.bounds.width) / 2 + 100, startAngle: .pi, endAngle: CGFloat(Double.pi * 2), clockwise: false)
+        path.close()
+        
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.path = path.cgPath
+        shapeLayer.fillColor = UIColor(red: 0.98, green: 0.66, blue: 0.15, alpha: 0.25).cgColor
+        
+        view.layer.addSublayer(shapeLayer)
+    }
+    
+    func draw_Little_CircleBackground() {
+        
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: CGFloat(UIScreen.main.bounds.width) + 20, y: -20))
+        path.addArc(withCenter: CGPoint(x: CGFloat(UIScreen.main.bounds.width) + 20, y: -20), radius: CGFloat(UIScreen.main.bounds.width) / 2, startAngle: .pi, endAngle: CGFloat(Double.pi / 2), clockwise: false)
+        path.close()
+        
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.path = path.cgPath
+        shapeLayer.fillColor = UIColor(red: 0.98, green: 0.66, blue: 0.15, alpha: 0.25).cgColor
+        
+        view.layer.addSublayer(shapeLayer)
+    }
 }

@@ -211,8 +211,3 @@ extension URL {
 //        return Observable.merge(observables)
 //    }
 //}
-public func measureTime(_ closure: () -> ()) -> TimeInterval {
-    let startDate = Date()
-    closure()
-    return Date().timeIntervalSince(startDate)
-}

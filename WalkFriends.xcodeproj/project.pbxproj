@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B00AADB329B9EF77008053B6 /* UserProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00AADB229B9EF77008053B6 /* UserProfileRepository.swift */; };
+		B00AADB329B9EF77008053B6 /* DatabaseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00AADB229B9EF77008053B6 /* DatabaseRepository.swift */; };
 		B02828D729E93BA0008B22CF /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02828D629E93BA0008B22CF /* Date.swift */; };
 		B02828DA29E93EF4008B22CF /* MapListCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02828D929E93EF4008B22CF /* MapListCoordinator.swift */; };
 		B02828DE29E93F8E008B22CF /* MapListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02828DD29E93F8E008B22CF /* MapListViewController.swift */; };
@@ -15,13 +15,13 @@
 		B02828E429E94207008B22CF /* MapListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02828E229E94207008B22CF /* MapListViewCell.swift */; };
 		B02828E529E94207008B22CF /* MapListViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B02828E329E94207008B22CF /* MapListViewCell.xib */; };
 		B02828E829E94400008B22CF /* MapList.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02828E729E94400008B22CF /* MapList.swift */; };
-		B031A1BC2991F64400C51B5A /* Letters for Learners Outline Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */; };
-		B031A1BD2991F64400C51B5A /* Letters for Learners Outline Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */; };
+		B028F7432A409D8E002C4B3F /* PartyConfettiRegular-eZOn3.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B028F7422A409D8D002C4B3F /* PartyConfettiRegular-eZOn3.ttf */; };
 		B031A1BF2991F73800C51B5A /* Letters for Learners.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */; };
 		B03310242A0E61020081528D /* EmailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03310232A0E61020081528D /* EmailCoordinator.swift */; };
 		B034D94C29E1568700B90AB2 /* RegisterCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B034D94B29E1568700B90AB2 /* RegisterCoordinator.swift */; };
 		B0483CFF29D6BC4E001941C1 /* ShareInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0483CFE29D6BC4E001941C1 /* ShareInfoViewController.swift */; };
 		B0483D0229D6BCAC001941C1 /* ShareInfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0483D0129D6BCAC001941C1 /* ShareInfoCoordinator.swift */; };
+		B0596AF82A37FAD000BDD8EA /* StorageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0596AF72A37FAD000BDD8EA /* StorageRepository.swift */; };
 		B05B7F6729ED02F100685D6F /* Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B7F6629ED02F100685D6F /* Reactive.swift */; };
 		B05C3D9C2A176F8C00D23AB7 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05C3D9B2A176F8C00D23AB7 /* UIViewController.swift */; };
 		B062D8092A0B6451005C9FD3 /* MapListDetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B062D8072A0B6451005C9FD3 /* MapListDetailViewCell.swift */; };
@@ -64,7 +64,6 @@
 		B09DC79B2990DEA2008558EA /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC79A2990DEA2008558EA /* TabBarCoordinator.swift */; };
 		B09DC7A22990E21A008558EA /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7A12990E21A008558EA /* LoginViewController.swift */; };
 		B09DC7A42990E29F008558EA /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7A32990E29F008558EA /* LoginCoordinator.swift */; };
-		B09DC7A72990E9DD008558EA /* Lemon Days.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B09DC7A62990E9DD008558EA /* Lemon Days.ttf */; };
 		B09DC7AA2990EC50008558EA /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7A92990EC50008558EA /* UITextField.swift */; };
 		B09DC7AC2990F3E6008558EA /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */; };
 		B09DC7AE2990FFAF008558EA /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7AD2990FFAF008558EA /* CALayer.swift */; };
@@ -87,7 +86,7 @@
 
 /* Begin PBXFileReference section */
 		40B8E93FFDC9EEFF8BC55A5E /* Pods-WalkFriends.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WalkFriends.release.xcconfig"; path = "Target Support Files/Pods-WalkFriends/Pods-WalkFriends.release.xcconfig"; sourceTree = "<group>"; };
-		B00AADB229B9EF77008053B6 /* UserProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileRepository.swift; sourceTree = "<group>"; };
+		B00AADB229B9EF77008053B6 /* DatabaseRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseRepository.swift; sourceTree = "<group>"; };
 		B02828D629E93BA0008B22CF /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		B02828D929E93EF4008B22CF /* MapListCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListCoordinator.swift; sourceTree = "<group>"; };
 		B02828DD29E93F8E008B22CF /* MapListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListViewController.swift; sourceTree = "<group>"; };
@@ -95,13 +94,13 @@
 		B02828E229E94207008B22CF /* MapListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListViewCell.swift; sourceTree = "<group>"; };
 		B02828E329E94207008B22CF /* MapListViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapListViewCell.xib; sourceTree = "<group>"; };
 		B02828E729E94400008B22CF /* MapList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapList.swift; sourceTree = "<group>"; };
-		B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Light.ttf"; sourceTree = "<group>"; };
-		B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners Outline Bold.ttf"; sourceTree = "<group>"; };
+		B028F7422A409D8D002C4B3F /* PartyConfettiRegular-eZOn3.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "PartyConfettiRegular-eZOn3.ttf"; sourceTree = "<group>"; };
 		B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners.ttf"; sourceTree = "<group>"; };
 		B03310232A0E61020081528D /* EmailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailCoordinator.swift; sourceTree = "<group>"; };
 		B034D94B29E1568700B90AB2 /* RegisterCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCoordinator.swift; sourceTree = "<group>"; };
 		B0483CFE29D6BC4E001941C1 /* ShareInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoViewController.swift; sourceTree = "<group>"; };
 		B0483D0129D6BCAC001941C1 /* ShareInfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoCoordinator.swift; sourceTree = "<group>"; };
+		B0596AF72A37FAD000BDD8EA /* StorageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageRepository.swift; sourceTree = "<group>"; };
 		B05B7F6629ED02F100685D6F /* Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reactive.swift; sourceTree = "<group>"; };
 		B05C3D9B2A176F8C00D23AB7 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		B062D8072A0B6451005C9FD3 /* MapListDetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListDetailViewCell.swift; sourceTree = "<group>"; };
@@ -146,7 +145,6 @@
 		B09DC79A2990DEA2008558EA /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
 		B09DC7A12990E21A008558EA /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B09DC7A32990E29F008558EA /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
-		B09DC7A62990E9DD008558EA /* Lemon Days.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lemon Days.ttf"; sourceTree = "<group>"; };
 		B09DC7A92990EC50008558EA /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		B09DC7AB2990F3E6008558EA /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		B09DC7AD2990FFAF008558EA /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
@@ -188,12 +186,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		B00AADB129B9EF5D008053B6 /* Repository */ = {
+		B00AADB129B9EF5D008053B6 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
-				B00AADB229B9EF77008053B6 /* UserProfileRepository.swift */,
+				B00AADB229B9EF77008053B6 /* DatabaseRepository.swift */,
+				B0596AF72A37FAD000BDD8EA /* StorageRepository.swift */,
 			);
-			path = Repository;
+			path = Repositories;
 			sourceTree = "<group>";
 		};
 		B014403029E00B6B000E4EB3 /* FirebaseService */ = {
@@ -280,6 +279,14 @@
 			path = RunViewModel;
 			sourceTree = "<group>";
 		};
+		B0596AF62A37FA4800BDD8EA /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				B00AADB129B9EF5D008053B6 /* Repositories */,
+			);
+			path = Interfaces;
+			sourceTree = "<group>";
+		};
 		B05D894529DC07B00032BB4F /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -361,7 +368,7 @@
 			children = (
 				B07971BC29B1D0C20038BE9D /* UseCase */,
 				B09DC79D2990DEF4008558EA /* Entities */,
-				B00AADB129B9EF5D008053B6 /* Repository */,
+				B0596AF62A37FA4800BDD8EA /* Interfaces */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -421,7 +428,7 @@
 			isa = PBXGroup;
 			children = (
 				B0936E692A20A8EB00EB03A5 /* UserLoginModel.swift */,
-				B076C6C9299CACBD00EFDA7F /* UserProfile.swift */,
+				B08ED1FE2A3067A000B29112 /* UserProfileData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -523,7 +530,7 @@
 			children = (
 				B076311F29E6A050009B39C0 /* UserMap.swift */,
 				B02828E729E94400008B22CF /* MapList.swift */,
-				B08ED1FE2A3067A000B29112 /* UserProfileData.swift */,
+				B076C6C9299CACBD00EFDA7F /* UserProfile.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -540,10 +547,8 @@
 		B09DC7A52990E9D1008558EA /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				B028F7422A409D8D002C4B3F /* PartyConfettiRegular-eZOn3.ttf */,
 				B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */,
-				B031A1BB2991F64400C51B5A /* Letters for Learners Outline Bold.ttf */,
-				B031A1BA2991F64400C51B5A /* Letters for Learners Outline Light.ttf */,
-				B09DC7A62990E9DD008558EA /* Lemon Days.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -686,14 +691,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B031A1BC2991F64400C51B5A /* Letters for Learners Outline Light.ttf in Resources */,
-				B09DC7A72990E9DD008558EA /* Lemon Days.ttf in Resources */,
 				B090808D29DECC6400DDAEBC /* PhotoListCell.xib in Resources */,
-				B031A1BD2991F64400C51B5A /* Letters for Learners Outline Bold.ttf in Resources */,
 				B09DC7902990DBF6008558EA /* LaunchScreen.storyboard in Resources */,
 				B02828E529E94207008B22CF /* MapListViewCell.xib in Resources */,
 				B031A1BF2991F73800C51B5A /* Letters for Learners.ttf in Resources */,
 				B09DC78D2990DBF6008558EA /* Assets.xcassets in Resources */,
+				B028F7432A409D8E002C4B3F /* PartyConfettiRegular-eZOn3.ttf in Resources */,
 				B065C42929CB5C5B005AC8E2 /* HomeListCell.xib in Resources */,
 				B0C56F2A29921413004E83B8 /* GoogleService-Info.plist in Resources */,
 				B062D80A2A0B6451005C9FD3 /* MapListDetailViewCell.xib in Resources */,
@@ -757,7 +760,7 @@
 				B08531D629B87FBF00209127 /* InfoCoordinator.swift in Sources */,
 				B09DC7AC2990F3E6008558EA /* RegisterViewController.swift in Sources */,
 				B09DC7B129910D93008558EA /* CustomTextField.swift in Sources */,
-				B00AADB329B9EF77008053B6 /* UserProfileRepository.swift in Sources */,
+				B00AADB329B9EF77008053B6 /* DatabaseRepository.swift in Sources */,
 				B09DC7A22990E21A008558EA /* LoginViewController.swift in Sources */,
 				B0A2D38E29BB08F000B6412F /* SetupProfileViewController.swift in Sources */,
 				B076312229E6A84A009B39C0 /* UIImage.swift in Sources */,
@@ -811,6 +814,7 @@
 				B0C273BA299B6BAC005B3AAD /* RunViewController.swift in Sources */,
 				B05C3D9C2A176F8C00D23AB7 /* UIViewController.swift in Sources */,
 				B0C56F2F29922094004E83B8 /* StorageManager.swift in Sources */,
+				B0596AF82A37FAD000BDD8EA /* StorageRepository.swift in Sources */,
 				B0C273BE299B6BC2005B3AAD /* InfoViewController.swift in Sources */,
 				B076311E29E671DB009B39C0 /* CLPlacemark.swift in Sources */,
 			);

@@ -8,8 +8,7 @@
 	<string>프로그램을 실행하기 위해서 사용자 위치 권한이 필요합니다.</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Letters for Learners Outline Bold.ttf</string>
-		<string>Letters for Learners Outline Light.ttf</string>
+		<string>PartyConfettiRegular-eZOn3.ttf</string>
 		<string>Letters for Learners.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
