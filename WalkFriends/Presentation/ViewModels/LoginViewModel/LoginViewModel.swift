@@ -24,6 +24,7 @@ final class LoginViewModel: ViewModel {
         let password: Observable<String>
         let login: Observable<Void>
         let register: Observable<Void>
+        let google_Sign: Observable<Void>
     }
     
     // MARK: - Output {
@@ -32,6 +33,7 @@ final class LoginViewModel: ViewModel {
         let present: Observable<Void>
         let loginEnabled: Driver<Bool>
         let loginTrigger: Observable<Result<Bool, FirebaseAuthError>>
+        let loginTrigger_Google: Observable<Result<Bool, FirebaseAuthError>>
     }
     
     // MARK: - Properties
@@ -41,6 +43,9 @@ final class LoginViewModel: ViewModel {
     // MARK: - Transform Method
     
     func transform(input: Input) -> Output {
+        
+//        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { fatalError() }
+//        guard let rootViewController = windowScene.windows.first?.rootViewController else { fatalError() }
         
         let emailEnabled = input.email
             .map { $0.isValidEmail() }
@@ -60,11 +65,14 @@ final class LoginViewModel: ViewModel {
                 return FirebaseService.shard.signIn(with: $0)
             }
         
+        let googleSign = input.google_Sign
+            .flatMap { return FirebaseService.shard.googleSign() }
+        
         let register = input.register
             .do(onNext: { [weak self] in
                 self?.actionDelegate?.showRegisterVC()
             })
                 
-        return Output(present: register, loginEnabled: loginEnabled, loginTrigger: login)
+        return Output(present: register, loginEnabled: loginEnabled, loginTrigger: login, loginTrigger_Google: googleSign)
     }
 }

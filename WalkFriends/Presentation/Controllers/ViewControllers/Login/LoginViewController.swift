@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import GoogleSignIn
 
 class LoginViewController: UIViewController {
     
@@ -54,30 +55,52 @@ class LoginViewController: UIViewController {
         return tf
     }()
     
+    lazy var forget_Password_Btn: UIButton = {
+        let btn = UIButton(type: .system)
+        btn.setTitle("비밀번호를 잊으셨나요?", for: .normal)
+        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 13)
+        btn.setTitleColor(.black, for: .normal)
+        return btn
+    }()
+    
     lazy var loginButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Login", for: .normal)
-        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 25)
+        btn.setTitle("로그인", for: .normal)
+        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 15)
         btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = .orange
+        btn.backgroundColor = UIColor(red: 0.98, green: 0.66, blue: 0.15, alpha: 1.00)
         btn.layer.cornerRadius = 25
         btn.isEnabled = false
         return btn
     }()
     
+    lazy var google_Sign_Btn: UIButton = {
+        let btn = UIButton(type: .custom)
+        btn.setImage(UIImage(named: "Google"), for: .normal)
+        btn.contentVerticalAlignment = .center
+        btn.contentHorizontalAlignment = .center
+        btn.backgroundColor = .white
+        btn.layer.cornerRadius = 10
+        btn.layer.shadowColor = UIColor.gray.cgColor
+        btn.layer.shadowOpacity = 1.0
+        btn.layer.shadowOffset = CGSize.zero
+        btn.layer.shadowRadius = 6
+        return btn
+    }()
+    
     lazy var registerInfoLabel: UILabel = {
        let lbl = UILabel()
-        lbl.text = "Don't have an account?"
+        lbl.text = "계정이 없으신가요?"
         lbl.textColor = .gray
-        lbl.font = UIFont(name: "LettersforLearners", size: 19)
+        lbl.font = UIFont(name: "LettersforLearners", size: 14)
         return lbl
     }()
     
     lazy var registerInfoButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Sign up", for: .normal)
-        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 19)
-        btn.setTitleColor(.orange, for: .normal)
+        btn.setTitle("계정 만들기", for: .normal)
+        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 14)
+        btn.setTitleColor(.black, for: .normal)
         return btn
     }()
     
@@ -101,7 +124,6 @@ class LoginViewController: UIViewController {
         
 //        configureUI()
         binding()
-        print(UIScreen.main.bounds)
         
 //        for family in UIFont.familyNames.sorted() {
 //            let names = UIFont.fontNames(forFamilyName: family)
@@ -147,12 +169,25 @@ class LoginViewController: UIViewController {
             make.height.equalTo(50)
         }
         
+        view.addSubview(forget_Password_Btn)
+        forget_Password_Btn.snp.makeConstraints { make in
+            make.top.equalTo(passwordTextField.safeAreaLayoutGuide.snp.bottom).offset(5)
+            make.right.equalTo(passwordTextField.safeAreaLayoutGuide.snp.right)
+        }
+        
         view.addSubview(loginButton)
         loginButton.snp.makeConstraints { make in
-            make.top.equalTo(passwordTextField.snp.bottom).offset(30)
-            make.right.equalTo(passwordTextField.snp.right)
+            make.top.equalTo(passwordTextField.safeAreaLayoutGuide.snp.bottom).offset(60)
+            make.left.equalTo(passwordTextField.safeAreaLayoutGuide.snp.left)
+            make.right.equalTo(passwordTextField.safeAreaLayoutGuide.snp.right)
             make.height.equalTo(50)
-            make.width.equalTo(120)
+        }
+        
+        view.addSubview(google_Sign_Btn)
+        google_Sign_Btn.snp.makeConstraints { make in
+            make.top.equalTo(loginButton.safeAreaLayoutGuide.snp.bottom).offset(50)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(80)
         }
         
         view.addSubview(registerInfoLabel)
@@ -175,7 +210,8 @@ class LoginViewController: UIViewController {
         let input = LoginViewModel.Input(email: emailTextField.rx.text.orEmpty.asObservable(),
                                          password: passwordTextField.rx.text.orEmpty.asObservable(),
                                          login: loginButton.rx.tap.asObservable(),
-                                         register: registerInfoButton.rx.tap.asObservable())
+                                         register: registerInfoButton.rx.tap.asObservable(),
+                                         google_Sign: google_Sign_Btn.rx.tap.asObservable())
         let output = loginViewModel.transform(input: input)
         
         output.loginEnabled
@@ -187,7 +223,7 @@ class LoginViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.loginTrigger
-            .observe(on: MainScheduler.instance)
+//            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] result in
                 
                 guard let strongSelf = self else { return }
@@ -200,6 +236,43 @@ class LoginViewController: UIViewController {
                 }
                 
             }).disposed(by: disposeBag)
+        
+//        google_Sign_Btn
+//            .rx
+//            .tap
+//            .bind(onNext: { [weak self] in
+//                self?.googleSignIn()
+//            }).disposed(by: disposeBag)
+        
+        output.loginTrigger_Google
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] result in
+
+                guard let strongSelf = self else { return }
+
+                switch result {
+                case .success(_):
+                    strongSelf.loginViewModel.actionDelegate?.signIn()
+                case .failure(let err):
+                    strongSelf.showFBAuthErrorAlert(error: err)
+                }
+
+            }).disposed(by: disposeBag)
     }
     
+}
+
+extension LoginViewController {
+    
+    func googleSignIn()  {
+        
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { (authResult, error) in
+            
+            guard authResult != nil, error == nil else {
+                return
+            }
+            return
+        }
+        
+    }
 }

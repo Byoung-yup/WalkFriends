@@ -33,9 +33,9 @@ class LoginCoordinator: NSObject, Coordinator {
     // MARK: - LoginViewController
     
     private func makeLoginViewModel() -> LoginViewModel {
-        let homeViewModel = LoginViewModel()
-        homeViewModel.actionDelegate = self
-        return homeViewModel
+        let loginViewModel = LoginViewModel()
+        loginViewModel.actionDelegate = self
+        return loginViewModel
     }
     
 }

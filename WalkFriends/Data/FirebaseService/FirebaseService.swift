@@ -6,13 +6,21 @@
 //
 
 import Foundation
+import FirebaseCore
 import FirebaseAuth
 import UIKit
 import RxSwift
+import GoogleSignIn
 
-protocol FirebaseAuthService {
+protocol FirebaseAuthService {}
+
+protocol DefaultService: FirebaseAuthService {
     func createUser(user: UserLoginInfo) -> Observable<Result<Bool, FirebaseAuthError>>
     func signIn(with userInfo: UserLoginInfo) -> Observable<Result<Bool, FirebaseAuthError>>
+}
+
+protocol GoogleService: FirebaseAuthService {
+    func googleSign() -> Observable<Result<Bool, FirebaseAuthError>>
 }
 
 final class FirebaseService {
@@ -151,6 +159,57 @@ extension FirebaseService: FirebaseAuthService {
         } catch let error {
             print("logout error: \(error.localizedDescription)")
             completion(false)
+        }
+    }
+}
+
+// MARK: GoogleService
+
+extension FirebaseService {
+    
+    
+    func googleSign() -> Observable<Result<Bool, FirebaseAuthError>> {
+        print("Thread1: \(Thread.current)")
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { fatalError() }
+        guard let rootViewController = windowScene.windows.first?.rootViewController else { fatalError() }
+        
+        return Observable.create { (observer) in
+            print("Thread2: \(Thread.current)")
+            let task = Task.detached { @MainActor [weak self]  in
+                print("Thread3: \(Thread.current)")
+                do {
+                    
+                    guard let strongSelf = self else { return }
+
+                    guard let clientID = FirebaseApp.app()?.options.clientID else { fatalError() }
+
+                    let config = GIDConfiguration(clientID: clientID)
+                    GIDSignIn.sharedInstance.configuration = config
+                    
+                    let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
+
+                    let user = result.user
+                    guard let idToken = user.idToken?.tokenString else {
+                        observer.onNext(.failure(FirebaseAuthError.NetworkError))
+                        observer.onCompleted()
+                        return
+                    }
+                    
+                    let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: user.accessToken.tokenString)
+                    
+                    try await strongSelf.auth.signIn(with: credential)
+
+                    observer.onNext(.success(true))
+                    observer.onCompleted()
+                } catch {
+                    observer.onNext(.failure(FirebaseAuthError.NetworkError))
+                    observer.onCompleted()
+                }
+            }
+            
+            return Disposables.create {
+                task.cancel()
+            }
         }
     }
 }
