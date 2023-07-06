@@ -15,6 +15,9 @@ struct MapList: Decodable {
     let subTitle: String
     let date: String
     let email: String
+    let popular: Int
+    let distance: String
+    let time: String
     
     enum CodingKeys: String, CodingKey {
         case uid = "uid"
@@ -24,5 +27,8 @@ struct MapList: Decodable {
         case imageUrls = "imageUrls"
         case date = "time"
         case email = "email"
+        case popular = "popular"
+        case distance = "distance"
+        case time = "titme"
     }
 }

@@ -7,14 +7,37 @@
 
 import UIKit
 import FirebaseCore
-import FirebaseAuth
+import FBSDKLoginKit
 import GoogleSignIn
+import FirebaseAuth
+import KakaoSDKCommon
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
         FirebaseApp.configure()
+        
+        KakaoSDK.initSDK(appKey: "fa3f46e81ac9f379807667f66c67067b")
+        
+        if #available(iOS 15, *) {
+            let appearance = UINavigationBarAppearance()
+            let navigationBar = UINavigationBar()
+            appearance.configureWithOpaqueBackground()
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, .font: UIFont(name: "LettersforLearners", size: 20)!]
+            appearance.backgroundColor = .clear
+            navigationBar.standardAppearance = appearance
+//            UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+//            UINavigationBar.appearance().shadowImage = UIImage()
+            UINavigationBar.appearance().scrollEdgeAppearance = appearance
+            UINavigationBar.appearance().standardAppearance = appearance
+        }
+
+        //네비게이션 바 색상 UIColor와 일치시키기
+        UINavigationBar.appearance().isTranslucent = true
+        
         return true
     }
     
@@ -31,23 +54,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-    
-    func application(
-        _ app: UIApplication,
-        open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]
-    ) -> Bool {
-        var handled: Bool
+
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         
-        handled = GIDSignIn.sharedInstance.handle(url)
-        if handled {
-            return true
-        }
+        ApplicationDelegate.shared.application(
+            app,
+            open: url,
+            sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+            annotation: options[UIApplication.OpenURLOptionsKey.annotation]
+        )
         
-        // Handle other custom URL types.
-        
-        // If not handled by this app, return false.
-        return false
     }
-    
 }
 

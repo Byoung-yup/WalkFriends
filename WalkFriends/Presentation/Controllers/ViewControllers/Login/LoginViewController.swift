@@ -9,7 +9,8 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-import GoogleSignIn
+import FBSDKLoginKit
+import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
@@ -19,10 +20,13 @@ class LoginViewController: UIViewController {
     
     let disposeBag = DisposeBag()
     
+//    var handle: AuthStateDidChangeListenerHandle!
+    
     // MARK: - UI Properties
     lazy var loginLabel: UILabel = {
        let lbl = UILabel()
         lbl.text = "Walk Friends"
+        lbl.textColor = .black
         let length = lbl.text!.count
         let attribtuedString = NSMutableAttributedString(string: lbl.text ?? "")
         let range = (lbl.text! as NSString).range(of: "Friends")
@@ -74,6 +78,23 @@ class LoginViewController: UIViewController {
         return btn
     }()
     
+    lazy var lineView: UIImageView = {
+       let imgView = UIImageView()
+        imgView.backgroundColor = .white
+        imgView.contentMode = .scaleAspectFill
+        imgView.image = UIImage(named: "Line")
+        return imgView
+    }()
+    
+    lazy var btn_StackView: UIStackView = {
+       let stackView = UIStackView(arrangedSubviews: [google_Sign_Btn, facebook_Sign_Btn, kakao_Sign_Btn])
+        stackView.axis = .horizontal
+        stackView.backgroundColor = .white
+        stackView.spacing = 20
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
     lazy var google_Sign_Btn: UIButton = {
         let btn = UIButton(type: .custom)
         btn.setImage(UIImage(named: "Google"), for: .normal)
@@ -82,14 +103,51 @@ class LoginViewController: UIViewController {
         btn.backgroundColor = .white
         btn.layer.cornerRadius = 10
         btn.layer.shadowColor = UIColor.gray.cgColor
-        btn.layer.shadowOpacity = 1.0
-        btn.layer.shadowOffset = CGSize.zero
-        btn.layer.shadowRadius = 6
+        btn.layer.shadowOpacity = 0.6
+        btn.layer.shadowOffset = CGSize(width: 0, height: 2)
+//        btn.layer.shadowRadius = 6
         return btn
     }()
     
+    lazy var facebook_Sign_Btn: UIButton = {
+        let btn = UIButton(type: .custom)
+        btn.setImage(UIImage(named: "Facebook"), for: .normal)
+        btn.contentVerticalAlignment = .center
+        btn.contentHorizontalAlignment = .center
+        btn.backgroundColor = .white
+        btn.layer.cornerRadius = 10
+        btn.layer.shadowColor = UIColor.gray.cgColor
+        btn.layer.shadowOpacity = 1.0
+        btn.layer.shadowOffset = CGSize(width: 0, height: 2)
+//        btn.layer.shadowRadius = 10
+        return btn
+    }()
+    
+    lazy var kakao_Sign_Btn: UIButton = {
+        let btn = UIButton(type: .custom)
+        btn.setImage(UIImage(named: "Kakao"), for: .normal)
+        btn.contentVerticalAlignment = .center
+        btn.contentHorizontalAlignment = .center
+        btn.backgroundColor = .white
+        btn.layer.cornerRadius = 10
+        btn.layer.shadowColor = UIColor.gray.cgColor
+        btn.layer.shadowOpacity = 1.0
+        btn.layer.shadowOffset = CGSize(width: 0, height: 2)
+//        btn.layer.shadowRadius = 6
+        return btn
+    }()
+    
+    lazy var lbl_StackView: UIStackView = {
+       let stackView = UIStackView(arrangedSubviews: [registerInfoLabel, registerInfoButton])
+        stackView.axis = .horizontal
+        stackView.backgroundColor = .white
+        stackView.spacing = 5
+        stackView.distribution = .equalCentering
+        return stackView
+    }()
+    
     lazy var registerInfoLabel: UILabel = {
-       let lbl = UILabel()
+        let lbl = UILabel()
         lbl.text = "계정이 없으신가요?"
         lbl.textColor = .gray
         lbl.font = UIFont(name: "LettersforLearners", size: 14)
@@ -100,7 +158,7 @@ class LoginViewController: UIViewController {
         let btn = UIButton(type: .system)
         btn.setTitle("계정 만들기", for: .normal)
         btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 14)
-        btn.setTitleColor(.black, for: .normal)
+        btn.setTitleColor(.main_Color, for: .normal)
         return btn
     }()
     
@@ -122,7 +180,8 @@ class LoginViewController: UIViewController {
 
         view.backgroundColor = .white
         
-//        configureUI()
+        configureUI()
+        drawBackground()
         binding()
         
 //        for family in UIFont.familyNames.sorted() {
@@ -134,8 +193,7 @@ class LoginViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        configureUI()
-        drawBackground()
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -148,7 +206,7 @@ class LoginViewController: UIViewController {
         
         view.addSubview(loginLabel)
         loginLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(CGFloat(UIScreen.main.bounds.width) / 3)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(CGFloat(UIScreen.main.bounds.width) / 4)
             make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(25)
             make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-25)
         }
@@ -183,23 +241,52 @@ class LoginViewController: UIViewController {
             make.height.equalTo(50)
         }
         
-        view.addSubview(google_Sign_Btn)
-        google_Sign_Btn.snp.makeConstraints { make in
-            make.top.equalTo(loginButton.safeAreaLayoutGuide.snp.bottom).offset(50)
+        view.addSubview(lineView)
+        lineView.snp.makeConstraints { make in
+            make.top.equalTo(loginButton.safeAreaLayoutGuide.snp.bottom).offset(40)
+            make.left.equalTo(emailTextField.safeAreaLayoutGuide.snp.left)
+            make.right.equalTo(emailTextField.safeAreaLayoutGuide.snp.right)
+            make.height.equalTo(20)
+        }
+        
+        view.addSubview(btn_StackView)
+        btn_StackView.snp.makeConstraints { make in
+            make.top.equalTo(lineView.safeAreaLayoutGuide.snp.bottom).offset(40)
+            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(62)
+            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-62)
+            make.height.equalTo(50)
+        }
+        
+//        view.addSubview(google_Sign_Btn)
+//        google_Sign_Btn.snp.makeConstraints { make in
+//            make.top.equalTo(loginButton.safeAreaLayoutGuide.snp.bottom).offset(50)
+//            make.centerX.equalToSuperview()
+//            make.width.equalTo(80)
+//        }
+//
+//        view.addSubview(facebook_Sign_Btn)
+//        facebook_Sign_Btn.snp.makeConstraints { make in
+//            make.top.equalTo(loginButton.safeAreaLayoutGuide.snp.bottom).offset(50)
+//            make.centerX.equalToSuperview()
+//            make.width.equalTo(80)
+//        }
+        
+//        view.addSubview(registerInfoLabel)
+//        registerInfoLabel.snp.makeConstraints { make in
+//            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-40)
+//            make.centerX.equalTo(view.snp.centerX).offset(-20)
+//        }
+//
+//        view.addSubview(registerInfoButton)
+//        registerInfoButton.snp.makeConstraints { make in
+//            make.centerY.equalTo(registerInfoLabel.snp.centerY)
+//            make.left.equalTo(registerInfoLabel.snp.right).offset(5)
+//        }
+        
+        view.addSubview(lbl_StackView)
+        lbl_StackView.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-25)
             make.centerX.equalToSuperview()
-            make.width.equalTo(80)
-        }
-        
-        view.addSubview(registerInfoLabel)
-        registerInfoLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-40)
-            make.centerX.equalTo(view.snp.centerX).offset(-20)
-        }
-        
-        view.addSubview(registerInfoButton)
-        registerInfoButton.snp.makeConstraints { make in
-            make.centerY.equalTo(registerInfoLabel.snp.centerY)
-            make.left.equalTo(registerInfoLabel.snp.right).offset(5)
         }
     }
 
@@ -211,68 +298,81 @@ class LoginViewController: UIViewController {
                                          password: passwordTextField.rx.text.orEmpty.asObservable(),
                                          login: loginButton.rx.tap.asObservable(),
                                          register: registerInfoButton.rx.tap.asObservable(),
-                                         google_Sign: google_Sign_Btn.rx.tap.asObservable())
+                                         google_SignIn: google_Sign_Btn.rx.tap.asObservable(),
+                                         facebook_SignIn: facebook_Sign_Btn.rx.tap.asObservable(),
+                                         kakak_SignIn: kakao_Sign_Btn.rx.tap.asObservable())
         let output = loginViewModel.transform(input: input)
         
         output.loginEnabled
             .drive(loginButton.rx.isEnabled)
             .disposed(by: disposeBag)
-            
+        
         output.present
             .subscribe()
             .disposed(by: disposeBag)
         
         output.loginTrigger
-//            .observe(on: MainScheduler.instance)
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] result in
                 
                 guard let strongSelf = self else { return }
                 
                 switch result {
                 case .success(_):
+                    
                     strongSelf.loginViewModel.actionDelegate?.signIn()
                 case .failure(let err):
                     strongSelf.showFBAuthErrorAlert(error: err)
                 }
                 
             }).disposed(by: disposeBag)
-        
-//        google_Sign_Btn
-//            .rx
-//            .tap
-//            .bind(onNext: { [weak self] in
-//                self?.googleSignIn()
-//            }).disposed(by: disposeBag)
         
         output.loginTrigger_Google
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] result in
-
+                
                 guard let strongSelf = self else { return }
-
+                
                 switch result {
                 case .success(_):
                     strongSelf.loginViewModel.actionDelegate?.signIn()
                 case .failure(let err):
                     strongSelf.showFBAuthErrorAlert(error: err)
                 }
-
+                
             }).disposed(by: disposeBag)
+        
+        output.loginTrigger_Facebook
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] result in
+                
+                guard let strongSelf = self else { return }
+                
+                switch result {
+                case .success(_):
+                    strongSelf.loginViewModel.actionDelegate?.signIn()
+                case .failure(let err):
+                    strongSelf.showFBAuthErrorAlert(error: err)
+                }
+                
+            }).disposed(by: disposeBag)
+        
+        output.loginTrigger_Kakao
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] result in
+                
+                
+                guard let strongSelf = self else { return }
+                
+                switch result {
+                case .success(_):
+                    strongSelf.loginViewModel.actionDelegate?.signIn()
+                case .failure(let err):
+                    strongSelf.showFBAuthErrorAlert(error: err)
+                }
+                
+            })
+            .disposed(by: disposeBag)
     }
     
-}
-
-extension LoginViewController {
-    
-    func googleSignIn()  {
-        
-        GIDSignIn.sharedInstance.signIn(withPresenting: self) { (authResult, error) in
-            
-            guard authResult != nil, error == nil else {
-                return
-            }
-            return
-        }
-        
-    }
 }

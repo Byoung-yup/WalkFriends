@@ -48,8 +48,6 @@ extension InfoCoordinator {
 extension InfoCoordinator: InfoViewControllerActionDelegate {
     
     func logOut() {
-        FirebaseService.shard.logout { [weak self] _ in
-            self?.delegate?.logout(self!)
-        }
+        delegate?.logout(self)
     }
 }

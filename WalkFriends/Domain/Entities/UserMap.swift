@@ -13,6 +13,7 @@ struct UserMap {
     let images: [UIImage]
     let title: String
     let subTitle: String
+    let popular: Int
 }
 
 extension UserMap {
@@ -21,12 +22,13 @@ extension UserMap {
         
         return [
            "uid": uid,
-           "email": FirebaseService.shard.currentUser.email!,
+//           "email": FirebaseService.shard.currentUser.email!,
            "address": address,
            "title": title,
            "subTitle": subTitle,
            "time": Date().getCurrenTime(),
-           "imageUrls": urls
+           "imageUrls": urls,
+           "popular": popular
         ]
     }
 }

@@ -11,7 +11,6 @@ import UIKit
 public struct UserProfile: Decodable {
     let email: String
     let nickName: String
-    let gender: String
 }
 
 //extension UserProfile {

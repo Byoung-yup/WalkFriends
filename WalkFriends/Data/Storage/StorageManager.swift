@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseStorage
 import RxSwift
+import FirebaseAuth
 
 final class StorageManager: ImageRepository {
     
@@ -24,7 +25,7 @@ extension StorageManager {
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
         
-        let fileRef = storage.reference().child("images/\(FirebaseService.shard.currentUser.uid)_profile.jpg")
+        let fileRef = storage.reference().child("images/\(FirebaseAuth.Auth.auth().currentUser!.uid)_profile.jpg")
         
         
         do {

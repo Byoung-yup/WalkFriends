@@ -22,7 +22,7 @@ final class RegiterViewModel: ViewModel {
         let password: Observable<String>
         let confirmPassword: Observable<String>
         let register: Observable<Void>
-        let naviback: Observable<Void>
+//        let naviback: Observable<Void>
         let toBack: Observable<Void>
     }
     
@@ -63,7 +63,7 @@ final class RegiterViewModel: ViewModel {
         //
         
         
-        let dismiss = Observable.merge(input.naviback, input.toBack)
+        let dismiss = input.toBack
             .do(onNext: { [weak self] in
                 self?.actionDelegate?.toBack()
             })

@@ -19,8 +19,8 @@ final class MapListCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let vc = MapListViewController(mapListViewModel: makeMapListViewModel())
-        navigationController.pushViewController(vc, animated: true)
+//        let vc = MapListViewController(mapListViewModel: makeMapListViewModel())
+//        navigationController.pushViewController(vc, animated: true)
     }
     
     // MARK: - MapListViewController

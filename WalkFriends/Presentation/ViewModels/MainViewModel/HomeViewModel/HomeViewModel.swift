@@ -9,17 +9,16 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-enum Presenter: Int {
-    case Run
-    case Menu
-    case None
-    case Profile
+enum Category_Action: Int {
+    case Default = 100
+    case Popular = 101
+    case Time = 102
+    case Distance = 103
 }
 
 protocol HomeViewModelActionDelegate {
     func setupProfile()
     func error()
-    func present(from: Presenter)
 }
 
 class HomeViewModel: ViewModel {
@@ -28,19 +27,24 @@ class HomeViewModel: ViewModel {
     
     private let dataUseCase: DataUseCase
     
-    let items = Observable.just(["Run", "Menu", "None", "Profile"])
+    let category_Items = Observable.just(["최신순", "인기순", "시간순", "거리순"])
+    
+    let items = Observable.just([MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20")])
     
     // MARK: - INPUT
     
     struct Input {
-        let selectedMenu: Driver<IndexPath>
+        let default_Btn: Observable<Void>
+        let popular_Btn: Observable<Void>
+        let time_Btn: Observable<Void>
+        let distance_Btn: Observable<Void>
     }
     
     // MARK: - OUTPUT
     
     struct Output {
-        let trigger: Driver<Presenter?>
         let fetchTrigger: Driver<Result<Bool, DatabaseError>>
+        let toggle_Btn_Trigger: Observable<Category_Action>
     }
     
     // MARK: - Initailize
@@ -54,15 +58,14 @@ class HomeViewModel: ViewModel {
         let fetch = dataUseCase.start()
             .asDriver(onErrorJustReturn: .failure(DatabaseError.DatabaseFetchError))
         
-        let dismiss = input.selectedMenu
-            .map {
-                return Presenter(rawValue: $0[1] )
-            }.do(onNext: { [weak self] presenter in
-                self?.actionDelegate?.present(from: presenter!)
-            }).asDriver()
+        let toggle_Btn = Observable.merge(
+            input.default_Btn.map { _ in Category_Action.Default },
+            input.popular_Btn.map { _ in Category_Action.Popular },
+            input.time_Btn.map { _ in Category_Action.Time },
+            input.distance_Btn.map { _ in Category_Action.Distance }
+        )
                 
-        return Output(trigger: dismiss,
-                      fetchTrigger: fetch)
+        return Output(fetchTrigger: fetch, toggle_Btn_Trigger: toggle_Btn)
     }
     
 }

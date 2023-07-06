@@ -51,7 +51,7 @@ final class ShareInfoViewModel: ViewModel {
     func transform(input: Input) -> Output {
         
         let data = Observable.combineLatest(input.addressText, input.selectedImages, input.titleText, input.memoText) {
-            return UserMap(address: $0, images: $1, title: $2, subTitle: $3)
+            return UserMap(address: $0, images: $1, title: $2, subTitle: $3, popular: 0)
         }
         
         let save = input.submit.withLatestFrom(data)

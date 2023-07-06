@@ -12,7 +12,6 @@ public struct UserProfileData {
     let image: UIImage
     let email: String
     let nickName: String
-    let gender: String
 }
 
 extension UserProfileData {
@@ -22,7 +21,6 @@ extension UserProfileData {
         return [
             "email": email,
             "nickName": nickName,
-            "gender": gender
         ]
     }
 }

@@ -23,28 +23,36 @@ class RegisterViewController: UIViewController {
        return indicatorView
     }()
     
-    lazy var backToButton: UIButton = {
-        let btn = UIButton()
-        let ImageConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .light)
-        let systemImage = UIImage(systemName: "arrow.backward", withConfiguration: ImageConfig)
-        btn.setImage(systemImage, for: .normal)
-        btn.tintColor = .systemGray
-        return btn
+    lazy var bgImageView: UIImageView = {
+       let imgView = UIImageView()
+        imgView.backgroundColor = .white
+        imgView.contentMode = .scaleAspectFill
+        imgView.image = UIImage(named: "Register_View_Bg")
+        return imgView
     }()
     
-    lazy var registerLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.text = "Create Account"
-        lbl.textColor = .black
-        lbl.font = UIFont(name: "LettersforLearners", size: 50)
-        return lbl
-    }()
+//    lazy var backToButton: UIButton = {
+//        let btn = UIButton()
+//        let ImageConfig = UIImage.SymbolConfiguration(pointSize: 25, weight: .light)
+//        let systemImage = UIImage(systemName: "arrow.backward", withConfiguration: ImageConfig)
+//        btn.setImage(systemImage, for: .normal)
+//        btn.tintColor = .systemGray
+//        return btn
+//    }()
+    
+//    lazy var registerLabel: UILabel = {
+//        let lbl = UILabel()
+//        lbl.text = "Create Account"
+//        lbl.textColor = .black
+//        lbl.font = UIFont(name: "LettersforLearners", size: 50)
+//        return lbl
+//    }()
     
     lazy var emailTextField: CustomTextField = {
         let tf = CustomTextField()
         tf.addleftimage(image: UIImage(systemName: "envelope")!)
-        tf.font = UIFont(name: "LettersforLearners", size: 20)
-        tf.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [.foregroundColor: UIColor.systemGray])
+        tf.font = UIFont(name: "LettersforLearners", size: 14)
+        tf.attributedPlaceholder = NSAttributedString(string: "이메일", attributes: [.foregroundColor: UIColor.systemGray])
         tf.textColor = .black
         tf.autocapitalizationType = .none
         return tf
@@ -63,8 +71,8 @@ class RegisterViewController: UIViewController {
     lazy var passwordTextField: CustomTextField = {
         let tf = CustomTextField()
         tf.addleftimage(image: UIImage(systemName: "lock")!)
-        tf.font = UIFont(name: "LettersforLearners", size: 20)
-        tf.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [.foregroundColor: UIColor.systemGray])
+        tf.font = UIFont(name: "LettersforLearners", size: 14)
+        tf.attributedPlaceholder = NSAttributedString(string: "패스워드", attributes: [.foregroundColor: UIColor.systemGray])
         tf.textColor = .black
         tf.isSecureTextEntry = true
         tf.autocapitalizationType = .none
@@ -84,8 +92,8 @@ class RegisterViewController: UIViewController {
     lazy var confirmPasswordTextField: CustomTextField = {
         let tf = CustomTextField()
         tf.addleftimage(image: UIImage(systemName: "lock")!)
-        tf.font = UIFont(name: "LettersforLearners", size: 20)
-        tf.attributedPlaceholder = NSAttributedString(string: "Confirm Password", attributes: [.foregroundColor: UIColor.systemGray])
+        tf.font = UIFont(name: "LettersforLearners", size: 14)
+        tf.attributedPlaceholder = NSAttributedString(string: "패스워드 확인", attributes: [.foregroundColor: UIColor.systemGray])
         tf.textColor = .black
         tf.isSecureTextEntry = true
         tf.autocapitalizationType = .none
@@ -104,28 +112,37 @@ class RegisterViewController: UIViewController {
     
     lazy var registerButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Sign Up", for: .normal)
-        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 25)
+        btn.setTitle("계정 등록", for: .normal)
+        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 14)
         btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = .orange
+        btn.backgroundColor = .main_Color
         btn.clipsToBounds = true
         btn.layer.cornerRadius = 25
         return btn
     }()
     
+    lazy var lbl_StackView: UIStackView = {
+       let stackView = UIStackView(arrangedSubviews: [noRegisterLabel, backToLoginButton])
+        stackView.axis = .horizontal
+        stackView.backgroundColor = .white
+        stackView.spacing = 5
+        stackView.distribution = .equalCentering
+        return stackView
+    }()
+    
     lazy var noRegisterLabel: UILabel = {
         let lbl = UILabel()
-        lbl.text = "Already have a account?"
+        lbl.text = "이미 계정이 있으신가요?"
         lbl.textColor = .gray
-        lbl.font = UIFont(name: "LettersforLearners", size: 19)
+        lbl.font = UIFont(name: "LettersforLearners", size: 14)
         return lbl
     }()
     
     lazy var backToLoginButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setTitle("Sign In", for: .normal)
-        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 19)
-        btn.setTitleColor(.orange, for: .normal)
+        btn.setTitle("로그인 하기", for: .normal)
+        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 14)
+        btn.setTitleColor(.main_Color, for: .normal)
         return btn
     }()
     
@@ -146,6 +163,7 @@ class RegisterViewController: UIViewController {
         view.backgroundColor = .white
         
         configureUI()
+        drawBackground()
         binding()
 
     }
@@ -164,29 +182,31 @@ class RegisterViewController: UIViewController {
             make.center.equalToSuperview()
         }
         
-        view.addSubview(backToButton)
-        backToButton.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
-            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(25)
+        view.addSubview(bgImageView)
+        bgImageView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(75)
+            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(15)
+            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-15)
+            make.height.equalTo(200)
         }
         
-        view.addSubview(registerLabel)
-        registerLabel.snp.makeConstraints { make in
-            make.top.equalTo(backToButton.snp.bottom).offset(80)
-            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(25)
-        }
+//        view.addSubview(backToButton)
+//        backToButton.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(30)
+//            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(25)
+//        }
         
         view.addSubview(emailTextField)
         emailTextField.snp.makeConstraints { make in
-            make.top.equalTo(registerLabel.snp.bottom).offset(40)
-            make.left.equalTo(registerLabel.snp.left)
+            make.top.equalTo(bgImageView.safeAreaLayoutGuide.snp.bottom).offset(40)
+            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(25)
             make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-25)
             make.height.equalTo(50)
         }
         
         view.addSubview(passwordTextField)
         passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(emailTextField.snp.bottom).offset(20)
+            make.top.equalTo(emailTextField.snp.bottom).offset(30)
             make.left.equalTo(emailTextField.snp.left)
             make.right.equalTo(emailTextField.snp.right)
             make.height.equalTo(50)
@@ -194,7 +214,7 @@ class RegisterViewController: UIViewController {
         
         view.addSubview(confirmPasswordTextField)
         confirmPasswordTextField.snp.makeConstraints { make in
-            make.top.equalTo(passwordTextField.snp.bottom).offset(20)
+            make.top.equalTo(passwordTextField.snp.bottom).offset(30)
             make.left.equalTo(emailTextField.snp.left)
             make.right.equalTo(emailTextField.snp.right)
             make.height.equalTo(50)
@@ -202,22 +222,10 @@ class RegisterViewController: UIViewController {
         
         view.addSubview(registerButton)
         registerButton.snp.makeConstraints { make in
-            make.top.equalTo(confirmPasswordTextField.snp.bottom).offset(30)
-            make.right.equalTo(confirmPasswordTextField.snp.right)
+            make.top.equalTo(confirmPasswordTextField.snp.bottom).offset(45)
+            make.left.equalTo(emailTextField.safeAreaLayoutGuide.snp.left)
+            make.right.equalTo(emailTextField.safeAreaLayoutGuide.snp.right)
             make.height.equalTo(50)
-            make.width.equalTo(120)
-        }
-        
-        view.addSubview(noRegisterLabel)
-        noRegisterLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-40)
-            make.centerX.equalTo(view.snp.centerX).offset(-20)
-        }
-        
-        view.addSubview(backToLoginButton)
-        backToLoginButton.snp.makeConstraints { make in
-            make.centerY.equalTo(noRegisterLabel.snp.centerY)
-            make.left.equalTo(noRegisterLabel.snp.right).offset(5)
         }
         
         emailTextField.addSubview(emailSymbol)
@@ -237,6 +245,12 @@ class RegisterViewController: UIViewController {
             make.centerY.equalTo(confirmPasswordTextField.snp.centerY)
             make.right.equalTo(confirmPasswordTextField.safeAreaLayoutGuide.snp.right).offset(-15)
         }
+        
+        view.addSubview(lbl_StackView)
+        lbl_StackView.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-25)
+            make.centerX.equalToSuperview()
+        }
     }
     
     // MARK: - Binding
@@ -247,7 +261,6 @@ class RegisterViewController: UIViewController {
                                            password: passwordTextField.rx.text.orEmpty.asObservable(),
                                            confirmPassword: confirmPasswordTextField.rx.text.orEmpty.asObservable(),
                                            register: registerButton.rx.tap.asObservable(),
-                                           naviback: backToButton.rx.tap.asObservable(),
                                            toBack: backToLoginButton.rx.tap.asObservable())
         let output = registerViewModel.transform(input: input)
         

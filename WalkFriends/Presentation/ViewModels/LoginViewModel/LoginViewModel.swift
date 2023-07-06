@@ -24,7 +24,9 @@ final class LoginViewModel: ViewModel {
         let password: Observable<String>
         let login: Observable<Void>
         let register: Observable<Void>
-        let google_Sign: Observable<Void>
+        let google_SignIn: Observable<Void>
+        let facebook_SignIn: Observable<Void>
+        let kakak_SignIn: Observable<Void>
     }
     
     // MARK: - Output {
@@ -34,6 +36,8 @@ final class LoginViewModel: ViewModel {
         let loginEnabled: Driver<Bool>
         let loginTrigger: Observable<Result<Bool, FirebaseAuthError>>
         let loginTrigger_Google: Observable<Result<Bool, FirebaseAuthError>>
+        let loginTrigger_Facebook: Observable<Result<Bool, FirebaseAuthError>>
+        let loginTrigger_Kakao: Observable<Result<Bool, FirebaseAuthError>>
     }
     
     // MARK: - Properties
@@ -65,14 +69,20 @@ final class LoginViewModel: ViewModel {
                 return FirebaseService.shard.signIn(with: $0)
             }
         
-        let googleSign = input.google_Sign
-            .flatMap { return FirebaseService.shard.googleSign() }
+        let googleSignIn = input.google_SignIn
+            .flatMap { return FirebaseService.shard.googleSignIn() }
+        
+        let fbSignIn = input.facebook_SignIn
+            .flatMap { return FirebaseService.shard.fbSignIn() }
+        
+        let kakaoSignIn = input.kakak_SignIn
+            .flatMap { return FirebaseService.shard.kakaoSignIn() }
         
         let register = input.register
             .do(onNext: { [weak self] in
                 self?.actionDelegate?.showRegisterVC()
             })
                 
-        return Output(present: register, loginEnabled: loginEnabled, loginTrigger: login, loginTrigger_Google: googleSign)
+        return Output(present: register, loginEnabled: loginEnabled, loginTrigger: login, loginTrigger_Google: googleSignIn, loginTrigger_Facebook: fbSignIn, loginTrigger_Kakao: kakaoSignIn)
     }
 }

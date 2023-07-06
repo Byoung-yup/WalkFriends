@@ -130,7 +130,7 @@ extension UIViewController {
                 thumbnail = result
             }
             
-            let data = thumbnail.jpegData(compressionQuality: 0.7)
+            let data = thumbnail.jpegData(compressionQuality: 1.0)
             
             guard let data = data else {
                 fatalError("Data not found")

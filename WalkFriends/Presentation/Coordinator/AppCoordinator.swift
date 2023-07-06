@@ -33,6 +33,14 @@ class AppCoordinator: Coordinator {
         }
     }
     
+//    private func showLaunchViewController() {
+//        
+//        let coordinator = LaunchCoordinator(navigationController: navigationController)
+//        coordinator.start()
+//        
+//        childCoordinators.append(coordinator)
+//    }
+    
     private func showMainViewController() {
         
         let coordinator = HomeCoordinator(navigationController: navigationController)
@@ -40,7 +48,7 @@ class AppCoordinator: Coordinator {
         coordinator.start()
         
         childCoordinators.append(coordinator)
-    
+        
     }
     
     private func showLoginViewController() {
@@ -66,7 +74,7 @@ extension AppCoordinator: LoginCoordinatorDelegate {
 }
 
 extension AppCoordinator: HomeCoordinatorDelegate {
-
+    
     func didLoggedOut(_ coordinator: HomeCoordinator) {
         
         childCoordinators = childCoordinators.filter { $0 !== coordinator }

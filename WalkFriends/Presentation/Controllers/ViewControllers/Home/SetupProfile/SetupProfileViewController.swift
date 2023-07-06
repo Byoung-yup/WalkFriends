@@ -23,32 +23,35 @@ class SetupProfileViewController: UIViewController {
         let imageV = UIImageView()
         imageV.contentMode = .scaleAspectFill
         imageV.image = defaultImage
-        imageV.tintColor = .orange
+        imageV.tintColor = .main_Color
         imageV.isUserInteractionEnabled = true
         return imageV
     }()
     
     lazy var userNicknameTextField: CustomTextField = {
         let tf = CustomTextField()
+        tf.addLeftPadding()
         tf.textColor = .black
-        tf.font = UIFont(name: "LettersforLearners", size: 20)
-        tf.attributedPlaceholder = NSAttributedString(string: "닉네임", attributes: [.foregroundColor: UIColor.systemGray])
+        tf.font = UIFont(name: "LettersforLearners", size: 15)
+        tf.attributedPlaceholder = NSAttributedString(string: "닉네임(2글자 이상)", attributes: [.foregroundColor: UIColor.systemGray])
         return tf
     }()
     
-    lazy var userGenderSgControl: UISegmentedControl = {
-        let items = ["남", "여"]
-        let sg = UISegmentedControl(items: items)
-        sg.backgroundColor = .white
-        return sg
-    }()
+//    lazy var userGenderSgControl: UISegmentedControl = {
+//        let items = ["남", "여"]
+//        let sg = UISegmentedControl(items: items)
+//        sg.backgroundColor = .white
+//        return sg
+//    }()
     
     lazy var createProfileBtn: UIButton = {
         let btn = UIButton(type: .system)
         btn.setTitle("확인", for: .normal)
-        btn.backgroundColor = .orange
+        btn.backgroundColor = .main_Color
         btn.setTitleColor(.white, for: .normal)
         btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 15)
+        btn.layer.cornerRadius = 25
+        btn.isEnabled = false
         return btn
     }()
     
@@ -78,17 +81,21 @@ class SetupProfileViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        title = "정보 입력"
-        print("index: \(userGenderSgControl.selectedSegmentIndex)")
+        title = "프로필 설정"
+        navigationItem.hidesBackButton = true
+//        print("index: \(userGenderSgControl.selectedSegmentIndex)")
+        drawBackground()
         configureUI()
+        
         binding()
+        
     }
     
     // MARK: - viewDidLayoutSubviews
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+         
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = imageView.frame.width / 2
 
@@ -100,44 +107,44 @@ class SetupProfileViewController: UIViewController {
         
         view.addSubview(imageView)
         imageView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
             make.centerX.equalTo(view.snp.centerX)
-            make.width.height.equalTo(100)
+            make.width.height.equalTo(130)
         }
         
         view.addSubview(userNicknameTextField)
         userNicknameTextField.snp.makeConstraints { make in
-            make.top.equalTo(imageView.safeAreaLayoutGuide.snp.bottom).offset(20)
-            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(30)
-            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-30)
-            make.height.equalTo(30)
-        }
-        
-        view.addSubview(userGenderSgControl)
-        userGenderSgControl.snp.makeConstraints { make in
-            make.top.equalTo(userNicknameTextField.snp.bottom).offset(15)
-            make.centerX.equalTo(userNicknameTextField.snp.centerX)
-            make.height.equalTo(userNicknameTextField.snp.height)
-            make.width.equalTo(100)
-        }
-        
-        view.addSubview(createProfileBtn)
-        createProfileBtn.snp.makeConstraints { make in
-            make.bottom.equalTo(view.snp.bottom).offset(-30)
-            make.centerX.equalTo(view.snp.centerX)
-            make.width.equalTo(100)
+            make.top.equalTo(imageView.safeAreaLayoutGuide.snp.bottom).offset(40)
+            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(25)
+            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-25)
             make.height.equalTo(50)
         }
         
-        setupSegmentControl()
+//        view.addSubview(userGenderSgControl)
+//        userGenderSgControl.snp.makeConstraints { make in
+//            make.top.equalTo(userNicknameTextField.snp.bottom).offset(15)
+//            make.centerX.equalTo(userNicknameTextField.snp.centerX)
+//            make.height.equalTo(userNicknameTextField.snp.height)
+//            make.width.equalTo(100)
+//        }
+        
+        view.addSubview(createProfileBtn)
+        createProfileBtn.snp.makeConstraints { make in
+            make.top.equalTo(userNicknameTextField.safeAreaLayoutGuide.snp.bottom).offset(40)
+            make.left.equalTo(userNicknameTextField.safeAreaLayoutGuide.snp.left)
+            make.right.equalTo(userNicknameTextField.safeAreaLayoutGuide.snp.right)
+            make.height.equalTo(50)
+        }
+        
+//        setupSegmentControl()
     }
     
-    private func setupSegmentControl() {
-        
-        userGenderSgControl.selectedSegmentTintColor = .orange
-        userGenderSgControl.tintColor = .white
-        
-    }
+//    private func setupSegmentControl() {
+//        
+//        userGenderSgControl.selectedSegmentTintColor = .orange
+//        userGenderSgControl.tintColor = .white
+//        
+//    }
     
     // MARK: - Binding
     
@@ -145,7 +152,6 @@ class SetupProfileViewController: UIViewController {
         
         let input = SetupProfileViewModel.Input(profileImage: defaultImage.asObservable(),
                                                 usernickName: userNicknameTextField.rx.text.orEmpty.asObservable(),
-                                                userGender: userGenderSgControl.rx.value.asObservable(),
                                                 createTrigger: createProfileBtn.rx.tap.asObservable())
         let output = setupProfileViewModel.transform(input: input)
         
@@ -170,8 +176,8 @@ class SetupProfileViewController: UIViewController {
         
         imageView.rx.tapGesture()
             .when(.recognized)
-            .subscribe(onNext: { [weak self] _ in
-                
+            .subscribe(onNext: { [weak self] event in
+                print("touch: \(event)")
                 guard let strongSelf = self else { return }
                 
                 strongSelf.presentImagePicker()

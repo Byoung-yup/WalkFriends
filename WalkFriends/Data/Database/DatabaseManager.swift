@@ -10,6 +10,7 @@ import UIKit
 import FirebaseFirestore
 import RxSwift
 import RxCocoa
+import FirebaseAuth
 
 enum DatabaseError: Error {
     case NotFoundUserError
@@ -36,7 +37,7 @@ extension DatabaseManager: DataRepository {
                 
                 do {
    
-                    let document = try await strongSelf.db.collection("Users").document(FirebaseService.shard.currentUser.uid).getDocument()
+                    let document = try await strongSelf.db.collection("Users").document("dd").getDocument()
                     
                     guard document.exists, let data = document.data() else  {
                         observer.onNext(.failure(DatabaseError.NotFoundUserError))
@@ -47,15 +48,15 @@ extension DatabaseManager: DataRepository {
                     let jsonData = try JSONSerialization.data(withJSONObject: data)
                     let decoded = try JSONDecoder().decode(UserProfile.self, from: jsonData)
                     
-                    FirebaseService.shard.UserProfle = decoded
+//                    FirebaseService.shard.UserProfle = decoded
 //                    print("Fetch User Data")
 //                    print("User: \(FirebaseService.shard.UserProfle)")
                     observer.onNext(.success(true))
                     observer.onCompleted()
                     
-                } catch {
-                    
-                    try FirebaseService.shard.auth.signOut()
+                } catch let err {
+                    print("Fetch Error: \(err.localizedDescription)")
+                    try FirebaseAuth.Auth.auth().signOut()
                     
                     observer.onNext(.failure(DatabaseError.DatabaseFetchError))
                     observer.onCompleted()
@@ -93,7 +94,7 @@ extension DatabaseManager: DataRepository {
     func createUserProfile(with data: UserProfileData) async throws {
         
         do {
-            try await db.collection("Users").document(FirebaseService.shard.currentUser.uid).setData(data.toJSON())
+            try await db.collection("Users").document(FirebaseAuth.Auth.auth().currentUser!.uid).setData(data.toJSON())
         } catch {
             throw DatabaseError.UnknownError
         }

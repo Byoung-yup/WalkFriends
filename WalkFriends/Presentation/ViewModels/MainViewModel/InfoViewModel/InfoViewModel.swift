@@ -18,13 +18,13 @@ final class InfoViewModel: ViewModel {
     // MARK: - Input
     
     struct Input {
-        let logout: Driver<Void>
+        let logout: Observable<Void>
     }
     
     // MARK: - Output
     
     struct Output {
-        let dismiss: Driver<Void>
+        let logout_Trigger: Observable<Result<Bool, FirebaseAuthError>>
         
     }
     
@@ -37,11 +37,11 @@ final class InfoViewModel: ViewModel {
     func transform(input: Input) -> Output {
         
         let logout = input.logout
-            .do(onNext: { [weak self] in
-                self?.actionDelegate?.logOut()
-            })
+            .flatMap {
+                return FirebaseService.shard.logout()
+            }
         
-        return Output(dismiss: logout)
+        return Output(logout_Trigger: logout)
     }
 }
 

@@ -28,6 +28,7 @@ final class HomeCoordinator: NSObject, Coordinator {
     func start() {
         let vc = HomeViewController(homeViewModel: makeHomeViewModel())
         navigationController.setViewControllers([vc], animated: false)
+        navigationController.navigationBar.isHidden = true
     }
     
     // MARK: - HomeViewController
@@ -54,28 +55,6 @@ extension HomeCoordinator: HomeViewModelActionDelegate {
         setupProfileCoordinator.delegate = self
         setupProfileCoordinator.start()
         childCoordinators.append(setupProfileCoordinator)
-    }
-    
-    func present(from presenter: Presenter) {
-        
-        switch presenter {
-        case .Run:
-            let coordinator = RunCoordinator(navigationController: navigationController)
-            coordinator.delegate = self
-            coordinator.start()
-            childCoordinators.append(coordinator)
-        case .Menu:
-            let coordinator = MapListCoordinator(navigationController: navigationController)
-            coordinator.start()
-            childCoordinators.append(coordinator)
-        case .None:
-            break
-        case .Profile:
-            let coordinator = InfoCoordinator(navigationController: navigationController)
-            coordinator.delegate = self
-            coordinator.start()
-            childCoordinators.append(coordinator)
-        }
     }
     
     func error() {

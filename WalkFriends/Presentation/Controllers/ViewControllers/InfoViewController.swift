@@ -73,12 +73,23 @@ class InfoViewController: UIViewController {
     
     private func binding() {
         
-        let input = InfoViewModel.Input(logout: logoutButton.rx.tap.asDriver())
+        let input = InfoViewModel.Input(logout: logoutButton.rx.tap.asObservable())
         let output = infoViewModel.transform(input: input)
         
-        output.dismiss
-            .drive()
-            .disposed(by: disposeBag)
+        output.logout_Trigger
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] result in
+                
+                guard let strongSelf = self else { return }
+                
+                switch result {
+                case .success(_):
+                    strongSelf.infoViewModel.actionDelegate?.logOut()
+                case .failure(let err):
+                    strongSelf.showFBAuthErrorAlert(error: err)
+                }
+                
+            }).disposed(by: disposeBag)
     }
 
 }
