@@ -84,7 +84,7 @@ class InfoViewController: UIViewController {
                 
                 switch result {
                 case .success(_):
-                    strongSelf.infoViewModel.actionDelegate?.logOut()
+                    strongSelf.infoViewModel.actions.signOut()
                 case .failure(let err):
                     strongSelf.showFBAuthErrorAlert(error: err)
                 }

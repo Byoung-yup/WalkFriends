@@ -31,7 +31,7 @@ class MapListViewCell: UITableViewCell {
     
     lazy var thumbnailView: UIImageView = {
         let imgView = UIImageView()
-        imgView.contentMode = .scaleAspectFit
+        imgView.contentMode = .scaleAspectFill
         imgView.backgroundColor = .red
         imgView.image = UIImage(named: "Register_View_Bg")
         return imgView
@@ -40,14 +40,14 @@ class MapListViewCell: UITableViewCell {
     lazy var titleLbl: UILabel = {
         let lbl = UILabel()
         lbl.textColor = .black
-        lbl.font = UIFont(name: "LettersforLearners", size: 14)
+        lbl.font = UIFont(name: "LettersforLearners", size: 15)
         return lbl
     }()
     
     lazy var subTitleLbl: UILabel = {
         let lbl = UILabel()
         lbl.textColor = .systemGray6
-        lbl.font = UIFont(name: "LettersforLearners", size: 12)
+        lbl.font = UIFont(name: "LettersforLearners", size: 13)
         return lbl
     }()
     
@@ -55,7 +55,8 @@ class MapListViewCell: UITableViewCell {
         let view = UIStackView(arrangedSubviews: [titleLbl, subTitleLbl, info_StackView])
         view.backgroundColor = .white
         view.axis = .vertical
-        view.distribution = .equalSpacing
+        view.distribution = .fillProportionally
+        view.alignment = .leading
         view.spacing = 5
         return view
     }()
@@ -64,7 +65,7 @@ class MapListViewCell: UITableViewCell {
         let view = UIStackView(arrangedSubviews: [popular_Symbol, popular_Lbl])
         view.backgroundColor = .white
         view.distribution = .fillEqually
-        view.spacing = 0
+        view.spacing = 5
         view.axis = .horizontal
         return view
     }()
@@ -83,7 +84,7 @@ class MapListViewCell: UITableViewCell {
         let lbl = UILabel()
         //        lbl.text = "4.7K"
         lbl.textColor = .black
-        lbl.font = UIFont(name: "LettersforLearners", size: 12)
+        lbl.font = UIFont(name: "LettersforLearners", size: 15)
         return lbl
     }()
     
@@ -91,7 +92,7 @@ class MapListViewCell: UITableViewCell {
         let view = UIStackView(arrangedSubviews: [distance_Symbol, distance_Lbl])
         view.backgroundColor = .white
         view.distribution = .fillEqually
-        view.spacing = 0
+        view.spacing = 5
         view.axis = .horizontal
         return view
     }()
@@ -110,7 +111,7 @@ class MapListViewCell: UITableViewCell {
         let lbl = UILabel()
 //        lbl.text = "0.5km"
         lbl.textColor = .black
-        lbl.font = UIFont(name: "LettersforLearners", size: 12)
+        lbl.font = UIFont(name: "LettersforLearners", size: 15)
         return lbl
     }()
     
@@ -118,7 +119,7 @@ class MapListViewCell: UITableViewCell {
         let view = UIStackView(arrangedSubviews: [time_Symbol, time_Lbl])
         view.backgroundColor = .white
         view.distribution = .fillEqually
-        view.spacing = 0
+        view.spacing = 5
         view.axis = .horizontal
         return view
     }()
@@ -135,17 +136,17 @@ class MapListViewCell: UITableViewCell {
     
     lazy var time_Lbl: UILabel = {
         let lbl = UILabel()
-        lbl.text = "20m"
+//        lbl.text = "20m"
         lbl.textColor = .black
-        lbl.font = UIFont(name: "LettersforLearners", size: 12)
+        lbl.font = UIFont(name: "LettersforLearners", size: 15)
         return lbl
     }()
     
     lazy var info_StackView: UIStackView = {
         let view = UIStackView(arrangedSubviews: [popular_Symbol_StackView, distance_Symbol_StackView, time_Symbol_StackView])
         view.backgroundColor = .white
-        view.distribution = .fill
-        view.spacing = 10
+        view.distribution = .fillEqually
+        view.spacing = 20
         view.axis = .horizontal
         return view
     }()
@@ -204,7 +205,7 @@ class MapListViewCell: UITableViewCell {
         containerView.addSubview(thumbnailView)
         thumbnailView.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.55)
+            make.height.equalToSuperview().multipliedBy(0.6)
         }
 //
         containerView.addSubview(bottom_StackView)
@@ -223,7 +224,7 @@ class MapListViewCell: UITableViewCell {
         subTitleLbl.text = mapList?.address
         popular_Lbl.text = mapList?.popular.numberFormatter()
         distance_Lbl.text = mapList?.distance
-        time_Lbl.text = mapList?.time
+        time_Lbl.text = mapList!.time + "m"
     }
     
 }

@@ -319,8 +319,8 @@ class LoginViewController: UIViewController {
                 
                 switch result {
                 case .success(_):
-                    
-                    strongSelf.loginViewModel.actionDelegate?.signIn()
+                    break
+//                    strongSelf.loginViewModel.actionDelegate?.signIn()
                 case .failure(let err):
                     strongSelf.showFBAuthErrorAlert(error: err)
                 }
@@ -335,7 +335,8 @@ class LoginViewController: UIViewController {
                 
                 switch result {
                 case .success(_):
-                    strongSelf.loginViewModel.actionDelegate?.signIn()
+                    break
+//                    strongSelf.loginViewModel.actionDelegate?.signIn()
                 case .failure(let err):
                     strongSelf.showFBAuthErrorAlert(error: err)
                 }
@@ -350,7 +351,8 @@ class LoginViewController: UIViewController {
                 
                 switch result {
                 case .success(_):
-                    strongSelf.loginViewModel.actionDelegate?.signIn()
+                    break
+//                    strongSelf.loginViewModel.actionDelegate?.signIn()
                 case .failure(let err):
                     strongSelf.showFBAuthErrorAlert(error: err)
                 }
@@ -366,7 +368,8 @@ class LoginViewController: UIViewController {
                 
                 switch result {
                 case .success(_):
-                    strongSelf.loginViewModel.actionDelegate?.signIn()
+                    break
+//                    strongSelf.loginViewModel.actionDelegate?.signIn()
                 case .failure(let err):
                     strongSelf.showFBAuthErrorAlert(error: err)
                 }

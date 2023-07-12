@@ -192,9 +192,9 @@ extension SetupProfileViewController {
     
     private func presentImagePicker() {
 
-        var imagePicker = ImagePickerController()
+        let imagePicker = ImagePickerController()
 
-        configureImagePicker(&imagePicker, selection: 1)
+        configureImagePicker(imagePicker, selection: 1)
 
         self.presentImagePicker(imagePicker) { asset in
 

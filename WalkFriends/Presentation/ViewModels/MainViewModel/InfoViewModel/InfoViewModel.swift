@@ -9,8 +9,14 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-protocol InfoViewControllerActionDelegate {
-    func logOut() 
+//protocol InfoViewControllerActionDelegate {
+//    func logOut()
+//}
+
+struct InfoViewModelActions {
+    let changeProfile: () -> Void
+    let showMyFavoriteMapListView: () -> Void
+    let signOut: () -> Void
 }
 
 final class InfoViewModel: ViewModel {
@@ -30,7 +36,13 @@ final class InfoViewModel: ViewModel {
     
     // MARK: - Properties
     
-    var actionDelegate: InfoViewControllerActionDelegate?
+    let actions: InfoViewModelActions
+//    var actionDelegate: InfoViewControllerActionDelegate?
+    
+    // MARK: - Init
+    init(actions: InfoViewModelActions) {
+        self.actions = actions
+    }
     
     // MARK: - Transform Method
     

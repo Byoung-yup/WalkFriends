@@ -10,6 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import FirebaseAuth
+import CoreLocation
 
 class HomeViewController: UIViewController, UIScrollViewDelegate {
     
@@ -20,7 +21,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     // MARK: - Properties
     
     lazy var main_Label: UILabel = {
-       let lbl = UILabel()
+        let lbl = UILabel(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         lbl.text = "Walk Friends"
         lbl.textColor = .black
         let length = lbl.text!.count
@@ -40,15 +41,14 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         let btn = UIButton(type: .system)
         btn.setImage(systemImage, for: .normal)
         btn.tintColor = .black
-//        btn.backgroundColor = .white
         return btn
     }()
     
     lazy var map_Searchbar: UISearchBar = {
-        let margins = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        let margins = NSDirectionalEdgeInsets(top: 0, leading: 21, bottom: 0, trailing: 21)
         let bar = UISearchBar()
         bar.backgroundImage = UIImage()
-        bar.searchTextField.backgroundColor = .lightGray
+        bar.searchTextField.backgroundColor = .systemGray
         bar.searchTextField.placeholder = "ex. 서린동"
         bar.directionalLayoutMargins = margins
         return bar
@@ -141,6 +141,23 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     lazy var mapListView = MapListView()
     
+    lazy var runBtn: UIButton = {
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
+        let systemImage = UIImage(systemName: "figure.run", withConfiguration: symbolConfig)
+        let btn = UIButton(type: .system)
+        btn.backgroundColor = .main_Color
+        btn.setImage(systemImage, for: .normal)
+        btn.tintColor = .white
+        btn.layer.cornerRadius = 35
+        return btn
+    }()
+    
+    lazy var locationManager: CLLocationManager = {
+        let manager = CLLocationManager()
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        return manager
+    }()
+    
 //    lazy var category_CollectionView: UICollectionView = {
 //        let flowLayout = UICollectionViewFlowLayout()
 //        flowLayout.scrollDirection = .horizontal
@@ -170,6 +187,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     required init?(coder: NSCoder) {
 //        super.init(coder: coder)
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("deinit - \(self.description)")
     }
     
     // MARK: - viewDidLoad
@@ -207,37 +228,28 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     private func configureUI() {
         
-//        view.addSubview(profileView)
-//        profileView.snp.makeConstraints { make in
-//            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-//            make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
-//            make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
-//            make.height.equalTo(200)
+//        navigationController?.navigationBar.backgroundColor = .white
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: main_Label)
+//        let barButtonItem = UIBarButtonItem()
+//        barButtonItem.customView = profile_Btn
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: profile_Btn)
+
+//        view.addSubview(main_Label)
+//        main_Label.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
+//            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(21)
 //        }
-        
-//        view.addSubview(homeListView)
-//        homeListView.snp.makeConstraints { make in
-//            make.left.right.equalToSuperview()
-//            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(80)
-//            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+//
+//        view.addSubview(profile_Btn)
+//        profile_Btn.snp.makeConstraints { make in
+//            make.centerY.equalTo(main_Label.snp.centerY)
+//            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-21)
+////            make.width.height.equalTo(main_Label.snp.height)
 //        }
-        
-        view.addSubview(main_Label)
-        main_Label.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
-            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(21)
-        }
-        
-        view.addSubview(profile_Btn)
-        profile_Btn.snp.makeConstraints { make in
-            make.centerY.equalTo(main_Label.snp.centerY)
-            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-21)
-//            make.width.height.equalTo(main_Label.snp.height)
-        }
         
         view.addSubview(map_Searchbar)
         map_Searchbar.snp.makeConstraints { make in
-            make.top.equalTo(main_Label.safeAreaLayoutGuide.snp.bottom).offset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
             make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
             make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
             make.height.equalTo(35)
@@ -245,8 +257,8 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
         view.addSubview(cateLbl)
         cateLbl.snp.makeConstraints { make in
-            make.top.equalTo(map_Searchbar.safeAreaLayoutGuide.snp.bottom).offset(20)
-            make.left.equalTo(main_Label.safeAreaLayoutGuide.snp.left)
+            make.top.equalTo(map_Searchbar.safeAreaLayoutGuide.snp.bottom).offset(15)
+            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(21)
         }
         
         view.addSubview(btn_StackView)
@@ -272,6 +284,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
 //            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
+        mapListView.addSubview(runBtn)
+        runBtn.snp.makeConstraints { make in
+            make.right.equalTo(mapListView.safeAreaLayoutGuide.snp.right).offset(-21)
+            make.bottom.equalTo(mapListView.safeAreaLayoutGuide.snp.bottom).offset(-30)
+            make.width.height.equalTo(70)
+        }
+        
 //        view.addSubview(category_CollectionView)
 //        category_CollectionView.snp.makeConstraints { make in
 //            make.top.equalTo(cateLbl.safeAreaLayoutGuide.snp.bottom).offset(20)
@@ -284,14 +303,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     // MARK: - Binding
     
     private func Binding() {
-        
-//        category_CollectionView.rx.setDelegate(self)
-//            .disposed(by: disposeBag)
-//
-//        homeViewModel.category_Items.bind(to: category_CollectionView.rx.items(cellIdentifier: CategoryCollectionViewCell.identifier, cellType: CategoryCollectionViewCell.self)) { (row, text, cell) in
-//            print("bind Cell")
-//            cell.category_Btn.setTitle(text, for: .normal)
-//        }.disposed(by: disposeBag)
         
         let category_Btns: [UIButton] = [category_Default_Btn, category_Popular_Btn, category_time_Btn, category_Distance_Btn]
         
@@ -325,31 +336,50 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
         mapListView.mapListTableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
-//
-//        output.trigger
-//            .drive()
-//            .disposed(by: disposeBag)
-//
-//        output.fetchTrigger
-//            .drive(onNext: { [weak self] result in
-//
-//                guard let strongSelf = self else { return }
-//
-//                switch result {
-//                case .success(_):
-//                    break
-//                case .failure(let err):
-//
-//                    if err == .NotFoundUserError {
-////                        strongSelf.homeViewModel.actionDelegate?.setupProfile()
-//                    }
-//                    else {
+        
+        runBtn
+            .rx
+            .tap
+            .subscribe(onNext: { [weak self] in
+                
+                guard let strongSelf = self else { return }
+                
+                strongSelf.checkUserDeviceLocationServiceAuthorization()
+                
+            }).disposed(by: disposeBag)
+        
+        
+        profile_Btn
+            .rx
+            .tap
+            .bind(onNext: { [weak self] in
+                
+                guard let strongSelf = self else { return }
+                    
+                strongSelf.homeViewModel.actions.showInfoViewController()
+                
+            }).disposed(by: disposeBag)
+        
+        output.fetchTrigger
+            .drive(onNext: { [weak self] result in
+
+                guard let strongSelf = self else { return }
+
+                switch result {
+                case .success(_):
+                    break
+                case .failure(let err):
+
+                    if err == .NotFoundUserError {
+//                        strongSelf.homeViewModel.actionDelegate?.setupProfile()
+                    }
+                    else {
 //                        strongSelf.homeViewModel.actionDelegate?.error()
-//                        strongSelf.showAlert(error: err)
-//                    }
-//                }
-//
-//            }).disposed(by: disposeBag)
+                        strongSelf.showAlert(error: err)
+                    }
+                }
+
+            }).disposed(by: disposeBag)
 //
 //        homeViewModel.items
 //            .bind(to: homeListView.collectionView.rx.items(cellIdentifier: "HomeListCell", cellType: HomeListCell.self)) { (row, text, cell) in
@@ -389,5 +419,55 @@ extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 280
+    }
+}
+
+extension HomeViewController {
+    
+    func checkUserDeviceLocationServiceAuthorization() {
+        
+        let authorizationStatus: CLAuthorizationStatus
+        
+        // 앱의 권한 상태 가져오는 코드 (iOS 버전에 따라 분기처리)
+        if #available(iOS 14.0, *) {
+            authorizationStatus = locationManager.authorizationStatus
+        }else {
+            authorizationStatus = CLLocationManager.authorizationStatus()
+        }
+        
+        checkUserCurrentLocationAuthorization(authorizationStatus)
+    }
+    
+    func checkUserCurrentLocationAuthorization(_ status: CLAuthorizationStatus) {
+        
+        switch status {
+        case .notDetermined:
+            // 사용자가 권한에 대한 설정을 선택하지 않은 상태
+            
+            // 권한 요청을 보내기 전에 desiredAccuracy 설정 필요
+//            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            
+            // 권한 요청을 보낸다.
+            locationManager.requestWhenInUseAuthorization()
+            
+        case .denied, .restricted:
+            // 사용자가 명시적으로 권한을 거부했거나, 위치 서비스 활성화가 제한된 상태
+            // 시스템 설정에서 설정값을 변경하도록 유도한다.
+            // 시스템 설정으로 유도하는 커스텀 얼럿
+            
+            DispatchQueue.main.async { [weak self] in
+                
+                self?.showRequestLocationServiceAlert()
+            }
+            
+        case .authorizedWhenInUse:
+            break
+            // 앱을 사용중일 때, 위치 서비스를 이용할 수 있는 상태
+            // manager 인스턴스를 사용하여 사용자의 위치를 가져온다.
+//            homeViewModel.actionDelegate?.run(locationManager: self.locationManager)
+            
+        default:
+            print("Default")
+        }
     }
 }

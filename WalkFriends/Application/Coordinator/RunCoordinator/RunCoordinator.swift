@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import CoreLocation
 
 protocol RunCoordinatorDelegate {
     func dismiss(_ coordinator: RunCoordinator)
@@ -17,14 +18,17 @@ final class RunCoordinator: NSObject, Coordinator {
     var childCoordinators: [NSObject] = []
     
     let navigationController: UINavigationController
+    
+    let locationManager: CLLocationManager
     var delegate: RunCoordinatorDelegate?
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, locationManager: CLLocationManager) {
         self.navigationController = navigationController
+        self.locationManager = locationManager
     }
     
     func start() {
-        let vc = RunViewController(viewModel: makeRunViewModel())
+        let vc = RunViewController(viewModel: makeRunViewModel(), locationManager: locationManager)
         navigationController.pushViewController(vc, animated: true)
     }
     

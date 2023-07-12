@@ -27,6 +27,7 @@
 		B042BA592A539F20004555AA /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B042BA582A539F20004555AA /* LocationViewController.swift */; };
 		B0483CFF29D6BC4E001941C1 /* ShareInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0483CFE29D6BC4E001941C1 /* ShareInfoViewController.swift */; };
 		B0483D0229D6BCAC001941C1 /* ShareInfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0483D0129D6BCAC001941C1 /* ShareInfoCoordinator.swift */; };
+		B04CDE1E2A5BF87200EAB8FC /* AppAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04CDE1D2A5BF87200EAB8FC /* AppAppearance.swift */; };
 		B0596AF82A37FAD000BDD8EA /* StorageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0596AF72A37FAD000BDD8EA /* StorageRepository.swift */; };
 		B05B7F6729ED02F100685D6F /* Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B7F6629ED02F100685D6F /* Reactive.swift */; };
 		B05C3D9C2A176F8C00D23AB7 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05C3D9B2A176F8C00D23AB7 /* UIViewController.swift */; };
@@ -75,6 +76,7 @@
 		B09DC7AE2990FFAF008558EA /* CALayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7AD2990FFAF008558EA /* CALayer.swift */; };
 		B09DC7B129910D93008558EA /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09DC7B029910D93008558EA /* CustomTextField.swift */; };
 		B0A2D38E29BB08F000B6412F /* SetupProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A2D38D29BB08F000B6412F /* SetupProfileViewController.swift */; };
+		B0B5DD1D2A5D37FB00570119 /* AppSceneDIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B5DD1C2A5D37FB00570119 /* AppSceneDIContainer.swift */; };
 		B0C273B8299B6B92005B3AAD /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C273B7299B6B92005B3AAD /* HomeViewController.swift */; };
 		B0C273BA299B6BAC005B3AAD /* RunViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C273B9299B6BAC005B3AAD /* RunViewController.swift */; };
 		B0C273BE299B6BC2005B3AAD /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C273BD299B6BC2005B3AAD /* InfoViewController.swift */; };
@@ -112,6 +114,7 @@
 		B042BA582A539F20004555AA /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
 		B0483CFE29D6BC4E001941C1 /* ShareInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoViewController.swift; sourceTree = "<group>"; };
 		B0483D0129D6BCAC001941C1 /* ShareInfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoCoordinator.swift; sourceTree = "<group>"; };
+		B04CDE1D2A5BF87200EAB8FC /* AppAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAppearance.swift; sourceTree = "<group>"; };
 		B0596AF72A37FAD000BDD8EA /* StorageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageRepository.swift; sourceTree = "<group>"; };
 		B05B7F6629ED02F100685D6F /* Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reactive.swift; sourceTree = "<group>"; };
 		B05C3D9B2A176F8C00D23AB7 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
@@ -163,6 +166,7 @@
 		B09DC7AD2990FFAF008558EA /* CALayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer.swift; sourceTree = "<group>"; };
 		B09DC7B029910D93008558EA /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		B0A2D38D29BB08F000B6412F /* SetupProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileViewController.swift; sourceTree = "<group>"; };
+		B0B5DD1C2A5D37FB00570119 /* AppSceneDIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSceneDIContainer.swift; sourceTree = "<group>"; };
 		B0C273B7299B6B92005B3AAD /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		B0C273B9299B6BAC005B3AAD /* RunViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunViewController.swift; sourceTree = "<group>"; };
 		B0C273BD299B6BC2005B3AAD /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
@@ -307,6 +311,17 @@
 			path = RunViewModel;
 			sourceTree = "<group>";
 		};
+		B04CDE1C2A5BF51000EAB8FC /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				B09DC7832990DBF2008558EA /* AppDelegate.swift */,
+				B04CDE1D2A5BF87200EAB8FC /* AppAppearance.swift */,
+				B09DC7852990DBF2008558EA /* SceneDelegate.swift */,
+				B09DC7972990DC95008558EA /* Coordinator */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
 		B0596AF62A37FA4800BDD8EA /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
@@ -366,7 +381,6 @@
 		B07971B829B1CEFF0038BE9D /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				B09DC7972990DC95008558EA /* Coordinator */,
 				B09DC79C2990DEE3008558EA /* ViewModels */,
 				B09DC79E2990DEFB008558EA /* Controllers */,
 			);
@@ -516,6 +530,7 @@
 			isa = PBXGroup;
 			children = (
 				B089273A2A495874003036BF /* WalkFriends.entitlements */,
+				B04CDE1C2A5BF51000EAB8FC /* Application */,
 				B09DC7AF29910D71008558EA /* CustomView */,
 				B07971B829B1CEFF0038BE9D /* Presentation */,
 				B07971BB29B1D0AA0038BE9D /* Domain */,
@@ -523,8 +538,6 @@
 				B072878B29A88BA200E8A085 /* Utils */,
 				B09DC7A82990EC46008558EA /* Extensions */,
 				B0C56F2929921412004E83B8 /* GoogleService-Info.plist */,
-				B09DC7832990DBF2008558EA /* AppDelegate.swift */,
-				B09DC7852990DBF2008558EA /* SceneDelegate.swift */,
 				B09DC78C2990DBF6008558EA /* Assets.xcassets */,
 				B09DC78E2990DBF6008558EA /* LaunchScreen.storyboard */,
 				B09DC7912990DBF6008558EA /* Info.plist */,
@@ -537,6 +550,7 @@
 			isa = PBXGroup;
 			children = (
 				B09DC7982990DD7D008558EA /* AppCoordinator.swift */,
+				B0B5DD1B2A5D37D500570119 /* AppSceneDIContainer */,
 				B03D99792A52C1B2007C0C13 /* LauchCoordinator */,
 				B034D94A29E14E2F00B90AB2 /* LoginCoordinator */,
 				B08531CA29B87F3700209127 /* HomeCoordinator */,
@@ -627,6 +641,14 @@
 				B0A2D38D29BB08F000B6412F /* SetupProfileViewController.swift */,
 			);
 			path = SetupProfile;
+			sourceTree = "<group>";
+		};
+		B0B5DD1B2A5D37D500570119 /* AppSceneDIContainer */ = {
+			isa = PBXGroup;
+			children = (
+				B0B5DD1C2A5D37FB00570119 /* AppSceneDIContainer.swift */,
+			);
+			path = AppSceneDIContainer;
 			sourceTree = "<group>";
 		};
 		B0C273B6299B6B7C005B3AAD /* ViewControllers */ = {
@@ -791,6 +813,7 @@
 				B0909F0529EE24DA00CFE7B1 /* MapListDetailViewController.swift in Sources */,
 				B02828DE29E93F8E008B22CF /* MapListViewController.swift in Sources */,
 				B07391572993601000903C1F /* FirebaseService.swift in Sources */,
+				B04CDE1E2A5BF87200EAB8FC /* AppAppearance.swift in Sources */,
 				B07971BE29B1D1AB0038BE9D /* DefaultUseCase.swift in Sources */,
 				B0C56F3629922D26004E83B8 /* EmailConfirmViewController.swift in Sources */,
 				B08531D629B87FBF00209127 /* InfoCoordinator.swift in Sources */,
@@ -827,6 +850,7 @@
 				B090808929DEB86700DDAEBC /* ShareInfoView.swift in Sources */,
 				B09DC79B2990DEA2008558EA /* TabBarCoordinator.swift in Sources */,
 				B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */,
+				B0B5DD1D2A5D37FB00570119 /* AppSceneDIContainer.swift in Sources */,
 				B08531CE29B87F9E00209127 /* RunCoordinator.swift in Sources */,
 				B02828E029E93FC6008B22CF /* MapListViewModel.swift in Sources */,
 				B076C6CA299CACBD00EFDA7F /* UserProfile.swift in Sources */,

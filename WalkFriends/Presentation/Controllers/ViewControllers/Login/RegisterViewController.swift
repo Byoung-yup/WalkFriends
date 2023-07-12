@@ -24,7 +24,7 @@ class RegisterViewController: UIViewController {
     }()
     
     lazy var bgImageView: UIImageView = {
-       let imgView = UIImageView()
+        let imgView = UIImageView()
         imgView.backgroundColor = .white
         imgView.contentMode = .scaleAspectFill
         imgView.image = UIImage(named: "Register_View_Bg")

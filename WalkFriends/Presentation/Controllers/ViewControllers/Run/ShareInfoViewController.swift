@@ -228,7 +228,7 @@ extension ShareInfoViewController {
         
         var imagePicker = ImagePickerController()
     
-        configureImagePicker(&imagePicker, selection: 3)
+        configureImagePicker(imagePicker, selection: 3)
         
         presentImagePicker(imagePicker, select: { (asset) in
             

@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import CoreLocation
 
 enum Category_Action: Int {
     case Default = 100
@@ -16,20 +17,28 @@ enum Category_Action: Int {
     case Distance = 103
 }
 
-protocol HomeViewModelActionDelegate {
-    func setupProfile()
-    func error()
+//protocol HomeViewModelActionDelegate {
+//    func setupProfile()
+//    func error()
+//    func run(locationManager: CLLocationManager)
+//}
+
+struct HomeViewModelActions {
+    let showInfoViewController: () -> Void
+    let showSetupProfileViewController: () -> Void
 }
 
 class HomeViewModel: ViewModel {
     
-    var actionDelegate: HomeViewModelActionDelegate?
-    
+//    var actionDelegate: HomeViewModelActionDelegate?
+    let actions: HomeViewModelActions
     private let dataUseCase: DataUseCase
     
     let category_Items = Observable.just(["최신순", "인기순", "시간순", "거리순"])
     
-    let items = Observable.just([MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20")])
+    let items = Observable.just([MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20"),
+                                 MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20"),
+                                 MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20")])
     
     // MARK: - INPUT
     
@@ -49,8 +58,9 @@ class HomeViewModel: ViewModel {
     
     // MARK: - Initailize
     
-    init(dataUseCase: DataUseCase) {
+    init(dataUseCase: DataUseCase, actions: HomeViewModelActions) {
         self.dataUseCase = dataUseCase
+        self.actions = actions
     }
     
     func transform(input: Input) -> Output {

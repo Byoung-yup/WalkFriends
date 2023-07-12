@@ -22,21 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         KakaoSDK.initSDK(appKey: "fa3f46e81ac9f379807667f66c67067b")
         
-        if #available(iOS 15, *) {
-            let appearance = UINavigationBarAppearance()
-            let navigationBar = UINavigationBar()
-            appearance.configureWithOpaqueBackground()
-            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, .font: UIFont(name: "LettersforLearners", size: 20)!]
-            appearance.backgroundColor = .clear
-            navigationBar.standardAppearance = appearance
-//            UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-//            UINavigationBar.appearance().shadowImage = UIImage()
-            UINavigationBar.appearance().scrollEdgeAppearance = appearance
-            UINavigationBar.appearance().standardAppearance = appearance
-        }
-
-        //네비게이션 바 색상 UIColor와 일치시키기
-        UINavigationBar.appearance().isTranslucent = true
+        AppAppearance.setupAppearance()
         
         return true
     }

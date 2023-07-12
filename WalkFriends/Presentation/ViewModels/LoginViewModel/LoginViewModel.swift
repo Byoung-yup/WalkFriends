@@ -10,10 +10,11 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-protocol LoginViewModelActionDelegate {
-    func showRegisterVC()
-    func signIn()
+struct LoginViewModelActions {
+    let showRegisterViewController: () -> Void
+    let signIn: () -> Void
 }
+
 
 final class LoginViewModel: ViewModel {
     
@@ -42,7 +43,13 @@ final class LoginViewModel: ViewModel {
     
     // MARK: - Properties
     
-    var actionDelegate: LoginViewModelActionDelegate?
+    private let actions: LoginViewModelActions
+//    var actionDelegate: LoginViewModelActionDelegate?
+    
+    // MARK: - Init
+    init(actions: LoginViewModelActions) {
+        self.actions = actions
+    }
     
     // MARK: - Transform Method
     
@@ -80,7 +87,7 @@ final class LoginViewModel: ViewModel {
         
         let register = input.register
             .do(onNext: { [weak self] in
-                self?.actionDelegate?.showRegisterVC()
+                self?.actions.showRegisterViewController()
             })
                 
         return Output(present: register, loginEnabled: loginEnabled, loginTrigger: login, loginTrigger_Google: googleSignIn, loginTrigger_Facebook: fbSignIn, loginTrigger_Kakao: kakaoSignIn)
