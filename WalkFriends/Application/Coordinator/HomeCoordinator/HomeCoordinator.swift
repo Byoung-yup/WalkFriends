@@ -9,22 +9,19 @@ import Foundation
 import UIKit
 import CoreLocation
 
-//protocol HomeCoordinatorDelegate {
-//    func didLoggedOut(_ coordinator: HomeCoordinator)
-//    func error(_ coordinator: HomeCoordinator)
-//}
-
 protocol HomeCoordinatorDepedencies {
     func makeHomeViewController(actions: HomeViewModelActions) -> HomeViewController
+    func dismissHomeViewController(_ coordinator: HomeCoordinator)
+    func makeInfoCoordinator(navigationController: UINavigationController, dependencies: InfoCoordinatorDependencies) -> InfoCoordinator
     func makeInfoViewController(actions: InfoViewModelActions) -> InfoViewController
-    func dismissHomeViewController(coordinator: HomeCoordinator)
+    func makeSetupProfileCoordinator(navigationController: UINavigationController, dependencies: SetupProfileCoordinatorDependencies) -> SetupProfileCoordinator
+    func makeSetupProfileViewController(actions: SetupViewModelActions) -> SetupProfileViewController
 }
 
 
 final class HomeCoordinator: NSObject, Coordinator {
     
     var childCoordinators: [NSObject] = []
-//    var delegate: HomeCoordinatorDelegate?
     
     private let navigationController: UINavigationController
     private let dependencies: HomeCoordinatorDepedencies
@@ -36,40 +33,52 @@ final class HomeCoordinator: NSObject, Coordinator {
     
     func start() {
         let actions = HomeViewModelActions(showInfoViewController: showInfoViewController,
-                                           showSetupProfileViewController: showSetupProfileViewController)
+                                           showSetupProfileViewController: showSetupProfileViewController,
+                                           fetchError: fetchError)
         let vc = dependencies.makeHomeViewController(actions: actions)
         
         navigationController.pushViewController(vc, animated: true)
-        
-//        let vc = HomeViewController(homeViewModel: makeHomeViewModel())
-//        navigationController.setViewControllers([vc], animated: false)
-//        navigationController.navigationBar.isHidden = true
+        navigationController.navigationBar.isHidden = false
     }
     
     private func showInfoViewController() {
-        let infoCoordinator = InfoCoordinator(navigationController: navigationController, dependecies: dependencies, homeCoordinator: self)
+        let infoCoordinator = dependencies.makeInfoCoordinator(navigationController: navigationController, dependencies: self)
         infoCoordinator.start()
         
-//        childCoordinators.append(infoCoordinator)
+        childCoordinators.append(infoCoordinator)
     }
     
     private func showSetupProfileViewController() {
+        let setupProfileCoordinator = dependencies.makeSetupProfileCoordinator(navigationController: navigationController, dependencies: self)
+        setupProfileCoordinator.start()
         
+        childCoordinators.append(setupProfileCoordinator)
     }
     
-    // MARK: - HomeViewController
+    private func fetchError() {
+        dependencies.dismissHomeViewController(self)
+    }
+}
+
+extension HomeCoordinator: InfoCoordinatorDependencies {
+    func makeInfoViewController(actions: InfoViewModelActions) -> InfoViewController {
+        return dependencies.makeInfoViewController(actions: actions)
+    }
     
-//    func makeHomeViewModel() -> HomeViewModel {
-//        let homeViewModel = HomeViewModel(dataUseCase: makeDataUseCase())
-//        homeViewModel.actionDelegate = self
-//        return homeViewModel
-//    }
+    func dismiss(_ coordinator: InfoCoordinator, status signOut: Bool) {
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+        if signOut { dependencies.dismissHomeViewController(self) }
+    }
+}
+
+extension HomeCoordinator: SetupProfileCoordinatorDependencies {
+    func makeSetupProfileViewController(actions: SetupViewModelActions) -> SetupProfileViewController {
+        return dependencies.makeSetupProfileViewController(actions: actions)
+    }
     
-    // MARK: - Use Cases
-//
-//    func makeDataUseCase() -> DataUseCase {
-//        return DefaultDataUseCase(dataBaseRepository: DatabaseManager(), storageRepository: StorageManager())
-//    }
+    func dismiss(_ coordinator: SetupProfileCoordinator) {
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+    }
 }
 
 // MARK: - HomeViewModelActionDelegate
@@ -95,13 +104,13 @@ final class HomeCoordinator: NSObject, Coordinator {
 //}
 
 // MARK: - SetupProfileCoordinatorDelegate
-
-extension HomeCoordinator: SetupProfileCoordinatorDelegate {
-    
-    func createProfile(_ coordinator: SetupProfileCoordinator) {
-        childCoordinators = childCoordinators.filter { $0 !== coordinator }
-    }
-}
+//
+//extension HomeCoordinator: SetupProfileCoordinatorDelegate {
+//
+//    func createProfile(_ coordinator: SetupProfileCoordinator) {
+//        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+//    }
+//}
 //
 //extension HomeCoordinator: InfoCoordinatorDelegate {
 //

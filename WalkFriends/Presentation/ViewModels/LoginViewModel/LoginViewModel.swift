@@ -8,13 +8,11 @@
 import Foundation
 import UIKit
 import RxSwift
-import RxCocoa
 
 struct LoginViewModelActions {
     let showRegisterViewController: () -> Void
     let signIn: () -> Void
 }
-
 
 final class LoginViewModel: ViewModel {
     
@@ -24,7 +22,6 @@ final class LoginViewModel: ViewModel {
         let email: Observable<String>
         let password: Observable<String>
         let login: Observable<Void>
-        let register: Observable<Void>
         let google_SignIn: Observable<Void>
         let facebook_SignIn: Observable<Void>
         let kakak_SignIn: Observable<Void>
@@ -33,18 +30,16 @@ final class LoginViewModel: ViewModel {
     // MARK: - Output {
     
     struct Output {
-        let present: Observable<Void>
-        let loginEnabled: Driver<Bool>
+        let loginEnabled: Observable<Bool>
         let loginTrigger: Observable<Result<Bool, FirebaseAuthError>>
-        let loginTrigger_Google: Observable<Result<Bool, FirebaseAuthError>>
-        let loginTrigger_Facebook: Observable<Result<Bool, FirebaseAuthError>>
-        let loginTrigger_Kakao: Observable<Result<Bool, FirebaseAuthError>>
+//        let loginTrigger_Google: Observable<Result<Bool, FirebaseAuthError>>
+//        let loginTrigger_Facebook: Observable<Result<Bool, FirebaseAuthError>>
+//        let loginTrigger_Kakao: Observable<Result<Bool, FirebaseAuthError>>
     }
     
     // MARK: - Properties
     
-    private let actions: LoginViewModelActions
-//    var actionDelegate: LoginViewModelActionDelegate?
+    let actions: LoginViewModelActions
     
     // MARK: - Init
     init(actions: LoginViewModelActions) {
@@ -64,7 +59,7 @@ final class LoginViewModel: ViewModel {
         let psEnabled = input.password
             .map { $0.isValidPassword() }
         
-        let loginEnabled = Observable.combineLatest(emailEnabled, psEnabled) { $0 && $1 }.asDriver(onErrorJustReturn: false)
+        let loginEnabled = Observable.combineLatest(emailEnabled, psEnabled) { $0 && $1 }
         
         let userInfo = Observable.combineLatest(input.email, input.password)
             .map {
@@ -73,8 +68,7 @@ final class LoginViewModel: ViewModel {
         
         let login = input.login.withLatestFrom(userInfo)
             .flatMapLatest {
-                return FirebaseService.shard.signIn(with: $0)
-            }
+                return FirebaseService.shard.signIn(with: $0) }
         
         let googleSignIn = input.google_SignIn
             .flatMap { return FirebaseService.shard.googleSignIn() }
@@ -85,11 +79,8 @@ final class LoginViewModel: ViewModel {
         let kakaoSignIn = input.kakak_SignIn
             .flatMap { return FirebaseService.shard.kakaoSignIn() }
         
-        let register = input.register
-            .do(onNext: { [weak self] in
-                self?.actions.showRegisterViewController()
-            })
-                
-        return Output(present: register, loginEnabled: loginEnabled, loginTrigger: login, loginTrigger_Google: googleSignIn, loginTrigger_Facebook: fbSignIn, loginTrigger_Kakao: kakaoSignIn)
+        let login_merge = Observable.merge(login, googleSignIn, fbSignIn, kakaoSignIn)
+        
+        return Output(loginEnabled: loginEnabled, loginTrigger: login_merge)
     }
 }

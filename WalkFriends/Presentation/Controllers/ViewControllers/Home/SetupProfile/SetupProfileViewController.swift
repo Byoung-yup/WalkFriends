@@ -167,7 +167,7 @@ class SetupProfileViewController: UIViewController {
 
                 switch result {
                 case .success(_):
-                    strongSelf.setupProfileViewModel.actionDelegate?.createProfile()
+                    break
                 case .failure(let err):
                     strongSelf.showAlert(error: err)
                 }

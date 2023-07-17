@@ -83,7 +83,7 @@ class AppCoordinator: Coordinator {
 
 extension AppCoordinator: AppSceneDIContainerDelegate {
     
-    func dismiss(coordinator: Coordinator) {
+    func dismiss(_ coordinator: Coordinator) {
         print("Before childCoordinators: \(childCoordinators)")
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
         print("After childCoordinators: \(childCoordinators)")

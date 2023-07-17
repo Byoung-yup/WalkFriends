@@ -14,7 +14,7 @@ final class AppAppearance {
         
         if #available(iOS 15, *) {
             let appearance = UINavigationBarAppearance()
-            let navigationBar = UINavigationBar()
+//            let navigationBar = UINavigationBar()
             appearance.configureWithOpaqueBackground()
 //            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, .font: UIFont(name: "LettersforLearners", size: 20)!]
             appearance.backgroundColor = .clear

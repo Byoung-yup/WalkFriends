@@ -40,15 +40,12 @@ final class FirebaseService {
     
     static let shard = FirebaseService()
     
-    //    var auth: Auth = {
-    //        let auth = FirebaseAuth.Auth.auth()
-    //        auth.useAppLanguage()
-    //        return auth
-    //    }()
+    var auth = {
+        let auth = FirebaseAuth.Auth.auth()
+        return auth
+    }()
     
     var handle: AuthStateDidChangeListenerHandle!
-    
-    //    var currentUser: User?
     
     var UserProfle: UserProfile?
     
@@ -78,8 +75,6 @@ extension FirebaseService: FirebaseAuthService {
             let task = Task {
                 do {
                     
-                    //                    guard let strongSelf = self else { return }
-                    
                     let result = try await FirebaseAuth.Auth.auth().createUser(withEmail: user.email, password: user.password)
                     try await result.user.sendEmailVerification()
                     
@@ -92,17 +87,14 @@ extension FirebaseService: FirebaseAuthService {
                     switch errorCode {
                     case .emailAlreadyInUse:
                         observer.onNext(.failure(FirebaseAuthError.AlreadyEmailError))
-                        observer.onCompleted()
                     case .invalidEmail:
                         observer.onNext(.failure(FirebaseAuthError.InvalidEmailError))
-                        observer.onCompleted()
                     case .weakPassword:
                         observer.onNext(.failure(FirebaseAuthError.WeakPasswordError))
-                        observer.onCompleted()
                     default:
                         observer.onNext(.failure(FirebaseAuthError.NetworkError))
-                        observer.onCompleted()
                     }
+                    observer.onCompleted()
                 }
             }
             return Disposables.create {
@@ -118,10 +110,7 @@ extension FirebaseService: FirebaseAuthService {
         return Observable.create { (observer) in
             
             let task = Task {
-                
                 do {
-                    
-                    //                    guard let strongSelf = self else { return }
                     
                     let authResult = try await FirebaseAuth.Auth.auth().signIn(withEmail: userInfo.email, password: userInfo.password)
                     guard authResult.user.isEmailVerified else {
@@ -245,9 +234,7 @@ extension FirebaseService {
         let loginManager = LoginManager()
         
         return Observable.create { [weak self] (observer) in
-            
             //            guard let strongSelf = self else { return }
-            
             if AccessToken.current != nil {
                 print("token: \(AccessToken.current?.tokenString)")
                 
@@ -255,7 +242,7 @@ extension FirebaseService {
                 
                 self?.handle = FirebaseAuth.Auth.auth().addStateDidChangeListener({ (auth, user) in
                     
-                    FirebaseAuth.Auth.auth().signIn(with: credential) { (user, error) in
+                    FirebaseAuth.Auth.auth().signIn(with: credential) { (_, error) in
                         
                         guard error == nil else {
                             print("error2: \(error?.localizedDescription)")
@@ -264,7 +251,7 @@ extension FirebaseService {
                             return
                         }
                         
-                        if let user = user {
+                        if user != nil {
                             
                             observer.onNext(.success(true))
                             observer.onCompleted()
@@ -313,8 +300,8 @@ extension FirebaseService {
             
             return Disposables.create { [weak self] in
                 
-                if self?.handle != nil {
-                    FirebaseAuth.Auth.auth().removeStateDidChangeListener((self?.handle)!)
+                if let handle = self?.handle {
+                    FirebaseAuth.Auth.auth().removeStateDidChangeListener(handle)
                 }
             }
         }

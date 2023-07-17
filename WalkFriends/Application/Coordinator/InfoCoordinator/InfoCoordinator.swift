@@ -8,34 +8,35 @@
 import Foundation
 import UIKit
 
-//protocol InfoCoordinatorDelegate {
-//    func logout(_ coordinator: InfoCoordinator)
-//}
+protocol InfoCoordinatorDependencies {
+    func makeInfoViewController(actions: InfoViewModelActions) -> InfoViewController
+    func dismiss(_ coordinator: InfoCoordinator, status signOut: Bool)
+}
 
 final class InfoCoordinator: NSObject, Coordinator {
     
     var childCoordinators: [NSObject] = []
-//    var delegate: InfoCoordinatorDelegate?
     
     private let navigationController: UINavigationController
-    private let dependencies: HomeCoordinatorDepedencies
-    private let homeCoordinator: HomeCoordinator
+    private let dependencies: InfoCoordinatorDependencies
     
-    init(navigationController: UINavigationController, dependecies: HomeCoordinatorDepedencies, homeCoordinator: HomeCoordinator) {
+    init(navigationController: UINavigationController, dependecies: InfoCoordinatorDependencies) {
         self.navigationController = navigationController
         self.dependencies = dependecies
-        self.homeCoordinator = homeCoordinator
     }
     
     func start() {
         let actions = InfoViewModelActions(changeProfile: changeProfile,
                                            showMyFavoriteMapListView: showMyFavoriteMapListView,
-                                           signOut: signOut)
+                                           signOut: signOut,
+                                           toBack: toBack)
         let vc = dependencies.makeInfoViewController(actions: actions)
         
         navigationController.pushViewController(vc, animated: true)
-//        let vc = InfoViewController(infoViewModel: makeInfoViewModel())
-//        navigationController.pushViewController(vc, animated: true)
+    }
+
+    private func toBack() {
+        dependencies.dismiss(self, status: false)
     }
     
     private func changeProfile() {
@@ -47,30 +48,8 @@ final class InfoCoordinator: NSObject, Coordinator {
     }
     
     private func signOut() {
-        navigationController.popViewController(animated: false)
-        dependencies.dismissHomeViewController(coordinator: homeCoordinator)
+//        navigationController.popViewController(animated: false)
+        dependencies.dismiss(self, status: true)
     }
     
 }
-
-//extension InfoCoordinator {
-//
-//    // MARK: - InfoViewController
-//
-//    private func makeInfoViewModel() -> InfoViewModel {
-//        let infoViewModel = InfoViewModel()
-//        infoViewModel.actionDelegate = self
-//
-//        return infoViewModel
-//    }
-//
-//}
-//
-//    // MARK: - InfoViewControllerActionDelegate
-//
-//extension InfoCoordinator: InfoViewControllerActionDelegate {
-//
-//    func logOut() {
-//        delegate?.logout(self)
-//    }
-//}

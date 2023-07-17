@@ -9,8 +9,6 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-import FBSDKLoginKit
-import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
@@ -20,11 +18,11 @@ class LoginViewController: UIViewController {
     
     let disposeBag = DisposeBag()
     
-//    var handle: AuthStateDidChangeListenerHandle!
+    //    var handle: AuthStateDidChangeListenerHandle!
     
     // MARK: - UI Properties
     lazy var loginLabel: UILabel = {
-       let lbl = UILabel()
+        let lbl = UILabel()
         lbl.text = "Walk Friends"
         lbl.textColor = .black
         let length = lbl.text!.count
@@ -39,7 +37,7 @@ class LoginViewController: UIViewController {
     }()
     
     lazy var emailTextField: CustomTextField = {
-       let tf = CustomTextField()
+        let tf = CustomTextField()
         tf.addleftimage(image: UIImage(systemName: "envelope")!)
         tf.font = UIFont(name: "LettersforLearners", size: 15)
         tf.attributedPlaceholder = NSAttributedString(string: "이메일", attributes: [.foregroundColor: UIColor.systemGray])
@@ -49,7 +47,7 @@ class LoginViewController: UIViewController {
     }()
     
     lazy var passwordTextField: CustomTextField = {
-       let tf = CustomTextField()
+        let tf = CustomTextField()
         tf.addleftimage(image: UIImage(systemName: "lock")!)
         tf.font = UIFont(name: "LettersforLearners", size: 15)
         tf.attributedPlaceholder = NSAttributedString(string: "패스워드", attributes: [.foregroundColor: UIColor.systemGray])
@@ -79,7 +77,7 @@ class LoginViewController: UIViewController {
     }()
     
     lazy var lineView: UIImageView = {
-       let imgView = UIImageView()
+        let imgView = UIImageView()
         imgView.backgroundColor = .white
         imgView.contentMode = .scaleAspectFill
         imgView.image = UIImage(named: "Line")
@@ -87,7 +85,7 @@ class LoginViewController: UIViewController {
     }()
     
     lazy var btn_StackView: UIStackView = {
-       let stackView = UIStackView(arrangedSubviews: [google_Sign_Btn, facebook_Sign_Btn, kakao_Sign_Btn])
+        let stackView = UIStackView(arrangedSubviews: [google_Sign_Btn, facebook_Sign_Btn, kakao_Sign_Btn])
         stackView.axis = .horizontal
         stackView.backgroundColor = .white
         stackView.spacing = 20
@@ -105,7 +103,7 @@ class LoginViewController: UIViewController {
         btn.layer.shadowColor = UIColor.gray.cgColor
         btn.layer.shadowOpacity = 0.6
         btn.layer.shadowOffset = CGSize(width: 0, height: 2)
-//        btn.layer.shadowRadius = 6
+        //        btn.layer.shadowRadius = 6
         return btn
     }()
     
@@ -119,7 +117,7 @@ class LoginViewController: UIViewController {
         btn.layer.shadowColor = UIColor.gray.cgColor
         btn.layer.shadowOpacity = 1.0
         btn.layer.shadowOffset = CGSize(width: 0, height: 2)
-//        btn.layer.shadowRadius = 10
+        //        btn.layer.shadowRadius = 10
         return btn
     }()
     
@@ -133,12 +131,12 @@ class LoginViewController: UIViewController {
         btn.layer.shadowColor = UIColor.gray.cgColor
         btn.layer.shadowOpacity = 1.0
         btn.layer.shadowOffset = CGSize(width: 0, height: 2)
-//        btn.layer.shadowRadius = 6
+        //        btn.layer.shadowRadius = 6
         return btn
     }()
     
     lazy var lbl_StackView: UIStackView = {
-       let stackView = UIStackView(arrangedSubviews: [registerInfoLabel, registerInfoButton])
+        let stackView = UIStackView(arrangedSubviews: [registerInfoLabel, registerInfoButton])
         stackView.axis = .horizontal
         stackView.backgroundColor = .white
         stackView.spacing = 5
@@ -177,23 +175,17 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = .white
         
         configureUI()
         drawBackground()
         binding()
         
-//        for family in UIFont.familyNames.sorted() {
-//            let names = UIFont.fontNames(forFamilyName: family)
-//            print("Family: \(family) Font names: \(names)")
-//        }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        
+        //        for family in UIFont.familyNames.sorted() {
+        //            let names = UIFont.fontNames(forFamilyName: family)
+        //            print("Family: \(family) Font names: \(names)")
+        //        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -257,31 +249,31 @@ class LoginViewController: UIViewController {
             make.height.equalTo(50)
         }
         
-//        view.addSubview(google_Sign_Btn)
-//        google_Sign_Btn.snp.makeConstraints { make in
-//            make.top.equalTo(loginButton.safeAreaLayoutGuide.snp.bottom).offset(50)
-//            make.centerX.equalToSuperview()
-//            make.width.equalTo(80)
-//        }
-//
-//        view.addSubview(facebook_Sign_Btn)
-//        facebook_Sign_Btn.snp.makeConstraints { make in
-//            make.top.equalTo(loginButton.safeAreaLayoutGuide.snp.bottom).offset(50)
-//            make.centerX.equalToSuperview()
-//            make.width.equalTo(80)
-//        }
+        //        view.addSubview(google_Sign_Btn)
+        //        google_Sign_Btn.snp.makeConstraints { make in
+        //            make.top.equalTo(loginButton.safeAreaLayoutGuide.snp.bottom).offset(50)
+        //            make.centerX.equalToSuperview()
+        //            make.width.equalTo(80)
+        //        }
+        //
+        //        view.addSubview(facebook_Sign_Btn)
+        //        facebook_Sign_Btn.snp.makeConstraints { make in
+        //            make.top.equalTo(loginButton.safeAreaLayoutGuide.snp.bottom).offset(50)
+        //            make.centerX.equalToSuperview()
+        //            make.width.equalTo(80)
+        //        }
         
-//        view.addSubview(registerInfoLabel)
-//        registerInfoLabel.snp.makeConstraints { make in
-//            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-40)
-//            make.centerX.equalTo(view.snp.centerX).offset(-20)
-//        }
-//
-//        view.addSubview(registerInfoButton)
-//        registerInfoButton.snp.makeConstraints { make in
-//            make.centerY.equalTo(registerInfoLabel.snp.centerY)
-//            make.left.equalTo(registerInfoLabel.snp.right).offset(5)
-//        }
+        //        view.addSubview(registerInfoLabel)
+        //        registerInfoLabel.snp.makeConstraints { make in
+        //            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-40)
+        //            make.centerX.equalTo(view.snp.centerX).offset(-20)
+        //        }
+        //
+        //        view.addSubview(registerInfoButton)
+        //        registerInfoButton.snp.makeConstraints { make in
+        //            make.centerY.equalTo(registerInfoLabel.snp.centerY)
+        //            make.left.equalTo(registerInfoLabel.snp.right).offset(5)
+        //        }
         
         view.addSubview(lbl_StackView)
         lbl_StackView.snp.makeConstraints { make in
@@ -289,26 +281,31 @@ class LoginViewController: UIViewController {
             make.centerX.equalToSuperview()
         }
     }
-
+    
     // MARK: - Binding
     
     private func binding() {
         
+        registerInfoButton
+            .rx
+            .tap
+            .asDriver()
+            .drive(onNext: { [weak self] in
+                guard let strongSelf = self else { return }
+                strongSelf.loginViewModel.actions.showRegisterViewController()
+            }).disposed(by: disposeBag)
+        
         let input = LoginViewModel.Input(email: emailTextField.rx.text.orEmpty.asObservable(),
                                          password: passwordTextField.rx.text.orEmpty.asObservable(),
                                          login: loginButton.rx.tap.asObservable(),
-                                         register: registerInfoButton.rx.tap.asObservable(),
                                          google_SignIn: google_Sign_Btn.rx.tap.asObservable(),
                                          facebook_SignIn: facebook_Sign_Btn.rx.tap.asObservable(),
                                          kakak_SignIn: kakao_Sign_Btn.rx.tap.asObservable())
         let output = loginViewModel.transform(input: input)
         
         output.loginEnabled
+            .asDriver(onErrorJustReturn: false)
             .drive(loginButton.rx.isEnabled)
-            .disposed(by: disposeBag)
-        
-        output.present
-            .subscribe()
             .disposed(by: disposeBag)
         
         output.loginTrigger
@@ -319,63 +316,62 @@ class LoginViewController: UIViewController {
                 
                 switch result {
                 case .success(_):
-                    break
-//                    strongSelf.loginViewModel.actionDelegate?.signIn()
+                    strongSelf.loginViewModel.actions.signIn()
                 case .failure(let err):
                     strongSelf.showFBAuthErrorAlert(error: err)
                 }
                 
             }).disposed(by: disposeBag)
         
-        output.loginTrigger_Google
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] result in
-                
-                guard let strongSelf = self else { return }
-                
-                switch result {
-                case .success(_):
-                    break
-//                    strongSelf.loginViewModel.actionDelegate?.signIn()
-                case .failure(let err):
-                    strongSelf.showFBAuthErrorAlert(error: err)
-                }
-                
-            }).disposed(by: disposeBag)
-        
-        output.loginTrigger_Facebook
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] result in
-                
-                guard let strongSelf = self else { return }
-                
-                switch result {
-                case .success(_):
-                    break
-//                    strongSelf.loginViewModel.actionDelegate?.signIn()
-                case .failure(let err):
-                    strongSelf.showFBAuthErrorAlert(error: err)
-                }
-                
-            }).disposed(by: disposeBag)
-        
-        output.loginTrigger_Kakao
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] result in
-                
-                
-                guard let strongSelf = self else { return }
-                
-                switch result {
-                case .success(_):
-                    break
-//                    strongSelf.loginViewModel.actionDelegate?.signIn()
-                case .failure(let err):
-                    strongSelf.showFBAuthErrorAlert(error: err)
-                }
-                
-            })
-            .disposed(by: disposeBag)
+        //        output.loginTrigger_Google
+        //            .observe(on: MainScheduler.instance)
+        //            .subscribe(onNext: { [weak self] result in
+        //
+        //                guard let strongSelf = self else { return }
+        //
+        //                switch result {
+        //                case .success(_):
+        //                    break
+        ////                    strongSelf.loginViewModel.actionDelegate?.signIn()
+        //                case .failure(let err):
+        //                    strongSelf.showFBAuthErrorAlert(error: err)
+        //                }
+        //
+        //            }).disposed(by: disposeBag)
+        //
+        //        output.loginTrigger_Facebook
+        //            .observe(on: MainScheduler.instance)
+        //            .subscribe(onNext: { [weak self] result in
+        //
+        //                guard let strongSelf = self else { return }
+        //
+        //                switch result {
+        //                case .success(_):
+        //                    break
+        ////                    strongSelf.loginViewModel.actionDelegate?.signIn()
+        //                case .failure(let err):
+        //                    strongSelf.showFBAuthErrorAlert(error: err)
+        //                }
+        //
+        //            }).disposed(by: disposeBag)
+        //
+        //        output.loginTrigger_Kakao
+        //            .observe(on: MainScheduler.instance)
+        //            .subscribe(onNext: { [weak self] result in
+        //
+        //
+        //                guard let strongSelf = self else { return }
+        //
+        //                switch result {
+        //                case .success(_):
+        //                    break
+        ////                    strongSelf.loginViewModel.actionDelegate?.signIn()
+        //                case .failure(let err):
+        //                    strongSelf.showFBAuthErrorAlert(error: err)
+        //                }
+        //
+        //            })
+        //            .disposed(by: disposeBag)
     }
     
 }

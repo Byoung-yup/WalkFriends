@@ -12,7 +12,7 @@ import RxCocoa
 
 class RegisterViewController: UIViewController {
     
-    let registerViewModel: RegiterViewModel
+    let registerViewModel: RegisterViewModel
     
     let disposebag = DisposeBag()
     
@@ -148,13 +148,17 @@ class RegisterViewController: UIViewController {
     
     // MARK: - Initialize
     
-    init(registerViewModel: RegiterViewModel) {
+    init(registerViewModel: RegisterViewModel) {
         self.registerViewModel = registerViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("\(self.description) - deinit")
     }
     
     override func viewDidLoad() {
@@ -257,11 +261,19 @@ class RegisterViewController: UIViewController {
     
     private func binding() {
         
-        let input = RegiterViewModel.Input(email: emailTextField.rx.text.orEmpty.asObservable(),
+        backToLoginButton
+            .rx
+            .tap
+            .asDriver()
+            .drive(onNext: { [weak self] in
+                guard let strongSelf = self else { return }
+                strongSelf.registerViewModel.actions.toBack()
+            }).disposed(by: disposebag)
+        
+        let input = RegisterViewModel.Input(email: emailTextField.rx.text.orEmpty.asObservable(),
                                            password: passwordTextField.rx.text.orEmpty.asObservable(),
                                            confirmPassword: confirmPasswordTextField.rx.text.orEmpty.asObservable(),
-                                           register: registerButton.rx.tap.asObservable(),
-                                           toBack: backToLoginButton.rx.tap.asObservable())
+                                           register: registerButton.rx.tap.asObservable())
         let output = registerViewModel.transform(input: input)
         
         output.isValidEmail
@@ -300,10 +312,6 @@ class RegisterViewController: UIViewController {
                 
             }).disposed(by: disposebag)
         
-        output.dismiss
-            .subscribe()
-            .disposed(by: disposebag)
-        
         output.registerTrigger
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] result in
@@ -311,11 +319,11 @@ class RegisterViewController: UIViewController {
                 guard let strongSelf = self else { return }
                 
 //                strongSelf.indicatorView.startAnimating()
-                strongSelf.indicatorView.isHidden = false
+//                strongSelf.indicatorView.isHidden = false
                 
                 switch result {
                 case .success(_):
-                    strongSelf.registerViewModel.actionDelegate?.toBack()
+                    strongSelf.registerViewModel.actions.toBack()
                     strongSelf.showFBAuthAlert()
                     
                 case .failure(let err):

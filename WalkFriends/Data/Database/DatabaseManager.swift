@@ -37,8 +37,9 @@ extension DatabaseManager: DataRepository {
                 
                 do {
    
-                    let document = try await strongSelf.db.collection("Users").document("dd").getDocument()
-                    
+                    let document = try await strongSelf.db.collection("Users").document((FirebaseService.shard.auth.currentUser?.uid)!).getDocument()
+                    print("current User Uid: \((FirebaseService.shard.auth.currentUser?.uid)!)")
+                    print("current User Email: \((FirebaseService.shard.auth.currentUser?.email)!)")
                     guard document.exists, let data = document.data() else  {
                         observer.onNext(.failure(DatabaseError.NotFoundUserError))
                         observer.onCompleted()
@@ -48,9 +49,6 @@ extension DatabaseManager: DataRepository {
                     let jsonData = try JSONSerialization.data(withJSONObject: data)
                     let decoded = try JSONDecoder().decode(UserProfile.self, from: jsonData)
                     
-//                    FirebaseService.shard.UserProfle = decoded
-//                    print("Fetch User Data")
-//                    print("User: \(FirebaseService.shard.UserProfle)")
                     observer.onNext(.success(true))
                     observer.onCompleted()
                     

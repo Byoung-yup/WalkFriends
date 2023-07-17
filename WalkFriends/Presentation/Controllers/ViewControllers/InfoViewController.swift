@@ -38,6 +38,25 @@ class InfoViewController: UIViewController {
         ConfigureUI()
         binding()
     }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+                    super.viewDidDisappear(animated)
+            if navigationController?.isBeingDismissed ?? false {
+                print("navigationController isBeingDismissed")
+            }
+            
+            if navigationController?.isMovingFromParent ?? false {
+                print("navigationController isMovingFromParent")
+            }
+            
+            if isBeingDismissed {
+                print("isBeingDismissed")
+            }
+            
+            if isMovingFromParent {
+                print("isMovingFromParent")
+            }
+     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -73,7 +92,9 @@ class InfoViewController: UIViewController {
     
     private func binding() {
         
-        let input = InfoViewModel.Input(logout: logoutButton.rx.tap.asObservable())
+        let input = InfoViewModel.Input(logout: logoutButton.rx.tap.asObservable(),
+                                        finish: rx.isPopping.asObservable())
+        
         let output = infoViewModel.transform(input: input)
         
         output.logout_Trigger
@@ -90,6 +111,10 @@ class InfoViewController: UIViewController {
                 }
                 
             }).disposed(by: disposeBag)
+        
+        output.finishTrigger
+            .subscribe()
+            .disposed(by: disposeBag)
     }
 
 }

@@ -17,6 +17,7 @@ struct InfoViewModelActions {
     let changeProfile: () -> Void
     let showMyFavoriteMapListView: () -> Void
     let signOut: () -> Void
+    let toBack: () -> Void
 }
 
 final class InfoViewModel: ViewModel {
@@ -25,13 +26,14 @@ final class InfoViewModel: ViewModel {
     
     struct Input {
         let logout: Observable<Void>
+        let finish: Observable<Void>
     }
     
     // MARK: - Output
     
     struct Output {
         let logout_Trigger: Observable<Result<Bool, FirebaseAuthError>>
-        
+        let finishTrigger: Observable<Void>
     }
     
     // MARK: - Properties
@@ -53,7 +55,12 @@ final class InfoViewModel: ViewModel {
                 return FirebaseService.shard.logout()
             }
         
-        return Output(logout_Trigger: logout)
+        let dismiss = input.finish
+            .do(onNext: { [weak self] in
+                self?.actions.toBack()
+            })
+        
+        return Output(logout_Trigger: logout, finishTrigger: dismiss)
     }
 }
 

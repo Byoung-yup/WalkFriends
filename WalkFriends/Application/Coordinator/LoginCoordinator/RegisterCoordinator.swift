@@ -8,48 +8,53 @@
 import Foundation
 import UIKit
 
-protocol RegisterCoordinatorDelegate {
+protocol RegisterCoordinatorDependencies {
     func toBack(_ coordinator: RegisterCoordinator)
+    func makeRegisterViewController(actions: RegisterViewModelActions) -> RegisterViewController
 }
 
 class RegisterCoordinator: NSObject, Coordinator {
     
     var childCoordinators: [NSObject] = []
-    var delegate: RegisterCoordinatorDelegate?
     
-//    private var registerViewController: RegisterViewController!
-    private let navigationController: UINavigationController!
+    private let navigationController: UINavigationController
+    private let dependencies: RegisterCoordinatorDependencies
     
-    init(navigationController: UINavigationController) {
+    init(navigationController: UINavigationController, dependencies: RegisterCoordinatorDependencies) {
         self.navigationController = navigationController
+        self.dependencies = dependencies
     }
     
     func start() {
+        let actions = RegisterViewModelActions(toBack: toBack)
+        let vc = dependencies.makeRegisterViewController(actions: actions)
         
-        let registerViewController = RegisterViewController(registerViewModel: makeRegisterViewModel())
-//        self.registerViewController = registerViewController
-        navigationController.pushViewController(registerViewController, animated: true)
+        navigationController.pushViewController(vc, animated: true)
         navigationController.navigationBar.isHidden = true
-        
     }
     
-    // MARK: - RegisterViewController
-    
-    func makeRegisterViewModel() -> RegiterViewModel {
-        
-        let registerViewModel = RegiterViewModel()
-        registerViewModel.actionDelegate = self
-        return registerViewModel
-    }
-}
-
-extension RegisterCoordinator: RegisterViewModelActionDelegate {
-    
-    func toBack() {
+    private func toBack() {
         navigationController.popViewController(animated: true)
-        delegate?.toBack(self)
+        dependencies.toBack(self)
     }
     
+//    // MARK: - RegisterViewController
+//
+//    func makeRegisterViewModel() -> RegiterViewModel {
+//
+//        let registerViewModel = RegiterViewModel()
+//        registerViewModel.actionDelegate = self
+//        return registerViewModel
+//    }
+//}
+//
+//extension RegisterCoordinator: RegisterViewModelActionDelegate {
+//
+//    func toBack() {
+//        navigationController.popViewController(animated: true)
+//        delegate?.toBack(self)
+//    }
+//
 //    func showEmailConfirmVC() {
 //        let coordinator = EmailCoordinator(viewcontroller: registerViewController)
 //        coordinator.start()

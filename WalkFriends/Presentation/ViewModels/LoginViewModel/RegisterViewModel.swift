@@ -9,11 +9,11 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-protocol RegisterViewModelActionDelegate {
-    func toBack()
+struct RegisterViewModelActions {
+    let toBack: () -> Void
 }
 
-final class RegiterViewModel: ViewModel {
+final class RegisterViewModel: ViewModel {
     
     // MARK: - Input
     
@@ -22,8 +22,6 @@ final class RegiterViewModel: ViewModel {
         let password: Observable<String>
         let confirmPassword: Observable<String>
         let register: Observable<Void>
-//        let naviback: Observable<Void>
-        let toBack: Observable<Void>
     }
     
     // MARK: - Output
@@ -33,13 +31,18 @@ final class RegiterViewModel: ViewModel {
         let isValidPassword: Driver<Bool>
         let isValidConfirmPassword: Driver<Bool>
         let isValidRegister: Driver<Bool>
-        let dismiss: Observable<Void>
         let registerTrigger: Observable<Result<Bool, FirebaseAuthError>>
     }
     
     // MARK: - Properties
     
-    var actionDelegate: RegisterViewModelActionDelegate?
+    //    var actionDelegate: RegisterViewModelActionDelegate?
+    let actions: RegisterViewModelActions
+    
+    // MARK: - Init
+    init(actions: RegisterViewModelActions) {
+        self.actions = actions
+    }
     
     // MARK: - Transform Method
     
@@ -60,20 +63,12 @@ final class RegiterViewModel: ViewModel {
             .flatMapLatest {
                 return FirebaseService.shard.createUser(user: $0)
             }
-        //
         
-        
-        let dismiss = input.toBack
-            .do(onNext: { [weak self] in
-                self?.actionDelegate?.toBack()
-            })
-                
-                return Output(isValidEmail: checkEmail,
-                              isValidPassword: checkPassword,
-                              isValidConfirmPassword: checkConfirmPassword,
-                              isValidRegister: checkRegister,
-                              dismiss: dismiss,
-                              registerTrigger: register)
+        return Output(isValidEmail: checkEmail,
+                      isValidPassword: checkPassword,
+                      isValidConfirmPassword: checkConfirmPassword,
+                      isValidRegister: checkRegister,
+                      registerTrigger: register)
     }
     
 }

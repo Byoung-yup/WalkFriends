@@ -158,25 +158,6 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         return manager
     }()
     
-//    lazy var category_CollectionView: UICollectionView = {
-//        let flowLayout = UICollectionViewFlowLayout()
-//        flowLayout.scrollDirection = .horizontal
-//        flowLayout.itemSize = CGSize(width: (UIScreen.main.bounds.width) / 5, height: 40)
-////        flowLayout.minimumLineSpacing = 20
-//        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-//        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-//        collectionView.backgroundColor = .white
-//        collectionView.register(CategoryCollectionViewCell.self, forCellWithReuseIdentifier: CategoryCollectionViewCell.identifier)
-//        collectionView.showsHorizontalScrollIndicator = false
-//        return collectionView
-//    }()
-    
-//    lazy var homeListView: HomeListView = {
-//        let view = HomeListView()
-//        view.backgroundColor = .blue
-//        return view
-//    }()
-    
     // MARK: - Initialize
     
     init(homeViewModel: HomeViewModel) {
@@ -361,25 +342,24 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             }).disposed(by: disposeBag)
         
         output.fetchTrigger
-            .drive(onNext: { [weak self] result in
-
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] result in
+                
                 guard let strongSelf = self else { return }
-
+                
                 switch result {
                 case .success(_):
                     break
-                case .failure(let err):
-
+                case.failure(let err):
+                    
                     if err == .NotFoundUserError {
-//                        strongSelf.homeViewModel.actionDelegate?.setupProfile()
-                    }
-                    else {
-//                        strongSelf.homeViewModel.actionDelegate?.error()
-                        strongSelf.showAlert(error: err)
+                        strongSelf.homeViewModel.actions.showSetupProfileViewController()
+                    } else {
+                        strongSelf.homeViewModel.actions.fetchError()
                     }
                 }
-
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
 //
 //        homeViewModel.items
 //            .bind(to: homeListView.collectionView.rx.items(cellIdentifier: "HomeListCell", cellType: HomeListCell.self)) { (row, text, cell) in

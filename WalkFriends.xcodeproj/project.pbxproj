@@ -25,6 +25,7 @@
 		B04022C12A56515B00647431 /* MapListViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B04022BF2A56515B00647431 /* MapListViewCell.xib */; };
 		B04022C32A56634700647431 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04022C22A56634700647431 /* Int.swift */; };
 		B042BA592A539F20004555AA /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B042BA582A539F20004555AA /* LocationViewController.swift */; };
+		B04483492A613590004DC9E0 /* Rx+UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04483482A613590004DC9E0 /* Rx+UIViewController.swift */; };
 		B0483CFF29D6BC4E001941C1 /* ShareInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0483CFE29D6BC4E001941C1 /* ShareInfoViewController.swift */; };
 		B0483D0229D6BCAC001941C1 /* ShareInfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0483D0129D6BCAC001941C1 /* ShareInfoCoordinator.swift */; };
 		B04CDE1E2A5BF87200EAB8FC /* AppAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04CDE1D2A5BF87200EAB8FC /* AppAppearance.swift */; };
@@ -112,6 +113,7 @@
 		B04022BF2A56515B00647431 /* MapListViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapListViewCell.xib; sourceTree = "<group>"; };
 		B04022C22A56634700647431 /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		B042BA582A539F20004555AA /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
+		B04483482A613590004DC9E0 /* Rx+UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rx+UIViewController.swift"; sourceTree = "<group>"; };
 		B0483CFE29D6BC4E001941C1 /* ShareInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoViewController.swift; sourceTree = "<group>"; };
 		B0483D0129D6BCAC001941C1 /* ShareInfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfoCoordinator.swift; sourceTree = "<group>"; };
 		B04CDE1D2A5BF87200EAB8FC /* AppAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAppearance.swift; sourceTree = "<group>"; };
@@ -613,6 +615,7 @@
 				B05C3D9B2A176F8C00D23AB7 /* UIViewController.swift */,
 				B03C84242A4EC5B100DE2F0A /* UIColor.swift */,
 				B04022C22A56634700647431 /* Int.swift */,
+				B04483482A613590004DC9E0 /* Rx+UIViewController.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -812,6 +815,7 @@
 			files = (
 				B0909F0529EE24DA00CFE7B1 /* MapListDetailViewController.swift in Sources */,
 				B02828DE29E93F8E008B22CF /* MapListViewController.swift in Sources */,
+				B04483492A613590004DC9E0 /* Rx+UIViewController.swift in Sources */,
 				B07391572993601000903C1F /* FirebaseService.swift in Sources */,
 				B04CDE1E2A5BF87200EAB8FC /* AppAppearance.swift in Sources */,
 				B07971BE29B1D1AB0038BE9D /* DefaultUseCase.swift in Sources */,

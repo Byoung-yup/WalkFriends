@@ -10,8 +10,8 @@ import RxSwift
 import RxCocoa
 import FirebaseAuth
 
-protocol SetupProfileViewModelActionDelegate {
-    func createProfile()
+struct SetupViewModelActions {
+    let createProfile: () -> Void
 }
 
 final class SetupProfileViewModel: ViewModel {
@@ -19,7 +19,6 @@ final class SetupProfileViewModel: ViewModel {
     struct Input {
         let profileImage: Observable<UIImage>
         let usernickName: Observable<String>
-//        let userGender: Observable<Int>
         let createTrigger: Observable<Void>
     }
     
@@ -29,14 +28,14 @@ final class SetupProfileViewModel: ViewModel {
     }
     
     private let dataUseCase: DataUseCase
-    
-    var actionDelegate: SetupProfileViewModelActionDelegate?
+    let actions: SetupViewModelActions
     
     
     // MARK: - Initialize
     
-    init(dataUseCase: DataUseCase) {
+    init(dataUseCase: DataUseCase, actions: SetupViewModelActions) {
         self.dataUseCase = dataUseCase
+        self.actions = actions
     }
     
 }
@@ -61,6 +60,16 @@ extension SetupProfileViewModel {
             .flatMapLatest { [weak self] data in
                 return (self?.dataUseCase.createProfile(with: data))!
             }
+            .observe(on: MainScheduler.instance)
+            .do(onNext: { [weak self] result in
+                
+                switch result {
+                case .success(_):
+                    self?.actions.createProfile()
+                case .failure(_):
+                    break
+                }
+            })
         
         return Output(create: create,
                       createEnabled: canCreate)

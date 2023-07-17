@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol AppSceneDIContainerDelegate {
-    func dismiss(coordinator: Coordinator)
+    func dismiss(_ coordinator: Coordinator)
 }
 
 final class AppSceneDIContainer {
@@ -30,6 +30,15 @@ final class AppSceneDIContainer {
         return LoginViewModel(actions: actions)
     }
     
+    // MARK: - Register View
+    func makeRegisterViewController(actions: RegisterViewModelActions) -> RegisterViewController {
+        return RegisterViewController(registerViewModel: makeRegisterViewModel(actions: actions))
+    }
+    
+    func makeRegisterViewModel(actions: RegisterViewModelActions) -> RegisterViewModel {
+        return RegisterViewModel(actions: actions)
+    }
+    
     // MARK: - Home View
     func makeHomeViewController(actions: HomeViewModelActions) -> HomeViewController {
         return HomeViewController(homeViewModel: makeHomeViewModel(actions: actions))
@@ -37,6 +46,15 @@ final class AppSceneDIContainer {
     
     func makeHomeViewModel(actions: HomeViewModelActions) -> HomeViewModel {
         return HomeViewModel(dataUseCase: makeDefaultUseCase(), actions: actions)
+    }
+    
+    // MARK: - Setup View
+    func makeSetupProfileViewController(actions: SetupViewModelActions) -> SetupProfileViewController {
+        return SetupProfileViewController(viewModel: makeSetupProfileViewModel(actions: actions))
+    }
+    
+    func makeSetupProfileViewModel(actions: SetupViewModelActions) -> SetupProfileViewModel {
+        return SetupProfileViewModel(dataUseCase: makeDefaultUseCase(), actions: actions)
     }
     
     // MARK: - Info View
@@ -58,14 +76,29 @@ final class AppSceneDIContainer {
         return HomeCoordinator(navigationController: navigationController, dependencies: self)
     }
     
+    // MARK: - SetupProfile Coordinator
+    func makeSetupProfileCoordinator(navigationController: UINavigationController, dependencies: SetupProfileCoordinatorDependencies) -> SetupProfileCoordinator {
+        return SetupProfileCoordinator(navigationController: navigationController, dependencies: dependencies)
+    }
+    
+    // MARK: - Register Coordinator
+    func makeRegisterCoordinator(navigationController: UINavigationController, dependencies: RegisterCoordinatorDependencies) -> RegisterCoordinator {
+        return RegisterCoordinator(navigationController: navigationController, dependencies: dependencies)
+    }
+    
+    // MARK: - Info Coordinator
+    func makeInfoCoordinator(navigationController: UINavigationController, dependencies: InfoCoordinatorDependencies) -> InfoCoordinator {
+        return InfoCoordinator(navigationController: navigationController, dependecies: dependencies)
+    }
+    
     // MARK: - Dismiss LoginViewController
-    func dismissLoginViewController(coordinator: LoginCoordinator) {
-        delegate?.dismiss(coordinator: coordinator)
+    func dismissLoginViewController(_ coordinator: LoginCoordinator) {
+        delegate?.dismiss(coordinator)
     }
     
     // MARK: - Dismiss HomeViewController
-    func dismissHomeViewController(coordinator: HomeCoordinator) {
-        delegate?.dismiss(coordinator: coordinator)
+    func dismissHomeViewController(_ coordinator: HomeCoordinator) {
+        delegate?.dismiss(coordinator)
     }
 }
 
