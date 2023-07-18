@@ -35,28 +35,28 @@ class InfoViewController: UIViewController {
         view.backgroundColor = .white
         title = "내 정보"
         
-        ConfigureUI()
+        configureUI()
         binding()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-                    super.viewDidDisappear(animated)
-            if navigationController?.isBeingDismissed ?? false {
-                print("navigationController isBeingDismissed")
-            }
-            
-            if navigationController?.isMovingFromParent ?? false {
-                print("navigationController isMovingFromParent")
-            }
-            
-            if isBeingDismissed {
-                print("isBeingDismissed")
-            }
-            
-            if isMovingFromParent {
-                print("isMovingFromParent")
-            }
-     }
+//    override func viewDidDisappear(_ animated: Bool) {
+//                    super.viewDidDisappear(animated)
+//            if navigationController?.isBeingDismissed ?? false {
+//                print("navigationController isBeingDismissed")
+//            }
+//
+//            if navigationController?.isMovingFromParent ?? false {
+//                print("navigationController isMovingFromParent")
+//            }
+//
+//            if isBeingDismissed {
+//                print("isBeingDismissed")
+//            }
+//
+//            if isMovingFromParent {
+//                print("isMovingFromParent")
+//            }
+//     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -78,7 +78,7 @@ class InfoViewController: UIViewController {
     
     // MARK: - Configure UI
     
-    private func ConfigureUI() {
+    private func configureUI() {
         
         view.addSubview(logoutButton)
         logoutButton.snp.makeConstraints { make in

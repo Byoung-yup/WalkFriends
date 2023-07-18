@@ -57,6 +57,15 @@ final class AppSceneDIContainer {
         return SetupProfileViewModel(dataUseCase: makeDefaultUseCase(), actions: actions)
     }
     
+    // MARK: - Run View
+    func makeRunViewController(actions: RunViewModelActions) -> RunViewController {
+        return RunViewController(viewModel: makeRunViewModel(actions: actions))
+    }
+    
+    func makeRunViewModel(actions: RunViewModelActions) -> RunViewModel {
+        return RunViewModel(actions: actions)
+    }
+    
     // MARK: - Info View
     func makeInfoViewController(actions: InfoViewModelActions) -> InfoViewController {
         return InfoViewController(infoViewModel: makeInfoViewModel(actions: actions))
@@ -84,6 +93,11 @@ final class AppSceneDIContainer {
     // MARK: - Register Coordinator
     func makeRegisterCoordinator(navigationController: UINavigationController, dependencies: RegisterCoordinatorDependencies) -> RegisterCoordinator {
         return RegisterCoordinator(navigationController: navigationController, dependencies: dependencies)
+    }
+    
+    // MARK: - Run Coordinator
+    func makeRunCoordinator(navigationController: UINavigationController, dependencies: RunCoordinatorDependencies) -> RunCoordinator {
+        return RunCoordinator(navigationController: navigationController, dependencies: dependencies)
     }
     
     // MARK: - Info Coordinator

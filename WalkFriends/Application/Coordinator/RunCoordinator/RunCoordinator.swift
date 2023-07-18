@@ -9,7 +9,8 @@ import Foundation
 import UIKit
 import CoreLocation
 
-protocol RunCoordinatorDelegate {
+protocol RunCoordinatorDependencies {
+    func makeRunViewController(actions: RunViewModelActions) -> RunViewController
     func dismiss(_ coordinator: RunCoordinator)
 }
 
@@ -17,55 +18,53 @@ final class RunCoordinator: NSObject, Coordinator {
     
     var childCoordinators: [NSObject] = []
     
-    let navigationController: UINavigationController
+    private let navigationController: UINavigationController
+    private let dependencies: RunCoordinatorDependencies
     
-    let locationManager: CLLocationManager
-    var delegate: RunCoordinatorDelegate?
-    
-    init(navigationController: UINavigationController, locationManager: CLLocationManager) {
+    init(navigationController: UINavigationController, dependencies: RunCoordinatorDependencies) {
         self.navigationController = navigationController
-        self.locationManager = locationManager
+        self.dependencies = dependencies
     }
     
     func start() {
-        let vc = RunViewController(viewModel: makeRunViewModel(), locationManager: locationManager)
+        let actions = RunViewModelActions(toBack: toBack)
+        let vc = dependencies.makeRunViewController(actions: actions)
+        
         navigationController.pushViewController(vc, animated: true)
+        navigationController.navigationBar.isHidden = false
     }
     
-    // MARK: - HomeViewController
-    
-    func makeRunViewModel() -> RunViewModel {
-        let runViewModel = RunViewModel()
-        runViewModel.actionDelegate = self
-        return runViewModel
+    private func toBack() {
+        navigationController.popViewController(animated: true)
+        dependencies.dismiss(self)
     }
     
 }
 
-extension RunCoordinator: RunViewModelActionDelegate {
-    
-    func dismiss(with saved: Bool, snapshot: UIImage?, address: String) {
-        
-        guard saved == true else {
-            navigationController.popViewController(animated: true)
-            delegate?.dismiss(self)
-            return
-        }
-        
-        navigationController.popViewController(animated: true)
-        
-        let coordiantor = ShareInfoCoordinator(navigationController: navigationController, snapshot: snapshot!, address: address)
-        coordiantor.delegate = self
-        coordiantor.start()
-        childCoordinators.append(coordiantor)
-    }
-}
+//extension RunCoordinator: RunViewModelActionDelegate {
+//    
+//    func dismiss(with saved: Bool, snapshot: UIImage?, address: String) {
+//        
+//        guard saved == true else {
+//            navigationController.popViewController(animated: true)
+////            delegate?.dismiss(self)
+//            return
+//        }
+//        
+//        navigationController.popViewController(animated: true)
+//        
+//        let coordiantor = ShareInfoCoordinator(navigationController: navigationController, snapshot: snapshot!, address: address)
+//        coordiantor.delegate = self
+//        coordiantor.start()
+//        childCoordinators.append(coordiantor)
+//    }
+//}
 
 extension RunCoordinator: ShareInfoCoordinatorDelegate {
     
     func dismiss(_ coordinator: ShareInfoCoordinator) {
         
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
-        delegate?.dismiss(self)
+//        delegate?.dismiss(self)
     }
 }

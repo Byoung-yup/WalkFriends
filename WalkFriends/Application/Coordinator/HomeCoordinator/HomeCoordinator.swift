@@ -10,12 +10,19 @@ import UIKit
 import CoreLocation
 
 protocol HomeCoordinatorDepedencies {
-    func makeHomeViewController(actions: HomeViewModelActions) -> HomeViewController
-    func dismissHomeViewController(_ coordinator: HomeCoordinator)
-    func makeInfoCoordinator(navigationController: UINavigationController, dependencies: InfoCoordinatorDependencies) -> InfoCoordinator
-    func makeInfoViewController(actions: InfoViewModelActions) -> InfoViewController
+    // MARK: coordinator
     func makeSetupProfileCoordinator(navigationController: UINavigationController, dependencies: SetupProfileCoordinatorDependencies) -> SetupProfileCoordinator
+    func makeInfoCoordinator(navigationController: UINavigationController, dependencies: InfoCoordinatorDependencies) -> InfoCoordinator
+    func makeRunCoordinator(navigationController: UINavigationController, dependencies: RunCoordinatorDependencies) -> RunCoordinator
+    
+    // MARK: viewController
+    func makeHomeViewController(actions: HomeViewModelActions) -> HomeViewController
+    func makeInfoViewController(actions: InfoViewModelActions) -> InfoViewController
     func makeSetupProfileViewController(actions: SetupViewModelActions) -> SetupProfileViewController
+    func makeRunViewController(actions: RunViewModelActions) -> RunViewController
+    
+    // MARK: dismiss
+    func dismissHomeViewController(_ coordinator: HomeCoordinator)
 }
 
 
@@ -34,7 +41,8 @@ final class HomeCoordinator: NSObject, Coordinator {
     func start() {
         let actions = HomeViewModelActions(showInfoViewController: showInfoViewController,
                                            showSetupProfileViewController: showSetupProfileViewController,
-                                           fetchError: fetchError)
+                                           fetchError: fetchError,
+                                           showRunViewController: showRunViewController)
         let vc = dependencies.makeHomeViewController(actions: actions)
         
         navigationController.pushViewController(vc, animated: true)
@@ -58,6 +66,13 @@ final class HomeCoordinator: NSObject, Coordinator {
     private func fetchError() {
         dependencies.dismissHomeViewController(self)
     }
+    
+    private func showRunViewController() {
+        let runCoordinator = dependencies.makeRunCoordinator(navigationController: navigationController, dependencies: self)
+        runCoordinator.start()
+        
+        childCoordinators.append(runCoordinator)
+    }
 }
 
 extension HomeCoordinator: InfoCoordinatorDependencies {
@@ -77,6 +92,16 @@ extension HomeCoordinator: SetupProfileCoordinatorDependencies {
     }
     
     func dismiss(_ coordinator: SetupProfileCoordinator) {
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+    }
+}
+
+extension HomeCoordinator: RunCoordinatorDependencies {
+    func makeRunViewController(actions: RunViewModelActions) -> RunViewController {
+        return dependencies.makeRunViewController(actions: actions)
+    }
+    
+    func dismiss(_ coordinator: RunCoordinator) {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
     }
 }
@@ -120,9 +145,9 @@ extension HomeCoordinator: SetupProfileCoordinatorDependencies {
 //    }
 //}
 
-extension HomeCoordinator: RunCoordinatorDelegate {
-    
-    func dismiss(_ coordinator: RunCoordinator) {
-        childCoordinators = childCoordinators.filter { $0 !== coordinator }
-    }
-}
+//extension HomeCoordinator: RunCoordinatorDelegate {
+//
+//    func dismiss(_ coordinator: RunCoordinator) {
+//        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+//    }
+//}

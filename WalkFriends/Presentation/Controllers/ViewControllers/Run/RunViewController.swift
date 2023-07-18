@@ -52,7 +52,7 @@ class RunViewController: UIViewController {
     
     private let runViewModel: RunViewModel
     
-    let locationManager: CLLocationManager
+    //    let locationManager: CLLocationManager
     
     private var previousCoordinate: CLLocationCoordinate2D?
     private var startCoordinate = BehaviorRelay<CLLocationCoordinate2D>(value: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0))
@@ -69,8 +69,8 @@ class RunViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .yellow
-        locationManager.delegate = self
-    
+        //        locationManager.delegate = self
+        
         configureUI()
         binding()
         
@@ -80,18 +80,13 @@ class RunViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("viewWillAppear")
-        locationManager.startUpdatingLocation()
+        runViewModel.locationManager.startUpdatingLocation()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         print("viewDidDisappear")
-        locationManager.stopUpdatingLocation()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print("viewDidAppear")
+        runViewModel.locationManager.stopUpdatingLocation()
     }
     
     // MARK: - viewDidLayoutSubviews
@@ -109,9 +104,8 @@ class RunViewController: UIViewController {
     
     // MARK: - Initialize
     
-    init(viewModel: RunViewModel, locationManager: CLLocationManager) {
+    init(viewModel: RunViewModel) {
         self.runViewModel = viewModel
-        self.locationManager = locationManager
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -132,23 +126,23 @@ class RunViewController: UIViewController {
             make.edges.equalToSuperview()
         }
         
-        mapView.addSubview(contentView)
-        contentView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.height.equalTo(mapView.snp.height).dividedBy(3)
-        }
-        
-        contentView.addSubview(runBtn)
-        runBtn.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-30)
-            make.centerX.equalToSuperview()
-        }
-        
-        contentView.addSubview(stopBtn)
-        stopBtn.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-30)
-            make.centerX.equalToSuperview()
-        }
+        //        mapView.addSubview(contentView)
+        //        contentView.snp.makeConstraints { make in
+        //            make.left.right.bottom.equalToSuperview()
+        //            make.height.equalTo(mapView.snp.height).dividedBy(3)
+        //        }
+        //
+        //        contentView.addSubview(runBtn)
+        //        runBtn.snp.makeConstraints { make in
+        //            make.bottom.equalToSuperview().offset(-30)
+        //            make.centerX.equalToSuperview()
+        //        }
+        //
+        //        contentView.addSubview(stopBtn)
+        //        stopBtn.snp.makeConstraints { make in
+        //            make.bottom.equalToSuperview().offset(-30)
+        //            make.centerX.equalToSuperview()
+        //        }
         
     }
     
@@ -156,30 +150,81 @@ class RunViewController: UIViewController {
     
     private func binding() {
         
-        let input = RunViewModel.Input(run: runBtn.rx.tap.asDriver(),
-                                       stop: stopBtn.rx.tap.asDriver(),
-                                       startCoordinate: startCoordinate.asObservable(),
-                                       destinationCoordinate: destinationCoordinate.asObservable(),
-                                       saved: isSavedStatus.asObservable())
+        var points: [CLLocationCoordinate2D] = []
+        
+        let input = RunViewModel.Input()
         let output = runViewModel.transform(input: input)
         
-        output.runTrigger
-            .drive(onNext: { [weak self] _ in
+        output.didChangeAuthorization
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] (_, status) in
                 
-//                self?.setCurrentPosition()
-//                self?.checkForCLAuthorizationStatus()
+                guard let strongSelf = self else { return }
+                
+                switch status {
+                case .denied:
+                    strongSelf.showRequestLocationServiceAlert()
+                case .notDetermined:
+                    break
+                case .restricted:
+                    print("Authorization: restricted")
+                case .authorizedAlways, .authorizedWhenInUse:          
+                   break
+                default:
+                    break
+                }
+                
             }).disposed(by: disposeBag)
         
-        output.stopTrigger
-            .drive(onNext: { [weak self] _ in
-                self?.stop()
-            }).disposed(by: disposeBag)
-        
-        output.dismissTrigger
-            .subscribe()
-            .disposed(by: disposeBag)
-        
+        output.didUpdateLocations
+            .subscribe(onNext: { [weak self] (_, locations) in
+                print("location: \(locations)")
+                guard let strongSelf = self else { return }
+                guard !locations.isEmpty, let currentLocation = locations.last else { return }
+                
+                points.append(currentLocation.coordinate)
+                
+                let lineDraw = MKPolyline(coordinates: points, count:points.count)
+                strongSelf.mapView.addOverlay(lineDraw)
 
+            }).disposed(by: disposeBag)
+        
+        output.location
+            .subscribe(onNext: { [weak self] location in
+                
+                guard let strongSelf = self else { return }
+                guard let currentLocation = location else { return }
+                
+                let region = CLLocationCoordinate2D(latitude: currentLocation.latitude, longitude: currentLocation.longitude)
+                let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+                strongSelf.mapView.setRegion(MKCoordinateRegion(center: region, span: span), animated: true)
+                
+            }).disposed(by: disposeBag)
+        
+        //        let input = RunViewModel.Input(run: runBtn.rx.tap.asDriver(),
+        //                                       stop: stopBtn.rx.tap.asDriver(),
+        //                                       startCoordinate: startCoordinate.asObservable(),
+        //                                       destinationCoordinate: destinationCoordinate.asObservable(),
+        //                                       saved: isSavedStatus.asObservable())
+        //        let output = runViewModel.transform(input: input)
+        //
+        //        output.runTrigger
+        //            .drive(onNext: { [weak self] _ in
+        //
+        ////                self?.setCurrentPosition()
+        ////                self?.checkForCLAuthorizationStatus()
+        //            }).disposed(by: disposeBag)
+        //
+        //        output.stopTrigger
+        //            .drive(onNext: { [weak self] _ in
+        //                self?.stop()
+        //            }).disposed(by: disposeBag)
+        //
+        //        output.dismissTrigger
+        //            .subscribe()
+        //            .disposed(by: disposeBag)
+        
+        
     }
     
 }
@@ -188,88 +233,74 @@ class RunViewController: UIViewController {
 
 extension RunViewController {
     
-//    func checkUserDeviceLocationServiceAuthorization() {
-//
-//        let authorizationStatus: CLAuthorizationStatus
-//
-//        // 앱의 권한 상태 가져오는 코드 (iOS 버전에 따라 분기처리)
-//        if #available(iOS 14.0, *) {
-//            authorizationStatus = locationManager.authorizationStatus
-//        }else {
-//            authorizationStatus = CLLocationManager.authorizationStatus()
-//        }
-//
-//        checkUserCurrentLocationAuthorization(authorizationStatus)
-//    }
-//
-//    func checkUserCurrentLocationAuthorization(_ status: CLAuthorizationStatus) {
-//
-//        switch status {
-//        case .notDetermined:
-//            // 사용자가 권한에 대한 설정을 선택하지 않은 상태
-//
-//            // 권한 요청을 보내기 전에 desiredAccuracy 설정 필요
-//            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-//
-//            // 권한 요청을 보낸다.
-//            locationManager.requestWhenInUseAuthorization()
-//
-//        case .denied, .restricted:
-//            // 사용자가 명시적으로 권한을 거부했거나, 위치 서비스 활성화가 제한된 상태
-//            // 시스템 설정에서 설정값을 변경하도록 유도한다.
-//            // 시스템 설정으로 유도하는 커스텀 얼럿
-//            showRequestLocationServiceAlert()
-//
-//        case .authorizedWhenInUse:
-//            // 앱을 사용중일 때, 위치 서비스를 이용할 수 있는 상태
-//            // manager 인스턴스를 사용하여 사용자의 위치를 가져온다.
-//            break
-//        default:
-//            print("Default")
-//        }
-//    }
-//
-//    func showRequestLocationServiceAlert() {
-//        let requestLocationServiceAlert = UIAlertController(title: "위치 정보 이용", message: "위치 서비스를 사용할 수 없습니다.\n디바이스의 '설정 > 개인정보 보호'에서 위치 서비스를 켜주세요.", preferredStyle: .alert)
-//        let goSetting = UIAlertAction(title: "설정으로 이동", style: .destructive) { _ in
-//            if let appSetting = URL(string: UIApplication.openSettingsURLString) {
-//                UIApplication.shared.open(appSetting)
-//            }
-//        }
-//        let cancel = UIAlertAction(title: "취소", style: .default)
-//
-//        requestLocationServiceAlert.addAction(cancel)
-//        requestLocationServiceAlert.addAction(goSetting)
-//
-//        present(requestLocationServiceAlert, animated: true)
-//    }
-//
-//    func showInfoAlert() {
-//
-//        let alert = UIAlertController(title: "안내", message: "기념 풍경 사진을 남겨두세요!", preferredStyle: .alert)
-//
-//        alert.addAction(UIAlertAction(title: "확인", style: .cancel))
-//
-//        present(alert, animated: true)
-//    }
-//
-//    func checkForCLAuthorizationStatus() {
-//
-//        let authorizationStatus: CLAuthorizationStatus
-//
-//        // 앱의 권한 상태 가져오는 코드 (iOS 버전에 따라 분기처리)
-//        if #available(iOS 14.0, *) {
-//            authorizationStatus = locationManager.authorizationStatus
-//        }else {
-//            authorizationStatus = CLLocationManager.authorizationStatus()
-//        }
-//
-//        if authorizationStatus == .authorizedWhenInUse  {
-//            setCurrentPosition()
-//        } else {
-//            showRequestLocationServiceAlert()
-//        }
-//    }
+    //    func checkUserDeviceLocationServiceAuthorization() {
+    //
+    //        let authorizationStatus: CLAuthorizationStatus
+    //
+    //        // 앱의 권한 상태 가져오는 코드 (iOS 버전에 따라 분기처리)
+    //        if #available(iOS 14.0, *) {
+    //            authorizationStatus = locationManager.authorizationStatus
+    //        }else {
+    //            authorizationStatus = CLLocationManager.authorizationStatus()
+    //        }
+    //
+    //        checkUserCurrentLocationAuthorization(authorizationStatus)
+    //    }
+    //
+    //    func checkUserCurrentLocationAuthorization(_ status: CLAuthorizationStatus) {
+    //
+    //        switch status {
+    //        case .notDetermined:
+    //            // 사용자가 권한에 대한 설정을 선택하지 않은 상태
+    //
+    //            // 권한 요청을 보내기 전에 desiredAccuracy 설정 필요
+    //            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+    //
+    //            // 권한 요청을 보낸다.
+    //            locationManager.requestWhenInUseAuthorization()
+    //
+    //        case .denied, .restricted:
+    //            // 사용자가 명시적으로 권한을 거부했거나, 위치 서비스 활성화가 제한된 상태
+    //            // 시스템 설정에서 설정값을 변경하도록 유도한다.
+    //            // 시스템 설정으로 유도하는 커스텀 얼럿
+    //            showRequestLocationServiceAlert()
+    //
+    //        case .authorizedWhenInUse:
+    //            // 앱을 사용중일 때, 위치 서비스를 이용할 수 있는 상태
+    //            // manager 인스턴스를 사용하여 사용자의 위치를 가져온다.
+    //            break
+    //        default:
+    //            print("Default")
+    //        }
+    //    }
+    //
+    //
+    //    func showInfoAlert() {
+    //
+    //        let alert = UIAlertController(title: "안내", message: "기념 풍경 사진을 남겨두세요!", preferredStyle: .alert)
+    //
+    //        alert.addAction(UIAlertAction(title: "확인", style: .cancel))
+    //
+    //        present(alert, animated: true)
+    //    }
+    //
+    //    func checkForCLAuthorizationStatus() {
+    //
+    //        let authorizationStatus: CLAuthorizationStatus
+    //
+    //        // 앱의 권한 상태 가져오는 코드 (iOS 버전에 따라 분기처리)
+    //        if #available(iOS 14.0, *) {
+    //            authorizationStatus = locationManager.authorizationStatus
+    //        }else {
+    //            authorizationStatus = CLLocationManager.authorizationStatus()
+    //        }
+    //
+    //        if authorizationStatus == .authorizedWhenInUse  {
+    //            setCurrentPosition()
+    //        } else {
+    //            showRequestLocationServiceAlert()
+    //        }
+    //    }
     
     func setCurrentPosition() {
         
@@ -281,10 +312,10 @@ extension RunViewController {
         
         let region = MKCoordinateRegion(center: startPoint, span: MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005))
         mapView.setRegion(region, animated: true)
-
+        
         setAnnotation(startPoint)
         
-//        showInfoAlert()
+        //        showInfoAlert()
     }
     
     private func setAnnotation(_ coordinate: CLLocationCoordinate2D) {
@@ -308,11 +339,11 @@ extension RunViewController {
             runViewModel.coordinators = coordinators
             runViewModel.size = mapView.frame.size
             destinationCoordinate.accept(previousCoordinate)
-//            runViewModel.coordinators?.append(testStartPoint2)
-//            runViewModel.coordinators?.append(testDesPoint2)
+            //            runViewModel.coordinators?.append(testStartPoint2)
+            //            runViewModel.coordinators?.append(testDesPoint2)
         }
         
-//        locationManager.stopUpdatingLocation()
+        //        locationManager.stopUpdatingLocation()
         
         // 저장 여부 결정
         

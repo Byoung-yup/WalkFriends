@@ -10,9 +10,10 @@ import CoreLocation
 import RxSwift
 import RxCocoa
 import MapKit
+import RxCoreLocation
 
-protocol RunViewModelActionDelegate {
-    func dismiss(with saved: Bool, snapshot: UIImage?, address: String)
+struct RunViewModelActions {
+    let toBack: () -> Void
 }
 
 final class RunViewModel: ViewModel {
@@ -20,43 +21,76 @@ final class RunViewModel: ViewModel {
     // MARK: - Input
     
     struct Input {
-        let run: Driver<Void>
-        let stop: Driver<Void>
-        let startCoordinate: Observable<CLLocationCoordinate2D>
-        let destinationCoordinate: Observable<CLLocationCoordinate2D>
-        let saved: Observable<Bool>
+//        let run: Driver<Void>
+//        let stop: Driver<Void>
+//        let startCoordinate: Observable<CLLocationCoordinate2D>
+//        let destinationCoordinate: Observable<CLLocationCoordinate2D>
+//        let saved: Observable<Bool>
     }
     
     // MARK: - Output
     
     struct Output {
-        let runTrigger: Driver<Void>
-        let stopTrigger: Driver<Void>
-        let dismissTrigger: Observable<Void?>
+        let didChangeAuthorization: ControlEvent<CLAuthorizationEvent>
+        let didUpdateLocations: Observable<CLLocationsEvent>
+        let location: Observable<CLLocationCoordinate2D?>
+//        let currentLocation:
+//        let runTrigger: Driver<Void>
+//        let stopTrigger: Driver<Void>
+//        let dismissTrigger: Observable<Void?>
     }
     
     // MARK: - Properties
     
+    let actions: RunViewModelActions
     var coordinators: [CLLocationCoordinate2D]?
-    var actionDelegate: RunViewModelActionDelegate?
+//    var actionDelegate: RunViewModelActionDelegate?
     var size: CGSize = CGSize(width: 0, height: 0)
+    
+    lazy var locationManager: CLLocationManager = {
+        let manager = CLLocationManager()
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        return manager
+    }()
+    
+    // MARK: - Init
+    init(actions: RunViewModelActions) {
+        self.actions = actions
+    }
     
     // MARK: - Transform
     
     func transform(input: Input) -> Output {
         
-        let center = Observable.combineLatest(input.startCoordinate, input.destinationCoordinate)
-            .map { [weak self] in
-                self?.centerPoint(start: $0, des: $1)
-            }
+        locationManager.requestWhenInUseAuthorization()
         
-        let dismiss = Observable.combineLatest(input.saved, center) { [weak self] in
-            self?.takeSnapshot(with: $0, coordinate: $1!)
-        }
+        let autorizationStatus = locationManager
+            .rx
+            .didChangeAuthorization
+        
+        let didUpdateLocations = locationManager
+            .rx
+            .didUpdateLocations
+            .share(replay: 1)
+        
+        let location = didUpdateLocations
+            .map { $1.first?.coordinate }
+        
+//        let currentLocation = didUpdateLocations
+//            .map { $0 }
+        
+//        let center = Observable.combineLatest(input.startCoordinate, input.destinationCoordinate)
+//            .map { [weak self] in
+//                self?.centerPoint(start: $0, des: $1)
+//            }
+//
+//        let dismiss = Observable.combineLatest(input.saved, center) { [weak self] in
+//            self?.takeSnapshot(with: $0, coordinate: $1!)
+//        }
         
         
         
-        return Output(runTrigger: input.run, stopTrigger: input.stop, dismissTrigger: dismiss)
+        return Output(didChangeAuthorization: autorizationStatus, didUpdateLocations: didUpdateLocations, location: location)
     }
     
     // MARK: - Center Coordinate2D
@@ -76,7 +110,7 @@ final class RunViewModel: ViewModel {
     func takeSnapshot(with saved: Bool, coordinate: CLLocationCoordinate2D) {
         
         guard saved == true else {
-            actionDelegate?.dismiss(with: saved, snapshot: nil, address: "")
+//            actionDelegate?.dismiss(with: saved, snapshot: nil, address: "")
             return
         }
         
@@ -164,7 +198,7 @@ final class RunViewModel: ViewModel {
             
             guard let placemarks = placemark, let placemarkInfo = placemarks.last else { return }
             
-            self?.actionDelegate?.dismiss(with: saved, snapshot: image, address: placemarkInfo.address!)
+//            self?.actionDelegate?.dismiss(with: saved, snapshot: image, address: placemarkInfo.address!)
             return
         }
     }

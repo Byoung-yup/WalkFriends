@@ -325,7 +325,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 
                 guard let strongSelf = self else { return }
                 
-                strongSelf.checkUserDeviceLocationServiceAuthorization()
+                strongSelf.homeViewModel.actions.showRunViewController()
                 
             }).disposed(by: disposeBag)
         
@@ -402,52 +402,52 @@ extension HomeViewController: UITableViewDelegate {
     }
 }
 
-extension HomeViewController {
-    
-    func checkUserDeviceLocationServiceAuthorization() {
-        
-        let authorizationStatus: CLAuthorizationStatus
-        
-        // 앱의 권한 상태 가져오는 코드 (iOS 버전에 따라 분기처리)
-        if #available(iOS 14.0, *) {
-            authorizationStatus = locationManager.authorizationStatus
-        }else {
-            authorizationStatus = CLLocationManager.authorizationStatus()
-        }
-        
-        checkUserCurrentLocationAuthorization(authorizationStatus)
-    }
-    
-    func checkUserCurrentLocationAuthorization(_ status: CLAuthorizationStatus) {
-        
-        switch status {
-        case .notDetermined:
-            // 사용자가 권한에 대한 설정을 선택하지 않은 상태
-            
-            // 권한 요청을 보내기 전에 desiredAccuracy 설정 필요
-//            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            
-            // 권한 요청을 보낸다.
-            locationManager.requestWhenInUseAuthorization()
-            
-        case .denied, .restricted:
-            // 사용자가 명시적으로 권한을 거부했거나, 위치 서비스 활성화가 제한된 상태
-            // 시스템 설정에서 설정값을 변경하도록 유도한다.
-            // 시스템 설정으로 유도하는 커스텀 얼럿
-            
-            DispatchQueue.main.async { [weak self] in
-                
-                self?.showRequestLocationServiceAlert()
-            }
-            
-        case .authorizedWhenInUse:
-            break
-            // 앱을 사용중일 때, 위치 서비스를 이용할 수 있는 상태
-            // manager 인스턴스를 사용하여 사용자의 위치를 가져온다.
-//            homeViewModel.actionDelegate?.run(locationManager: self.locationManager)
-            
-        default:
-            print("Default")
-        }
-    }
-}
+//extension HomeViewController {
+//
+//    func checkUserDeviceLocationServiceAuthorization() {
+//
+//        let authorizationStatus: CLAuthorizationStatus
+//
+//        // 앱의 권한 상태 가져오는 코드 (iOS 버전에 따라 분기처리)
+//        if #available(iOS 14.0, *) {
+//            authorizationStatus = locationManager.authorizationStatus
+//        }else {
+//            authorizationStatus = CLLocationManager.authorizationStatus()
+//        }
+//
+//        checkUserCurrentLocationAuthorization(authorizationStatus)
+//    }
+//
+//    func checkUserCurrentLocationAuthorization(_ status: CLAuthorizationStatus) {
+//
+//        switch status {
+//        case .notDetermined:
+//            // 사용자가 권한에 대한 설정을 선택하지 않은 상태
+//
+//            // 권한 요청을 보내기 전에 desiredAccuracy 설정 필요
+////            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//
+//            // 권한 요청을 보낸다.
+//            locationManager.requestWhenInUseAuthorization()
+//
+//        case .denied, .restricted:
+//            // 사용자가 명시적으로 권한을 거부했거나, 위치 서비스 활성화가 제한된 상태
+//            // 시스템 설정에서 설정값을 변경하도록 유도한다.
+//            // 시스템 설정으로 유도하는 커스텀 얼럿
+//
+//            DispatchQueue.main.async { [weak self] in
+//
+//                self?.showRequestLocationServiceAlert()
+//            }
+//
+//        case .authorizedWhenInUse:
+//            break
+//            // 앱을 사용중일 때, 위치 서비스를 이용할 수 있는 상태
+//            // manager 인스턴스를 사용하여 사용자의 위치를 가져온다.
+////            homeViewModel.actionDelegate?.run(locationManager: self.locationManager)
+//
+//        default:
+//            print("Default")
+//        }
+//    }
+//}
