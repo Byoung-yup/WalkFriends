@@ -8,8 +8,9 @@
 import Foundation
 import UIKit
 
-protocol ShareInfoCoordinatorDelegate {
+protocol ShareInfoCoordinatorDepedencies {
     func dismiss(_ coordinator: ShareInfoCoordinator)
+    func makeShareViewController(actions: ShareInfoViewModelActions, mapInfo: MapInfo) -> ShareInfoViewController
 }
 
 final class ShareInfoCoordinator: NSObject, Coordinator {
@@ -17,45 +18,27 @@ final class ShareInfoCoordinator: NSObject, Coordinator {
     var childCoordinators: [NSObject] = []
     
     private let navigationController: UINavigationController
-    var delegate: ShareInfoCoordinatorDelegate?
+    private let dependencies: ShareInfoCoordinatorDepedencies
     
-    let snapshot: UIImage
-    let address: String
+    private let mapInfo: MapInfo
     
-    init(navigationController: UINavigationController, snapshot: UIImage, address: String) {
+    init(navigationController: UINavigationController, dependenceis: ShareInfoCoordinatorDepedencies, mapInfo: MapInfo) {
         self.navigationController = navigationController
-        self.snapshot = snapshot
-        self.address = address
+        self.dependencies = dependenceis
+        self.mapInfo = mapInfo
     }
     
     func start() {
-        let vc = ShareInfoViewController(viewModel: makeShareInfoViewModel(), snapshot: snapshot, addressInfo: address)
-        navigationController.navigationBar.isHidden = true
-        navigationController.pushViewController(vc, animated: true)
-    }
-
-    // MARK: - ShareInfoViewController
-    
-    private func makeShareInfoViewModel() -> ShareInfoViewModel {
-        let viewModel = ShareInfoViewModel(dataUseCase: makeDataUseCase())
-        viewModel.actionDelegate = self
-        return viewModel
-    }
-    
-    // MARK: - Use Cases
-    
-    func makeDataUseCase() -> DataUseCase {
-        return DefaultDataUseCase(dataBaseRepository: DatabaseManager(), storageRepository: StorageManager())
-    }
-}
-
-extension ShareInfoCoordinator: ShareInfoViewModelActionDelegate {
-    
-    func dismiss() {
-        navigationController.popViewController(animated: true)
-        navigationController.navigationBar.isHidden = false
-        delegate?.dismiss(self)
+        let actions = ShareInfoViewModelActions(toBack: toBack)
+        let vc = dependencies.makeShareViewController(actions: actions, mapInfo: mapInfo)
         
+        navigationController.pushViewController(vc, animated: true)
+        navigationController.navigationBar.isHidden = true
+    }
+    
+    private func toBack() {
+        navigationController.popViewController(animated: true)
+        dependencies.dismiss(self)
     }
 }
 

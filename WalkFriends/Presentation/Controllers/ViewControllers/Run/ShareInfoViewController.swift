@@ -30,9 +30,20 @@ class ShareInfoViewController: UIViewController {
         return imgView
     }()
     
-    lazy var bottomView: UIView = {
+    lazy var toBack_Btn: UIButton = {
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .medium)
+        let systemImage = UIImage(systemName: "chevron.backward", withConfiguration: symbolConfig)
+        let btn = UIButton(type: .system)
+        btn.setImage(systemImage, for: .normal)
+        btn.tintColor = .black
+        btn.backgroundColor = .white
+        return btn
+    }()
+    
+    lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
+        view.layer.cornerRadius = 15
         return view
     }()
     
@@ -54,9 +65,6 @@ class ShareInfoViewController: UIViewController {
     // MARK: - Properties
     
     let shareInfoViewModel: ShareInfoViewModel
-    
-    let snapshotImage: UIImage
-    let address: String
     
     let disposeBag = DisposeBag()
     
@@ -81,12 +89,16 @@ class ShareInfoViewController: UIViewController {
         binding()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        toBack_Btn.layer.cornerRadius = toBack_Btn.frame.width / 2
+    }
+    
     // MARK: - Initiallize
     
-    init(viewModel: ShareInfoViewModel, snapshot: UIImage, addressInfo: String) {
+    init(viewModel: ShareInfoViewModel) {
         shareInfoViewModel = viewModel
-        snapshotImage = snapshot
-        address = addressInfo
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -94,19 +106,15 @@ class ShareInfoViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - viewDidLayoutSubviews
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        bottomView.layer.cornerRadius = 30
+    deinit {
+        print("\(self.description) - deinit")
     }
     
     // MARK: - Configure UI
     
     private func configureUI() {
         
-        imageView.image = snapshotImage
+//        imageView.image = snapshotImage
         
         
 //        scrollView.zoomScale = 1.0
@@ -124,18 +132,30 @@ class ShareInfoViewController: UIViewController {
             make.edges.equalToSuperview()
         }
         
-        imageView.addSubview(bottomView)
-        bottomView.snp.makeConstraints { make in
+        imageView.addSubview(containerView)
+        containerView.snp.makeConstraints { make in
             make.left.equalTo(imageView.safeAreaLayoutGuide.snp.left)
             make.right.equalTo(imageView.safeAreaLayoutGuide.snp.right)
             make.bottom.equalToSuperview()
-            make.height.equalTo(80)
+            make.height.equalTo(imageView.snp.height).dividedBy(1.5)
         }
         
-        bottomView.addSubview(addPhotoBtn)
-        addPhotoBtn.snp.makeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
+        containerView.addSubview(shareInfoView)
+        shareInfoView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
+        
+        imageView.addSubview(toBack_Btn)
+        toBack_Btn.snp.makeConstraints { make in
+            make.left.equalTo(imageView.safeAreaLayoutGuide.snp.left).offset(21)
+            make.top.equalTo(imageView.safeAreaLayoutGuide.snp.top).offset(21)
+            make.width.height.equalTo(40)
+        }
+//
+//        bottomView.addSubview(addPhotoBtn)
+//        addPhotoBtn.snp.makeConstraints { make in
+//            make.centerX.centerY.equalToSuperview()
+//        }
     }
     
     // MARK: - Binding
@@ -147,40 +167,50 @@ class ShareInfoViewController: UIViewController {
                                              titleText: shareInfoView.titleTextField.rx.text.orEmpty.asObservable(),
                                              memoText: shareInfoView.memoTextField.rx.text.orEmpty.asObservable(),
                                              submit: shareInfoView.submitBtn.rx.tap.asObservable(),
-                                             cancel: shareInfoView.cancelBtn.rx.tap.asObservable())
+                                             toBack: toBack_Btn.rx.tap.asObservable())
         let output = shareInfoViewModel.transform(input: input)
         
-        addPhotoBtn.rx.tap
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
-                self?.updateUI()
-            }).disposed(by: disposeBag)
+        DispatchQueue.main.async { [weak self] in
+            self?.imageView.image = output.mapInfo.image
+            self?.shareInfoView.addressView.text = output.mapInfo.address
+        }
         
-        shareInfoView.addPhotoBtnView.rx.tap
+        output.dismiss
+            .subscribe()
+            .disposed(by: disposeBag)
+        
+//        addPhotoBtn.rx.tap
 //            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] in
-                self?.presentImagePicker()
-            }).disposed(by: disposeBag)
+//            .subscribe(onNext: { [weak self] in
+//                self?.updateUI()
+//            }).disposed(by: disposeBag)
+//
+//        shareInfoView.addPhotoBtnView.rx.tap
+////            .observe(on: MainScheduler.instance)
+//            .subscribe(onNext: { [weak self] in
+//                self?.presentImagePicker()
+//            }).disposed(by: disposeBag)
+//
+//        userSelectedImages.bind(to: shareInfoView.photoCollectionView.rx.items(cellIdentifier: PhotoListCell.identifier, cellType: PhotoListCell.self)) { row ,element , cell in
+//            cell.imageView.image = element
+//        }.disposed(by: disposeBag)
         
-        userSelectedImages.bind(to: shareInfoView.photoCollectionView.rx.items(cellIdentifier: PhotoListCell.identifier, cellType: PhotoListCell.self)) { row ,element , cell in
-            cell.imageView.image = element
-        }.disposed(by: disposeBag)
-        
-        output.save
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] result in
-                print("Result: \(result)")
-                guard let strongSelf = self else { return }
-                
-                switch result {
-                case .success(_):
-                    strongSelf.shareInfoViewModel.actionDelegate?.dismiss()
-                case .failure(let err):
-                    strongSelf.showAlert(error: err)
-                    strongSelf.shareInfoViewModel.actionDelegate?.dismiss()
-                }
-                
-            }).disposed(by: disposeBag)
+//        output.save
+//            .observe(on: MainScheduler.instance)
+//            .subscribe(onNext: { [weak self] result in
+//                print("Result: \(result)")
+//                guard let strongSelf = self else { return }
+//
+//                switch result {
+//                case .success(_):
+//                    break
+////                    strongSelf.shareInfoViewModel.actionDelegate?.dismiss()
+//                case .failure(let err):
+//                    strongSelf.showAlert(error: err)
+////                    strongSelf.shareInfoViewModel.actionDelegate?.dismiss()
+//                }
+//
+//            }).disposed(by: disposeBag)
 //
 //        output.dismiss
 //            .drive()
@@ -190,25 +220,25 @@ class ShareInfoViewController: UIViewController {
     private func updateUI() {
         
         addPhotoBtn.isHidden = true
-        shareInfoView.addressView.text = address
+//        shareInfoView.addressView.text = address
+//
+//        mapImageRelay.accept([snapshotImage])
+//        addressRelay.accept(address)
         
-        mapImageRelay.accept([snapshotImage])
-        addressRelay.accept(address)
-        
-        bottomView.snp.remakeConstraints { make in
-            make.top.equalTo(imageView.safeAreaLayoutGuide.snp.top).offset(60)
-            make.left.equalTo(imageView.safeAreaLayoutGuide.snp.left)
-            make.right.equalTo(imageView.safeAreaLayoutGuide.snp.right)
-            make.bottom.equalToSuperview()
-        }
-        
-        bottomView.addSubview(shareInfoView)
-        shareInfoView.snp.makeConstraints { make in
-            make.top.equalTo(bottomView.safeAreaLayoutGuide.snp.top)
-            make.left.equalTo(bottomView.safeAreaLayoutGuide.snp.left)
-            make.right.equalTo(bottomView.safeAreaLayoutGuide.snp.right)
-            make.bottom.equalTo(bottomView.safeAreaLayoutGuide.snp.bottom)
-        }
+//        bottomView.snp.remakeConstraints { make in
+//            make.top.equalTo(imageView.safeAreaLayoutGuide.snp.top).offset(60)
+//            make.left.equalTo(imageView.safeAreaLayoutGuide.snp.left)
+//            make.right.equalTo(imageView.safeAreaLayoutGuide.snp.right)
+//            make.bottom.equalToSuperview()
+//        }
+//        
+//        bottomView.addSubview(shareInfoView)
+//        shareInfoView.snp.makeConstraints { make in
+//            make.top.equalTo(bottomView.safeAreaLayoutGuide.snp.top)
+//            make.left.equalTo(bottomView.safeAreaLayoutGuide.snp.left)
+//            make.right.equalTo(bottomView.safeAreaLayoutGuide.snp.right)
+//            make.bottom.equalTo(bottomView.safeAreaLayoutGuide.snp.bottom)
+//        }
     }
 }
 

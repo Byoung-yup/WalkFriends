@@ -10,9 +10,18 @@ import CoreLocation
 
 extension CLPlacemark {
 
-    var address: String? {
-        if let name = administrativeArea {
-            var result = name
+    var address: String {
+        var result = ""
+        if let administrativeArea = administrativeArea {
+            result += "\(administrativeArea)"
+            
+//            if let name = name {
+//                result += " name\(name)"
+//            }
+            
+//            if let subAdministrativeArea = subAdministrativeArea {
+//                result += " subAdministrativeArea\(subAdministrativeArea)"
+//            }
 
             if let locality = locality {
                 result += " \(locality)"
@@ -22,14 +31,39 @@ extension CLPlacemark {
                 result += " \(subLocality)"
             }
             
+//            if let country = country {
+//                result += " country\(country)"
+//            }
+            
             if let thoroughfare = thoroughfare {
                 result += " \(thoroughfare)"
             }
-
-            return result
+            
+//            if let subThoroughfare = subThoroughfare {
+//                result += " subThoroughfare\(subThoroughfare)"
+//            }
+            
+//            if let inlandWater = inlandWater {
+//                result += " inlandWater\(inlandWater)"
+//            }
+//
+//            if let areasOfInterest = areasOfInterest {
+//                result += " areasOfInterest\(areasOfInterest)"
+//            }
+//
+//            if let postalCode = postalCode {
+//                result += " postalCode\(postalCode)"
+//            }
+//
+//            if let isoCountryCode = isoCountryCode {
+//                result += " isoCountryCode\(isoCountryCode)"
+//            }
+//
+//            if let ocean = ocean {
+//                result += " ocean\(ocean)"
+//            }
         }
-
-        return nil
+        return result
     }
 
 }

@@ -66,6 +66,15 @@ final class AppSceneDIContainer {
         return RunViewModel(actions: actions)
     }
     
+    // MARK: - Share View
+    func makeShareViewController(actions: ShareInfoViewModelActions, mapInfo: MapInfo) -> ShareInfoViewController {
+        return ShareInfoViewController(viewModel: makeShareViewModel(actions: actions, mapInfo: mapInfo))
+    }
+    
+    func makeShareViewModel(actions: ShareInfoViewModelActions, mapInfo: MapInfo) -> ShareInfoViewModel {
+        return ShareInfoViewModel(dataUseCase: makeDefaultUseCase(), actions: actions, mapInfo: mapInfo)
+    }
+    
     // MARK: - Info View
     func makeInfoViewController(actions: InfoViewModelActions) -> InfoViewController {
         return InfoViewController(infoViewModel: makeInfoViewModel(actions: actions))
@@ -98,6 +107,11 @@ final class AppSceneDIContainer {
     // MARK: - Run Coordinator
     func makeRunCoordinator(navigationController: UINavigationController, dependencies: RunCoordinatorDependencies) -> RunCoordinator {
         return RunCoordinator(navigationController: navigationController, dependencies: dependencies)
+    }
+    
+    // MARK: - Share Coordinator
+    func makeShareCoordinator(navigationController: UINavigationController, dependencies: ShareInfoCoordinatorDepedencies, mapInfo: MapInfo) -> ShareInfoCoordinator {
+        return ShareInfoCoordinator(navigationController: navigationController, dependenceis: dependencies, mapInfo: mapInfo)
     }
     
     // MARK: - Info Coordinator

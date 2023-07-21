@@ -14,12 +14,14 @@ protocol HomeCoordinatorDepedencies {
     func makeSetupProfileCoordinator(navigationController: UINavigationController, dependencies: SetupProfileCoordinatorDependencies) -> SetupProfileCoordinator
     func makeInfoCoordinator(navigationController: UINavigationController, dependencies: InfoCoordinatorDependencies) -> InfoCoordinator
     func makeRunCoordinator(navigationController: UINavigationController, dependencies: RunCoordinatorDependencies) -> RunCoordinator
+    func makeShareCoordinator(navigationController: UINavigationController, dependencies: ShareInfoCoordinatorDepedencies, mapInfo: MapInfo) -> ShareInfoCoordinator
     
     // MARK: viewController
     func makeHomeViewController(actions: HomeViewModelActions) -> HomeViewController
     func makeInfoViewController(actions: InfoViewModelActions) -> InfoViewController
     func makeSetupProfileViewController(actions: SetupViewModelActions) -> SetupProfileViewController
     func makeRunViewController(actions: RunViewModelActions) -> RunViewController
+    func makeShareViewController(actions: ShareInfoViewModelActions, mapInfo: MapInfo) -> ShareInfoViewController
     
     // MARK: dismiss
     func dismissHomeViewController(_ coordinator: HomeCoordinator)
@@ -73,6 +75,13 @@ final class HomeCoordinator: NSObject, Coordinator {
         
         childCoordinators.append(runCoordinator)
     }
+    
+    private func showShareViewController(mapInfo: MapInfo) {
+        let shareCoordinator = dependencies.makeShareCoordinator(navigationController: navigationController, dependencies: self, mapInfo: mapInfo)
+        shareCoordinator.start()
+        
+        childCoordinators.append(shareCoordinator)
+    }
 }
 
 extension HomeCoordinator: InfoCoordinatorDependencies {
@@ -101,8 +110,23 @@ extension HomeCoordinator: RunCoordinatorDependencies {
         return dependencies.makeRunViewController(actions: actions)
     }
     
-    func dismiss(_ coordinator: RunCoordinator) {
+    func dismiss(_ coordinator: RunCoordinator, _ mapInfo: MapInfo?) {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
+        
+        if let mapInfo = mapInfo {
+            showShareViewController(mapInfo: mapInfo)
+        }
+    }
+}
+
+extension HomeCoordinator: ShareInfoCoordinatorDepedencies {
+    func makeShareViewController(actions: ShareInfoViewModelActions, mapInfo: MapInfo) -> ShareInfoViewController {
+        return dependencies.makeShareViewController(actions: actions, mapInfo: mapInfo)
+    }
+    
+    func dismiss(_ coordinator: ShareInfoCoordinator) {
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+        navigationController.navigationBar.isHidden = true
     }
 }
 

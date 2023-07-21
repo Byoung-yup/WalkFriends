@@ -11,7 +11,7 @@ import CoreLocation
 
 protocol RunCoordinatorDependencies {
     func makeRunViewController(actions: RunViewModelActions) -> RunViewController
-    func dismiss(_ coordinator: RunCoordinator)
+    func dismiss(_ coordinator: RunCoordinator, _ mapInfo: MapInfo?)
 }
 
 final class RunCoordinator: NSObject, Coordinator {
@@ -27,16 +27,22 @@ final class RunCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let actions = RunViewModelActions(toBack: toBack)
+        let actions = RunViewModelActions(toBack: toBack,
+                                          showShareViewController: showShareViewController)
         let vc = dependencies.makeRunViewController(actions: actions)
         
         navigationController.pushViewController(vc, animated: true)
-        navigationController.navigationBar.isHidden = false
+//        navigationController.navigationBar.isHidden = false
     }
     
     private func toBack() {
         navigationController.popViewController(animated: true)
-        dependencies.dismiss(self)
+        dependencies.dismiss(self, nil)
+    }
+    
+    private func showShareViewController(mapInfo: MapInfo) {
+        navigationController.popViewController(animated: true)
+        dependencies.dismiss(self, mapInfo)
     }
     
 }
@@ -60,11 +66,11 @@ final class RunCoordinator: NSObject, Coordinator {
 //    }
 //}
 
-extension RunCoordinator: ShareInfoCoordinatorDelegate {
-    
-    func dismiss(_ coordinator: ShareInfoCoordinator) {
-        
-        childCoordinators = childCoordinators.filter { $0 !== coordinator }
-//        delegate?.dismiss(self)
-    }
-}
+//extension RunCoordinator: ShareInfoCoordinatorDelegate {
+//
+//    func dismiss(_ coordinator: ShareInfoCoordinator) {
+//
+//        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+////        delegate?.dismiss(self)
+//    }
+//}
