@@ -50,6 +50,9 @@ class ShareInfoViewController: UIViewController {
     lazy var shareInfoView: ShareInfoView = {
         let view = ShareInfoView()
         view.backgroundColor = .white
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        view.layer.cornerRadius = 15
+        view.layer.masksToBounds = true
         return view
     }()
     
@@ -87,6 +90,10 @@ class ShareInfoViewController: UIViewController {
         view.backgroundColor = .white
         configureUI()
         binding()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     override func viewDidLayoutSubviews() {
@@ -162,17 +169,12 @@ class ShareInfoViewController: UIViewController {
     
     private func binding() {
         
-        let input = ShareInfoViewModel.Input(addressText: addressRelay.asObservable(),
-                                             selectedImages: mapImageRelay.asObservable(),
-                                             titleText: shareInfoView.titleTextField.rx.text.orEmpty.asObservable(),
-                                             memoText: shareInfoView.memoTextField.rx.text.orEmpty.asObservable(),
-                                             submit: shareInfoView.submitBtn.rx.tap.asObservable(),
-                                             toBack: toBack_Btn.rx.tap.asObservable())
+        let input = ShareInfoViewModel.Input(toBack: toBack_Btn.rx.tap.asObservable())
         let output = shareInfoViewModel.transform(input: input)
         
         DispatchQueue.main.async { [weak self] in
             self?.imageView.image = output.mapInfo.image
-            self?.shareInfoView.addressView.text = output.mapInfo.address
+            self?.shareInfoView.titleTextField.placeholder = output.mapInfo.address
         }
         
         output.dismiss
@@ -185,15 +187,15 @@ class ShareInfoViewController: UIViewController {
 //                self?.updateUI()
 //            }).disposed(by: disposeBag)
 //
-//        shareInfoView.addPhotoBtnView.rx.tap
-////            .observe(on: MainScheduler.instance)
-//            .subscribe(onNext: { [weak self] in
-//                self?.presentImagePicker()
-//            }).disposed(by: disposeBag)
-//
-//        userSelectedImages.bind(to: shareInfoView.photoCollectionView.rx.items(cellIdentifier: PhotoListCell.identifier, cellType: PhotoListCell.self)) { row ,element , cell in
-//            cell.imageView.image = element
-//        }.disposed(by: disposeBag)
+        shareInfoView.addPhotoBtnView.rx.tap
+//            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] in
+                self?.presentImagePicker()
+            }).disposed(by: disposeBag)
+
+        userSelectedImages.bind(to: shareInfoView.photoCollectionView.rx.items(cellIdentifier: PhotoListCell.identifier, cellType: PhotoListCell.self)) { row ,element , cell in
+            cell.imageView.image = element
+        }.disposed(by: disposeBag)
         
 //        output.save
 //            .observe(on: MainScheduler.instance)
@@ -256,7 +258,7 @@ extension ShareInfoViewController {
     
     private func presentImagePicker() {
         
-        var imagePicker = ImagePickerController()
+        let imagePicker = ImagePickerController()
     
         configureImagePicker(imagePicker, selection: 3)
         
@@ -297,7 +299,7 @@ extension ShareInfoViewController {
                 
                 var thumbnail = UIImage()
                 
-                imageManager.requestImage(for: AssetImages[i], targetSize: CGSize(width: 200, height: 100), contentMode: .aspectFit, options: option) {
+                imageManager.requestImage(for: AssetImages[i], targetSize: CGSize(width: 100, height: 200), contentMode: .aspectFit, options: option) {
                     (result, info) in
                     thumbnail = result!
                 }

@@ -16,7 +16,9 @@ class PhotoListCell: UICollectionViewCell {
     
     lazy var imageView: UIImageView = {
        let view = UIImageView()
-        view.contentMode = .scaleAspectFill
+        view.contentMode = .scaleToFill
+        view.layer.cornerRadius = 15
+        view.layer.masksToBounds = true
         return view
     }()
     
@@ -34,7 +36,7 @@ class PhotoListCell: UICollectionViewCell {
     
     private func configureUI() {
         
-        addSubview(imageView)
+        contentView.addSubview(imageView)
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

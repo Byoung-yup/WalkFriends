@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 import RxCocoa
 import RxSwift
+import BSImagePicker
 
 struct ShareInfoViewModelActions {
     let toBack: () -> Void
@@ -19,11 +20,11 @@ final class ShareInfoViewModel: ViewModel {
     // MARK: - Input
     
     struct Input {
-        let addressText: Observable<String>
-        let selectedImages: Observable<[UIImage]>
-        let titleText: Observable<String>
-        let memoText: Observable<String>
-        let submit: Observable<Void>
+//        let addressText: Observable<String>
+//        let selectedImages: Observable<[UIImage]>
+//        let titleText: Observable<String>
+//        let memoText: Observable<String>
+//        let submit: Observable<Void>
         let toBack: Observable<Void>
     }
     

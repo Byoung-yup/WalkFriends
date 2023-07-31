@@ -126,7 +126,7 @@ extension HomeCoordinator: ShareInfoCoordinatorDepedencies {
     
     func dismiss(_ coordinator: ShareInfoCoordinator) {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
-        navigationController.navigationBar.isHidden = true
+        navigationController.navigationBar.isHidden = false
     }
 }
 

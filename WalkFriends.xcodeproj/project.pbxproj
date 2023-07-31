@@ -17,6 +17,7 @@
 		B031A1BF2991F73800C51B5A /* Letters for Learners.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */; };
 		B03310242A0E61020081528D /* EmailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03310232A0E61020081528D /* EmailCoordinator.swift */; };
 		B034D94C29E1568700B90AB2 /* RegisterCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B034D94B29E1568700B90AB2 /* RegisterCoordinator.swift */; };
+		B03AFD942A778D7600B6DEF8 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03AFD932A778D7600B6DEF8 /* Line.swift */; };
 		B03C84252A4EC5B100DE2F0A /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03C84242A4EC5B100DE2F0A /* UIColor.swift */; };
 		B03D99772A52BF45007C0C13 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03D99762A52BF45007C0C13 /* LaunchViewController.swift */; };
 		B03D997B2A52C202007C0C13 /* LaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03D997A2A52C202007C0C13 /* LaunchCoordinator.swift */; };
@@ -105,6 +106,7 @@
 		B031A1BE2991F73800C51B5A /* Letters for Learners.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Letters for Learners.ttf"; sourceTree = "<group>"; };
 		B03310232A0E61020081528D /* EmailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailCoordinator.swift; sourceTree = "<group>"; };
 		B034D94B29E1568700B90AB2 /* RegisterCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCoordinator.swift; sourceTree = "<group>"; };
+		B03AFD932A778D7600B6DEF8 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		B03C84242A4EC5B100DE2F0A /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		B03D99762A52BF45007C0C13 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		B03D997A2A52C202007C0C13 /* LaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinator.swift; sourceTree = "<group>"; };
@@ -625,6 +627,7 @@
 			children = (
 				B09DC7B029910D93008558EA /* CustomTextField.swift */,
 				B0638BA0299FCFBA001776F5 /* CustomLabelView.swift */,
+				B03AFD932A778D7600B6DEF8 /* Line.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -867,6 +870,7 @@
 				B090808C29DECC6400DDAEBC /* PhotoListCell.swift in Sources */,
 				B03310242A0E61020081528D /* EmailCoordinator.swift in Sources */,
 				B0C56F2D2992208C004E83B8 /* DatabaseManager.swift in Sources */,
+				B03AFD942A778D7600B6DEF8 /* Line.swift in Sources */,
 				B0638BA1299FCFBA001776F5 /* CustomLabelView.swift in Sources */,
 				B02828D729E93BA0008B22CF /* Date.swift in Sources */,
 				B076C6CD299CC1CF00EFDA7F /* HomeViewModel.swift in Sources */,
@@ -1030,6 +1034,7 @@
 				DEVELOPMENT_TEAM = J2J2A4T2U9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WalkFriends/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "프로그램을 실행하기 위해서 사용자 위치 권한이 필요합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 접근을 위해 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1065,6 +1070,7 @@
 				DEVELOPMENT_TEAM = J2J2A4T2U9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WalkFriends/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "프로그램을 실행하기 위해서 사용자 위치 권한이 필요합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 접근을 위해 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
