@@ -11,8 +11,10 @@ import UIKit
 struct UserMap {
     let address: String
     let images: [UIImage]
+//    let map_Image: UIImage
     let title: String
-    let subTitle: String
+    let memo: String
+    let time: String
     let popular: Int
 }
 
@@ -22,11 +24,12 @@ extension UserMap {
         
         return [
            "uid": uid,
-//           "email": FirebaseService.shard.currentUser.email!,
+           "email": (FirebaseService.shard.auth.currentUser?.email)!,
            "address": address,
            "title": title,
-           "subTitle": subTitle,
-           "time": Date().getCurrenTime(),
+           "memo": memo,
+           "time": time,
+           "upload_Date": Date().getCurrenTime(),
            "imageUrls": urls,
            "popular": popular
         ]

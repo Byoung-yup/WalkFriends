@@ -21,6 +21,13 @@ class LoginViewController: UIViewController {
     //    var handle: AuthStateDidChangeListenerHandle!
     
     // MARK: - UI Properties
+    
+    lazy var indicatorView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.style = .medium
+        return view
+    }()
+    
     lazy var loginLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Walk Friends"

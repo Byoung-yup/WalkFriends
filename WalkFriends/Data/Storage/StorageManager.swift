@@ -25,7 +25,7 @@ extension StorageManager {
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
         
-        let fileRef = storage.reference().child("images/\(FirebaseAuth.Auth.auth().currentUser!.uid)_profile.jpg")
+        let fileRef = storage.reference().child("images/\((FirebaseService.shard.auth.currentUser?.uid)!)_profile.jpg")
         
         
         do {
@@ -36,56 +36,56 @@ extension StorageManager {
         
     }
     
-    func uploadImageArrayData(with data: [Data], uid: String) -> Observable<[String]> {
-        
-        let metaData = StorageMetadata()
-        metaData.contentType = "image/jpg"
-        
-        var urls: [String] = []
-        
-        return Observable.create { (observer) in
-            
-            data.enumerated().forEach { [weak self] (index, item) in
-                print("enumerated")
-                
-                let fileRef = self?.storage.reference().child("Maps/\(uid)/\(index).jpg")
-                
-                fileRef?.putData(item, metadata: metaData, completion: { meta, error in
-                    
-                    guard error == nil else {
-                        observer.onError(DatabaseError.NotFoundUserError)
-                        print("Storage put data error")
-                        return
-                    }
-                    
-                    DispatchQueue.main.async {
-                        
-                        fileRef?.downloadURL(completion: { url, error in
-                            
-                            guard let url = url, error == nil else {
-                                observer.onError(DatabaseError.NotFoundUserError)
-                                print("Storage download url error")
-                                return
-                            }
-                            
-                            urls.append(url.absoluteString)
-                            
-                            if urls.count == data.count {
-                                observer.onNext(urls)
-                                observer.onCompleted()
-                            }
-                        })
-                    }
-                })
-            }
-            
-            
-            return Disposables.create()
-        }
-        
-        
-        
-    }
+//    func uploadImageArrayData(with data: [Data], uid: String) -> Observable<[String]> {
+//
+//        let metaData = StorageMetadata()
+//        metaData.contentType = "image/jpg"
+//
+//        var urls: [String] = []
+//
+//        return Observable.create { (observer) in
+//
+//            data.enumerated().forEach { [weak self] (index, item) in
+//                print("enumerated")
+//
+//                let fileRef = self?.storage.reference().child("Maps/\(uid)/\(index).jpg")
+//
+//                fileRef?.putData(item, metadata: metaData, completion: { meta, error in
+//
+//                    guard error == nil else {
+//                        observer.onError(DatabaseError.NotFoundUserError)
+//                        print("Storage put data error")
+//                        return
+//                    }
+//
+//                    DispatchQueue.main.async {
+//
+//                        fileRef?.downloadURL(completion: { url, error in
+//
+//                            guard let url = url, error == nil else {
+//                                observer.onError(DatabaseError.NotFoundUserError)
+//                                print("Storage download url error")
+//                                return
+//                            }
+//
+//                            urls.append(url.absoluteString)
+//
+//                            if urls.count == data.count {
+//                                observer.onNext(urls)
+//                                observer.onCompleted()
+//                            }
+//                        })
+//                    }
+//                })
+//            }
+//
+//
+//            return Disposables.create()
+//        }
+//
+//
+//
+//    }
     
     func uploadImageArrayData2(with data: [Data], uid: String) async throws -> [String] {
         

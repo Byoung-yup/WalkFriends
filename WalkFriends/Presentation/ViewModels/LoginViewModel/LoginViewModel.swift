@@ -50,8 +50,6 @@ final class LoginViewModel: ViewModel {
     
     func transform(input: Input) -> Output {
         
-//        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { fatalError() }
-//        guard let rootViewController = windowScene.windows.first?.rootViewController else { fatalError() }
         
         let emailEnabled = input.email
             .map { $0.isValidEmail() }

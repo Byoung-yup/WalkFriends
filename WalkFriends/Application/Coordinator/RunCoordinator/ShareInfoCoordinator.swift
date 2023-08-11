@@ -33,7 +33,6 @@ final class ShareInfoCoordinator: NSObject, Coordinator {
         let vc = dependencies.makeShareViewController(actions: actions, mapInfo: mapInfo)
         
         navigationController.pushViewController(vc, animated: true)
-        navigationController.navigationBar.isHidden = true
     }
     
     private func toBack() {

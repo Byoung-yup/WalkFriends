@@ -45,7 +45,7 @@ final class RunViewModel: ViewModel {
         let didUpdateLocations: Observable<Void>
         let locations: BehaviorRelay<[CLLocationCoordinate2D]>
         let location: Observable<CLLocation?>
-        let snapshot: Observable<Void?>
+        let snapshot: Observable<Void>
         //        let placemark: Observable<String>
         //        let currentLocation:
         //        let runTrigger: Driver<Void>
@@ -101,15 +101,22 @@ final class RunViewModel: ViewModel {
             .location
             .filter { $0 != nil }
         
-        let placemark_coordinators = locationManager
-            .rx
-            .placemark(preferredLocale: Locale(identifier: "Ko-kr"))
-            .map { $0.address }
+//        let placemark_coordinators = locationManager
+//            .rx
+//            .placemark(preferredLocale: Locale(identifier: "Ko-kr"))
+//            .map { $0.address }
         
         let stop = input.stop.withLatestFrom(coordinators) { [weak self] (_, coordinators) in
-            print("coordinators: \(coordinators)")
-            let centerPoint = self?.centerPoint(start: coordinators.first!, des: coordinators.last!)
-            return self?.takeSnapshot(center: centerPoint!, coordinators: coordinators)
+//            print("coordinators: \(coordinators)")
+            guard let self = self else { return }
+            
+            guard let first_Coordinator = coordinators.first else { return }
+            guard let last_Coordinator = coordinators.last else { return }
+            
+            self.locationManager.stopUpdatingLocation()
+            
+            let centerPoint = self.centerPoint(start: first_Coordinator, des: last_Coordinator)
+            return self.takeSnapshot(center: centerPoint, coordinators: coordinators)
         }
         //        let currentLocation = didUpdateLocations
         //            .map { $0 }
@@ -167,16 +174,17 @@ final class RunViewModel: ViewModel {
         print("Thread1: \(Thread.current)")
         snapShotter.start() { [weak self] (snapshot, error) in
             print("Thread2: \(Thread.current)")
-            guard let snapshot = snapshot else {
-                return
-            }
+            guard let self = self else { return }
             
+            guard let snapshot = snapshot else { return }
+            
+            let image = self.drawLineOnImage(snapshot: snapshot, coordinators: coordinators)
+//            print("image: \(image)")
+            self.reverseGeocoding(image: image, coordinate: coordinators.first!)
             // Don't just pass snapshot.image, pass snapshot itself!
-            let image = self?.drawLineOnImage(snapshot: snapshot, coordinators: coordinators)
-            self?.reverseGeocoding(image: image!, coordinate: coordinators.first!)
+//            return self.drawLineOnImage(snapshot: snapshot, coordinators: coordinators)
+//            self.reverseGeocoding(image: image!, coordinate: coordinators.first!)
         }
-        
-       
 //        return snapshot
         
         //        return Observable.create { (observer) in
@@ -272,9 +280,11 @@ final class RunViewModel: ViewModel {
         
         geocoder.reverseGeocodeLocation(location, preferredLocale: locale) { [weak self] placemark, error in
             
+            guard let self = self else { return }
+            
             guard let placemarks = placemark, let placemarkInfo = placemarks.last else { return }
             
-            self?.actions.showShareViewController(MapInfo(address: placemarkInfo.address, image: image))
+            self.actions.showShareViewController(MapInfo(address: placemarkInfo.address, image: image))
             return
         }
     }

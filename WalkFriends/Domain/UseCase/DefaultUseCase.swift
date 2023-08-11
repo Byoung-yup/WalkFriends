@@ -139,8 +139,10 @@ extension DefaultDataUseCase: DataUseCase {
 //    }
     
     func shareData(with userData: UserMap) -> Observable<Result<Bool, DatabaseError>> {
-        
+        print("shareData()")
         let jpegDatas = userData.images.map { $0.convertJPEGData() }
+//        let jpeg_Map_Image = userData.map_Image.convertJPEGData()
+//        jpegDatas.append(jpeg_Map_Image)
         let uid = UUID().uuidString
         
         
@@ -161,11 +163,12 @@ extension DefaultDataUseCase: DataUseCase {
                 } catch let err as DatabaseError {
                     observer.onNext(.failure(err))
                     observer.onCompleted()
+                    return
                 }
                 
                 observer.onNext(.success(true))
                 observer.onCompleted()
-                
+                return
             }
             
             return Disposables.create {

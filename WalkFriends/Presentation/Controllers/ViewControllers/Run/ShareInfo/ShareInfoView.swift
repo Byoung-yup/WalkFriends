@@ -15,8 +15,11 @@ class ShareInfoView: UIView {
     
     // MARK: - UI Properties
     
+    
+    
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
+        view.backgroundColor = .white
         return view
     }()
     
@@ -39,7 +42,7 @@ class ShareInfoView: UIView {
         let tf = UITextField()
         tf.font = UIFont(name: "LettersforLearners", size: 14)
         tf.addLeftPadding()
-        tf.attributedPlaceholder = NSAttributedString(string: ".", attributes: [.foregroundColor: UIColor.systemGray])
+        tf.attributedPlaceholder = NSAttributedString(string: "제목을 입력해주세요.", attributes: [.foregroundColor: UIColor.systemGray])
         tf.textColor = .black
         tf.autocapitalizationType = .none
         tf.layer.borderWidth = 1
@@ -137,6 +140,16 @@ class ShareInfoView: UIView {
         return view
     }()
     
+    lazy var time_StackView: UIStackView = {
+       let stackView = UIStackView(arrangedSubviews: [timeLbl, timeTextField, minuteLbl])
+        stackView.axis = .horizontal
+        stackView.backgroundColor = .white
+        stackView.alignment = .leading
+        stackView.setCustomSpacing(15, after: timeLbl)
+        stackView.setCustomSpacing(5, after: timeTextField)
+        return stackView
+    }()
+    
     lazy var timeLbl: UILabel = {
         let lbl = UILabel()
         lbl.font = UIFont(name: "LettersforLearners", size: 14)
@@ -153,7 +166,7 @@ class ShareInfoView: UIView {
         tf.autocapitalizationType = .none
         tf.layer.borderWidth = 1
         tf.layer.borderColor = UIColor.main_Color.cgColor
-        tf.layer.cornerRadius = 15
+        tf.layer.cornerRadius = 10
         return tf
     }()
     
@@ -172,16 +185,55 @@ class ShareInfoView: UIView {
         return view
     }()
     
-    lazy var submitBtn: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setTitle("공유하기", for: .normal)
-        btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 15)
-        btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = UIColor(red: 0.98, green: 0.66, blue: 0.15, alpha: 1.00)
-        btn.layer.cornerRadius = 25
-        btn.isEnabled = false
-        return btn
+    lazy var thumbnailLbl: UILabel = {
+        let lbl = UILabel()
+        lbl.font = UIFont(name: "LettersforLearners", size: 14)
+        lbl.textColor = .black
+        lbl.backgroundColor = .white
+        lbl.text = "미리 보기"
+        lbl.adjustsFontSizeToFitWidth = true
+        return lbl
     }()
+    
+    lazy var addressInfoLbl: UILabel = {
+        let lbl = UILabel()
+        lbl.font = UIFont(name: "LettersforLearners", size: 14)
+        lbl.textColor = .lightGray
+        lbl.backgroundColor = .white
+        lbl.adjustsFontSizeToFitWidth = true
+        return lbl
+    }()
+    
+    lazy var thumbnailView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleToFill
+        imageView.layer.cornerRadius = 15
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
+    
+    lazy var thumbnailInfoLbl: UILabel = {
+        let lbl = UILabel()
+        lbl.font = UIFont(name: "LettersforLearners", size: 14)
+        lbl.textColor = .lightGray
+        lbl.backgroundColor = .white
+        lbl.numberOfLines = 0
+        let attachment = NSTextAttachment()
+        let imageSymbol = UIImage.SymbolConfiguration(pointSize: 14, weight: .medium)
+        attachment.image = UIImage(systemName: "info.circle", withConfiguration: imageSymbol)?.withTintColor(.lightGray)
+        let attachmentString = NSAttributedString(attachment: attachment)
+        let contentString = NSMutableAttributedString(string: "")
+        contentString.append(attachmentString)
+        contentString.append(NSAttributedString(string: " 네트워크 환경에 따라 위치 표시가 정확하지 않을 수 있습니다."))
+        lbl.attributedText = contentString
+        return lbl
+    }()
+    
+//    lazy var lineView4: Line = {
+//        let view = Line()
+//        view.backgroundColor = .white
+//        return view
+//    }()
     
     // MARK: - Initialize
     
@@ -194,6 +246,11 @@ class ShareInfoView: UIView {
         super.init(coder: coder)
         configureUI()
     }
+    
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        self.endEditing(true)
+//        print("touch")
+//    }
     
     // MARK: - Properties
     
@@ -299,42 +356,95 @@ class ShareInfoView: UIView {
             make.height.equalTo(20)
         }
         
-        contentView.addSubview(timeLbl)
-        timeLbl.snp.makeConstraints { make in
+        contentView.addSubview(time_StackView)
+        time_StackView.snp.makeConstraints { make in
             make.top.equalTo(lineView3.safeAreaLayoutGuide.snp.bottom).offset(15)
             make.left.equalTo(contentView.safeAreaLayoutGuide.snp.left).offset(21)
-        }
-        
-        contentView.addSubview(timeTextField)
-        timeTextField.snp.makeConstraints { make in
-            make.centerY.equalTo(timeLbl.snp.centerY)
-            make.left.equalTo(timeLbl.safeAreaLayoutGuide.snp.right).offset(10)
+//            make.bottom.equalTo(contentView.safeAreaLayoutGuide.snp.bottom).offset(-15)
             make.height.equalTo(30)
-            make.width.equalTo(50)
+//            make.width.equalTo(contentView.snp.width).dividedBy(3)
         }
         
-        contentView.addSubview(minuteLbl)
+        timeLbl.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+        }
+        
+        timeTextField.snp.makeConstraints { make in
+            make.width.equalTo(50)
+            make.height.equalToSuperview()
+        }
+        
         minuteLbl.snp.makeConstraints { make in
-            make.left.equalTo(timeTextField.safeAreaLayoutGuide.snp.right).offset(5)
-            make.centerY.equalTo(timeLbl.snp.centerY)
+            make.centerY.equalToSuperview()
         }
         
         contentView.addSubview(lineView4)
         lineView4.snp.makeConstraints { make in
-            make.top.equalTo(timeLbl.safeAreaLayoutGuide.snp.bottom).offset(15)
+            make.top.equalTo(time_StackView.safeAreaLayoutGuide.snp.bottom).offset(15)
             make.left.equalTo(contentView.safeAreaLayoutGuide.snp.left).offset(21)
             make.right.equalTo(contentView.safeAreaLayoutGuide.snp.right).offset(-21)
             make.height.equalTo(20)
         }
         
-        contentView.addSubview(submitBtn)
-        submitBtn.snp.makeConstraints { make in
+        contentView.addSubview(thumbnailLbl)
+        thumbnailLbl.snp.makeConstraints { make in
             make.top.equalTo(lineView4.safeAreaLayoutGuide.snp.bottom).offset(15)
             make.left.equalTo(contentView.safeAreaLayoutGuide.snp.left).offset(21)
-            make.right.equalTo(contentView.safeAreaLayoutGuide.snp.right).offset(-21)
-            make.height.equalTo(50)
-            make.bottom.equalTo(contentView.safeAreaLayoutGuide.snp.bottom).offset(-15)
+//            make.right.equalTo(contentView.safeAreaLayoutGuide.snp.right).offset(-21)
         }
+        
+        contentView.addSubview(addressInfoLbl)
+        addressInfoLbl.snp.makeConstraints { make in
+            make.centerY.equalTo(thumbnailLbl.snp.centerY)
+            make.left.equalTo(thumbnailLbl.safeAreaLayoutGuide.snp.right).offset(10)
+            
+        }
+        
+        
+        contentView.addSubview(thumbnailView)
+        thumbnailView.snp.makeConstraints { make in
+            make.top.equalTo(thumbnailLbl.safeAreaLayoutGuide.snp.bottom).offset(15)
+            make.left.equalTo(contentView.safeAreaLayoutGuide.snp.left).offset(21)
+            make.right.equalTo(contentView.safeAreaLayoutGuide.snp.right).offset(-21)
+            make.height.equalTo(snp.height)
+        }
+        
+        contentView.addSubview(thumbnailInfoLbl)
+        thumbnailInfoLbl.snp.makeConstraints { make in
+            make.top.equalTo(thumbnailView.safeAreaLayoutGuide.snp.bottom).offset(15)
+            make.left.equalTo(contentView.safeAreaLayoutGuide.snp.left).offset(21)
+            make.right.equalTo(contentView.safeAreaLayoutGuide.snp.right).offset(-21)
+            make.bottom.equalTo(contentView.safeAreaLayoutGuide.snp.bottom).offset(-15)
+            make.height.equalTo(50)
+        }
+        
+//        contentView.addSubview(timeLbl)
+//        timeLbl.snp.makeConstraints { make in
+//            make.top.equalTo(lineView3.safeAreaLayoutGuide.snp.bottom).offset(15)
+//            make.left.equalTo(contentView.safeAreaLayoutGuide.snp.left).offset(21)
+//        }
+//
+//        contentView.addSubview(timeTextField)
+//        timeTextField.snp.makeConstraints { make in
+//            make.centerY.equalTo(timeLbl.snp.centerY)
+//            make.left.equalTo(timeLbl.safeAreaLayoutGuide.snp.right).offset(10)
+//            make.height.equalTo(30)
+//            make.width.equalTo(50)
+//        }
+//
+//        contentView.addSubview(minuteLbl)
+//        minuteLbl.snp.makeConstraints { make in
+//            make.left.equalTo(timeTextField.safeAreaLayoutGuide.snp.right).offset(5)
+//            make.centerY.equalTo(timeLbl.snp.centerY)
+//        }
+        
+//        contentView.addSubview(lineView4)
+//        lineView4.snp.makeConstraints { make in
+//            make.top.equalTo(timeLbl.safeAreaLayoutGuide.snp.bottom).offset(15)
+//            make.left.equalTo(contentView.safeAreaLayoutGuide.snp.left).offset(21)
+//            make.right.equalTo(contentView.safeAreaLayoutGuide.snp.right).offset(-21)
+//            make.height.equalTo(20)
+//        }
     }
     
 }

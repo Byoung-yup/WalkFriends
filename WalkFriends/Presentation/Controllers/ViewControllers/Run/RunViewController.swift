@@ -181,8 +181,7 @@ class RunViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.locations
-            .asDriver()
-            .drive(onNext: { [weak self] locations in
+            .subscribe(onNext: { [weak self] locations in
 //                print("locations: \(locations)")
                 guard let strongSelf = self else { return }
                 
