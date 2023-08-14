@@ -43,9 +43,9 @@ class HomeViewModel: ViewModel {
     
     let category_Items = Observable.just(["최신순", "인기순", "시간순", "거리순"])
     
-    let items = Observable.just([MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20"),
-                                 MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20"),
-                                 MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20")])
+//    let items = Observable.just([MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20"),
+//                                 MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20"),
+//                                 MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20")])
     
     // MARK: - INPUT
     
@@ -61,6 +61,7 @@ class HomeViewModel: ViewModel {
     struct Output {
         let fetchTrigger: Observable<Result<Bool, DatabaseError>>
         let toggle_Btn_Trigger: Observable<Category_Action>
+        let fetch_MapList: Observable<Result<[MapList?], DatabaseError>>
     }
     
     // MARK: - Initailize
@@ -80,8 +81,10 @@ class HomeViewModel: ViewModel {
             input.time_Btn.map { _ in Category_Action.Time },
             input.distance_Btn.map { _ in Category_Action.Distance }
         )
+        
+        let fetch_MapList = dataUseCase.fetchMapListData()
                 
-        return Output(fetchTrigger: fetch, toggle_Btn_Trigger: toggle_Btn)
+        return Output(fetchTrigger: fetch, toggle_Btn_Trigger: toggle_Btn, fetch_MapList: fetch_MapList)
     }
     
 }

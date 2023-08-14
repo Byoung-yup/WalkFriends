@@ -220,11 +220,11 @@ class MapListViewCell: UITableViewCell {
     
     private func configureCell() {
         
-        titleLbl.text = mapList?.title
-        subTitleLbl.text = mapList?.address
-        popular_Lbl.text = mapList?.popular.numberFormatter()
-        distance_Lbl.text = mapList?.distance
-        time_Lbl.text = mapList!.time + "m"
+//        titleLbl.text = mapList?.title
+//        subTitleLbl.text = mapList?.address
+//        popular_Lbl.text = mapList?.popular.numberFormatter()
+//        distance_Lbl.text = mapList?.distance
+//        time_Lbl.text = mapList!.time + "m"
     }
     
 }

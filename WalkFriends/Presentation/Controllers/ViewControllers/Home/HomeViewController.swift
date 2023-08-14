@@ -310,10 +310,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 
             }).disposed(by: disposeBag)
         
-        homeViewModel.items.bind(to: mapListView.mapListTableView.rx.items(cellIdentifier: MapListViewCell.identifier, cellType: MapListViewCell.self)) { (row, element, cell) in
-            cell.mapList = element
-            cell.selectionStyle = .none
-        }.disposed(by: disposeBag)
+//        homeViewModel.items.bind(to: mapListView.mapListTableView.rx.items(cellIdentifier: MapListViewCell.identifier, cellType: MapListViewCell.self)) { (row, element, cell) in
+//            cell.mapList = element
+//            cell.selectionStyle = .none
+//        }.disposed(by: disposeBag)
         
         mapListView.mapListTableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
@@ -344,7 +344,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         output.fetchTrigger
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] result in
-                
+                print("user Exist: \(result)")
                 guard let strongSelf = self else { return }
                 
                 switch result {
@@ -360,6 +360,13 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 }
             })
             .disposed(by: disposeBag)
+        
+        output.fetch_MapList
+            .subscribe(onNext: { result in
+                
+                print("fetch_MapList: \(result)")
+                
+            }).disposed(by: disposeBag)
 //
 //        homeViewModel.items
 //            .bind(to: homeListView.collectionView.rx.items(cellIdentifier: "HomeListCell", cellType: HomeListCell.self)) { (row, text, cell) in

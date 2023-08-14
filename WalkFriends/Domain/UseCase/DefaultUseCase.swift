@@ -17,7 +17,7 @@ protocol DataUseCase: UseCase {
     func createProfile2(with userProfile: UserProfileData) -> Observable<Result<Bool, DatabaseError>>
     
     func shareData(with userData: UserMap) -> Observable<Result<Bool, DatabaseError>>
-    func fetchMapListData() -> Observable<[MapList]>
+    func fetchMapListData() -> Observable<Result<[MapList?], DatabaseError>>
 //    func downLoadImages(urls: [String]) -> Observable<[Data]>
 }
 
@@ -35,7 +35,26 @@ class DefaultDataUseCase {
     
     func start() -> Observable<Result<Bool, DatabaseError>> {
         
-        return dataBaseRepository.fetchUserData()
+        return Observable.create { (observer) in
+            
+            let task = Task { [weak self] in
+                
+                guard let self = self else { return }
+                
+                do {
+                    try await self.dataBaseRepository.fetchUserData2()
+                } catch let err as DatabaseError {
+                    observer.onNext(.failure(err))
+                    observer.onCompleted()
+                }
+                
+                observer.onNext(.success(true))
+                observer.onCompleted()
+            }
+            return Disposables.create {
+                task.cancel()
+            }
+        }
     }
     
 }
@@ -139,7 +158,7 @@ extension DefaultDataUseCase: DataUseCase {
 //    }
     
     func shareData(with userData: UserMap) -> Observable<Result<Bool, DatabaseError>> {
-        print("shareData()")
+//        print("shareData()")
         let jpegDatas = userData.images.map { $0.convertJPEGData() }
 //        let jpeg_Map_Image = userData.map_Image.convertJPEGData()
 //        jpegDatas.append(jpeg_Map_Image)
@@ -178,9 +197,33 @@ extension DefaultDataUseCase: DataUseCase {
         
     }
     
-    func fetchMapListData() -> Observable<[MapList]> {
+    func fetchMapListData() -> Observable<Result<[MapList?], DatabaseError>> {
         
-        return dataBaseRepository.fetchMapListData()
+        return Observable.create { (observer) in
+            
+            let task = Task { [weak self] in
+                
+                guard let self = self else { return }
+                
+                var mapLists: [MapList?] = []
+                
+                do {
+                    mapLists = try await self.dataBaseRepository.fetchMapListData2()
+                } catch let err as DatabaseError {
+                    observer.onNext(.failure(err))
+                    observer.onCompleted()
+                }
+                
+                observer.onNext(.success(mapLists))
+                observer.onCompleted()
+                return
+                
+            }
+            
+            return Disposables.create {
+                task.cancel()
+            }
+        }
     }
     
     

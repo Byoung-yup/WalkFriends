@@ -27,42 +27,53 @@ final class DatabaseManager {
 
 extension DatabaseManager: DataRepository {
     
-    func fetchUserData() -> Observable<Result<Bool, DatabaseError>> {
+//    func fetchUserData() -> Observable<Result<Bool, DatabaseError>> {
+//
+//        return Observable.create { [weak self] (observer) in
+//
+//            let task = Task { [weak self] in
+//
+//                guard let strongSelf = self else { return }
+//
+//                do {
+//
+//                    let document = try await strongSelf.db.collection("Users").document((FirebaseService.shard.auth.currentUser?.uid)!).getDocument()
+//                    print("current User Uid: \((FirebaseService.shard.auth.currentUser?.uid)!)")
+//                    print("current User Email: \((FirebaseService.shard.auth.currentUser?.email)!)")
+//                    guard document.exists, let data = document.data() else  {
+//                        observer.onNext(.failure(DatabaseError.NotFoundUserError))
+//                        observer.onCompleted()
+//                        return
+//                    }
+//
+//                    let jsonData = try JSONSerialization.data(withJSONObject: data)
+//                    let decoded = try JSONDecoder().decode(UserProfile.self, from: jsonData)
+//
+//                    observer.onNext(.success(true))
+//                    observer.onCompleted()
+//
+//                } catch let err {
+//                    print("Fetch Error: \(err.localizedDescription)")
+//                    try FirebaseAuth.Auth.auth().signOut()
+//
+//                    observer.onNext(.failure(DatabaseError.DatabaseFetchError))
+//                    observer.onCompleted()
+//                }
+//            }
+//
+//            return Disposables.create { task.cancel() }
+//        }
+//    }
+    
+    func fetchUserData() async throws  {
         
-        return Observable.create { [weak self] (observer) in
-            
-            let task = Task { [weak self] in
-                
-                guard let strongSelf = self else { return }
-                
-                do {
-   
-                    let document = try await strongSelf.db.collection("Users").document((FirebaseService.shard.auth.currentUser?.uid)!).getDocument()
-                    print("current User Uid: \((FirebaseService.shard.auth.currentUser?.uid)!)")
-                    print("current User Email: \((FirebaseService.shard.auth.currentUser?.email)!)")
-                    guard document.exists, let data = document.data() else  {
-                        observer.onNext(.failure(DatabaseError.NotFoundUserError))
-                        observer.onCompleted()
-                        return
-                    }
-                    
-                    let jsonData = try JSONSerialization.data(withJSONObject: data)
-                    let decoded = try JSONDecoder().decode(UserProfile.self, from: jsonData)
-                    
-                    observer.onNext(.success(true))
-                    observer.onCompleted()
-                    
-                } catch let err {
-                    print("Fetch Error: \(err.localizedDescription)")
-                    try FirebaseAuth.Auth.auth().signOut()
-                    
-                    observer.onNext(.failure(DatabaseError.DatabaseFetchError))
-                    observer.onCompleted()
-                }
-            }
-            
-            return Disposables.create { task.cancel() }
+        let document = try! await db.collection("Users").document((FirebaseService.shard.auth.currentUser?.uid)!).getDocument()
+        
+        guard document.exists else {
+            try FirebaseService.shard.auth.signOut()
+            throw DatabaseError.NotFoundUserError
         }
+//        print("user Exist")
     }
     
 //    func fetchUserProfile(completion: @escaping (Result<Bool, DatabaseError>) -> Void) {
@@ -199,6 +210,36 @@ extension DatabaseManager: DataRepository {
                 observer.onCompleted()
             }
             return Disposables.create()
+        }
+    }
+    
+    func fetchMapListData2() async throws -> [MapList?] {
+        
+        return try await withThrowingTaskGroup(of: MapList?.self) { group in
+            
+            let snapshot = try await db.collection("Maps").getDocuments()
+            
+            let documnets = snapshot.documents
+            
+            for documnet in documnets {
+                
+                let data = documnet.data()
+                
+                group.addTask {
+                    
+                    do {
+                        let jsonData = try JSONSerialization.data(withJSONObject: data, options: .fragmentsAllowed)
+                        return try JSONDecoder().decode(MapList.self, from: jsonData)
+                    } catch let err {
+                        print("err: \(err.localizedDescription)")
+                        throw DatabaseError.UnknownError
+                    }
+                }
+            }
+            
+            return try await group
+                .reduce(into: [MapList?](), { $0.append($1) })
+                .compactMap { $0 }
         }
     }
 }

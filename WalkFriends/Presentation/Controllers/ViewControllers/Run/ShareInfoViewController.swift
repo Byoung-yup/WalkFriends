@@ -13,7 +13,7 @@ import RxCocoa
 import BSImagePicker
 import Photos
 import RxGesture
-import RxKeyboard
+//import RxKeyboard
 
 class ShareInfoViewController: UIViewController {
     
@@ -258,6 +258,7 @@ class ShareInfoViewController: UIViewController {
                     self.shareInfoViewModel.actions.toBack()
                 case .failure(let err):
                     self.showAlert(error: err)
+                    self.shareInfoViewModel.actions.toBack()
                 }
                 
             }).disposed(by: disposeBag)
@@ -290,19 +291,39 @@ class ShareInfoViewController: UIViewController {
                 self?.view.endEditing(true)
             }).disposed(by: disposeBag)
         
-        RxKeyboard.instance.visibleHeight
-            .drive(onNext: { [weak self] keyboardHeight in
-                print("keyboard")
+//        RxKeyboard.instance.visibleHeight
+//            .drive(onNext: { [weak self] keyboardHeight in
+//                print("keyboard")
+//                guard let self = self else { return }
+//
+//                let height = keyboardHeight > 0 ? -keyboardHeight + self.bottomView.frame.height : 0
+//
+//                self.shareInfoView.snp.updateConstraints {
+//                    $0.bottom.equalTo(self.bottomView.safeAreaLayoutGuide.snp.top).offset(height)
+//                }
+//
+//                self.view.layoutIfNeeded()
+//
+//            }).disposed(by: disposeBag)
+        
+        shareInfoView.memoTextField
+            .rx
+            .tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-
-                let height = keyboardHeight > 0 ? -keyboardHeight + self.bottomView.frame.height : 0
-
-                self.shareInfoView.snp.updateConstraints {
-                    $0.bottom.equalTo(self.bottomView.safeAreaLayoutGuide.snp.top).offset(height)
-                }
-
-                self.view.layoutIfNeeded()
-
+                
+                self.shareInfoView.scrollView.setContentOffset(CGPoint(x: 0, y: (self.shareInfoView.memoTextField.frame.origin.y) - self.shareInfoView.memoTextField.frame.height), animated: true)
+            }).disposed(by: disposeBag)
+        
+        shareInfoView.timeTextField
+            .rx
+            .tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                
+                self.shareInfoView.scrollView.setContentOffset(CGPoint(x: 0, y: (self.shareInfoView.time_StackView.frame.origin.y) - self.shareInfoView.time_StackView.frame.height), animated: true)
             }).disposed(by: disposeBag)
         
         output.user_Map_Images

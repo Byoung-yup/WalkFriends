@@ -106,7 +106,8 @@ extension StorageManager {
                         _ = try await fileRef.putDataAsync(item, metadata: metaData)
                         let url = try await fileRef.downloadURL()
                         return url.absoluteString
-                    } catch {
+                    } catch let err {
+                        print("err: \(err.localizedDescription)")
                         throw DatabaseError.UnknownError
                     }
                     

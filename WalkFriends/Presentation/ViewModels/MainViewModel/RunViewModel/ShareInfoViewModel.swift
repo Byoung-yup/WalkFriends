@@ -71,13 +71,14 @@ final class ShareInfoViewModel: ViewModel {
                 guard let self = self else { fatalError() }
                 self.actions.toBack()
             })
-                let user_Map_Images: BehaviorRelay<[UIImage]> = BehaviorRelay(value: [mapInfo.image])
-                let user_Selected_Images = input.selectedImages
-                .map { [weak self] in
-                    guard let self = self else { fatalError() }
-                    
-                    user_Map_Images.accept([self.mapInfo.image] + $0)
-                }
+                
+        let user_Map_Images: PublishRelay<[UIImage]> = PublishRelay()
+        let user_Selected_Images = input.selectedImages
+            .map { [weak self] in
+                guard let self = self else { fatalError() }
+                
+                user_Map_Images.accept([self.mapInfo.image] + $0)
+            }
                 
         let user_Map_InfoData = Observable.combineLatest(user_Map_Images, input.titleText, input.memoText, input.timeText)
             .map { [weak self] in

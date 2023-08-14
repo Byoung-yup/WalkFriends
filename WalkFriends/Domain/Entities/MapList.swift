@@ -12,23 +12,23 @@ struct MapList: Decodable {
     let address: String
     let imageUrls: [String]
     let title: String
-    let subTitle: String
+    let memo: String
     let date: String
     let email: String
     let popular: Int
-    let distance: String
+//    let distance: String
     let time: String
     
     enum CodingKeys: String, CodingKey {
         case uid = "uid"
         case address = "address"
         case title = "title"
-        case subTitle = "subTitle"
+        case memo = "memo"
         case imageUrls = "imageUrls"
-        case date = "time"
+        case date = "upload_Date"
         case email = "email"
         case popular = "popular"
-        case distance = "distance"
-        case time = "titme"
+//        case distance = "distance"
+        case time = "time"
     }
 }
