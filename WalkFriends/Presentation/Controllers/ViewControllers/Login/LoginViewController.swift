@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
@@ -18,7 +19,7 @@ class LoginViewController: UIViewController {
     
     let disposeBag = DisposeBag()
     
-    //    var handle: AuthStateDidChangeListenerHandle!
+    var handle: AuthStateDidChangeListenerHandle!
     
     // MARK: - UI Properties
     
@@ -195,6 +196,32 @@ class LoginViewController: UIViewController {
         //        }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        handle = Auth.auth().addStateDidChangeListener({ [weak self] (auth, user) in
+            
+            if let user = user {
+                print("email: \(user.providerData[0].email!)")
+                print("uid: \(user.providerData[0].uid)")
+                print("---------------------------------------------")
+                if let currentUser = auth.currentUser {
+                    print("email: \(currentUser.email)")
+                    print("uid: \(currentUser.uid)")
+                }
+                print("Firebase")
+                print("currentUser: \(FirebaseService.shard.auth.currentUser!)")
+                print("currentUser email: \(FirebaseService.shard.auth.currentUser!.email)")
+                print("currentUser uid: \(FirebaseService.shard.auth.currentUser!.uid)")
+                self?.loginViewModel.isLoginState.accept(true)
+            }
+        })
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        Auth.auth().removeStateDidChangeListener(handle!)
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
@@ -316,17 +343,25 @@ class LoginViewController: UIViewController {
             .disposed(by: disposeBag)
         
         output.loginTrigger
-            .observe(on: MainScheduler.instance)
+//            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] result in
                 
-                guard let strongSelf = self else { return }
+//                guard let strongSelf = self else { return }
+//
+//                switch result {
+//                case .success(_):
+//                    strongSelf.loginViewModel.actions.signIn()
+//                case .failure(let err):
+//                    strongSelf.showFBAuthErrorAlert(error: err)
+//                }
                 
-                switch result {
-                case .success(_):
-                    strongSelf.loginViewModel.actions.signIn()
-                case .failure(let err):
-                    strongSelf.showFBAuthErrorAlert(error: err)
-                }
+            }).disposed(by: disposeBag)
+        
+        output.isLoginState
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] state in
+                
+                if state { self?.loginViewModel.actions.signIn() }
                 
             }).disposed(by: disposeBag)
         

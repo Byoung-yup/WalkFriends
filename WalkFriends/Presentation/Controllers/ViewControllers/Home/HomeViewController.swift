@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
-import FirebaseAuth
+//import FirebaseAuth
 import CoreLocation
 
 class HomeViewController: UIViewController, UIScrollViewDelegate {
@@ -185,9 +185,12 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         configureUI()
         Binding()
         
-        let userInfo = FirebaseAuth.Auth.auth().currentUser?.providerData[0]
-        print("HomeVC - User: \(userInfo?.email)")
+        if let userInfo = FirebaseService.shard.currentUser {
+            print("HomeVC - email: \(userInfo.email)")
+            print("HomeVC - uid: \(userInfo.uid)")
+        }
         
+//        print("email: \(UserDefaults.standard.object(forKey: "email"))")
 //        print("current user uid: \(FirebaseService.shard.currentUser?.uid)")
 //        print("current user email: \(FirebaseService.shard.currentUser?.email)")
     }

@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import RxSwift
+import RxRelay
 
 struct LoginViewModelActions {
     let showRegisterViewController: () -> Void
@@ -32,6 +33,7 @@ final class LoginViewModel: ViewModel {
     struct Output {
         let loginEnabled: Observable<Bool>
         let loginTrigger: Observable<Result<Bool, FirebaseAuthError>>
+        let isLoginState: Observable<Bool>
 //        let loginTrigger_Google: Observable<Result<Bool, FirebaseAuthError>>
 //        let loginTrigger_Facebook: Observable<Result<Bool, FirebaseAuthError>>
 //        let loginTrigger_Kakao: Observable<Result<Bool, FirebaseAuthError>>
@@ -40,6 +42,7 @@ final class LoginViewModel: ViewModel {
     // MARK: - Properties
     
     let actions: LoginViewModelActions
+    let isLoginState: BehaviorRelay<Bool> = BehaviorRelay(value: false)
     
     // MARK: - Init
     init(actions: LoginViewModelActions) {
@@ -79,6 +82,6 @@ final class LoginViewModel: ViewModel {
         
         let login_merge = Observable.merge(login, googleSignIn, fbSignIn, kakaoSignIn)
         
-        return Output(loginEnabled: loginEnabled, loginTrigger: login_merge)
+        return Output(loginEnabled: loginEnabled, loginTrigger: login_merge, isLoginState: isLoginState.asObservable())
     }
 }

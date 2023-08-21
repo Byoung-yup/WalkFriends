@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 import RxCocoa
-import FirebaseAuth
+//import FirebaseAuth
 
 struct SetupViewModelActions {
     let createProfile: () -> Void
@@ -44,12 +44,12 @@ extension SetupProfileViewModel {
     
     func transform(input: Input) -> Output {
         
-        let userInfo = FirebaseAuth.Auth.auth().currentUser?.providerData[0]
+        guard let email = FirebaseService.shard.auth.currentUser?.providerData[0].email else { fatalError() }
         
 //        let gender = input.userGender.map { $0 == 0 ? "남자" : "여자" }
 //
         let userProfile = Observable.combineLatest(input.profileImage, input.usernickName) { (image, nickname) in
-            return UserProfileData(image: image, email: (userInfo?.email)!, nickName: nickname)
+            return UserProfileData(image: image, email: email, nickName: nickname)
         }
 
         let canCreate = input.usernickName
@@ -66,6 +66,7 @@ extension SetupProfileViewModel {
                 switch result {
                 case .success(_):
                     self?.actions.createProfile()
+                    break
                 case .failure(_):
                     break
                 }

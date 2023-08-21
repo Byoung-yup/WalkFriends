@@ -41,7 +41,7 @@ class HomeViewModel: ViewModel {
     
     private let dataUseCase: DataUseCase
     
-    let category_Items = Observable.just(["최신순", "인기순", "시간순", "거리순"])
+    let category_Items = Observable.of(["최신순", "인기순", "시간순", "거리순"])
     
 //    let items = Observable.just([MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20"),
 //                                 MapList(uid: "dddddddddddd", address: "서을특별시 종로구 서린동", imageUrls: [], title: "자연 그 자체", subTitle: "테스트 입니다", date: "2023-07-06", email: "qudduq9999@naver.com",popular: 4000, distance: "0.5km", time: "20"),

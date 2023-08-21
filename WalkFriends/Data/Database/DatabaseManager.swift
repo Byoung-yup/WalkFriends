@@ -67,13 +67,12 @@ extension DatabaseManager: DataRepository {
     
     func fetchUserData() async throws  {
         
-        let document = try! await db.collection("Users").document((FirebaseService.shard.auth.currentUser?.uid)!).getDocument()
-        
+        let document = try await db.collection("Users").document((FirebaseService.shard.auth.currentUser!.uid)).getDocument()
+        print("document: \(document)")
         guard document.exists else {
-            try FirebaseService.shard.auth.signOut()
             throw DatabaseError.NotFoundUserError
         }
-//        print("user Exist")
+        print("user Exist")
     }
     
 //    func fetchUserProfile(completion: @escaping (Result<Bool, DatabaseError>) -> Void) {
@@ -101,9 +100,13 @@ extension DatabaseManager: DataRepository {
 //    }
     
     func createUserProfile(with data: UserProfileData) async throws {
+        throw DatabaseError.UnknownError
+        guard let uid = FirebaseService.shard.auth.currentUser?.uid else {
+            throw DatabaseError.UnknownError
+        }
         
         do {
-            try await db.collection("Users").document(FirebaseAuth.Auth.auth().currentUser!.uid).setData(data.toJSON())
+            try await db.collection("Users").document(uid).setData(data.toJSON())
         } catch {
             throw DatabaseError.UnknownError
         }

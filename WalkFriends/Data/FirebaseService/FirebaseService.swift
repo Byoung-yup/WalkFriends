@@ -44,10 +44,11 @@ final class FirebaseService {
         let auth = FirebaseAuth.Auth.auth()
         return auth
     }()
-    
-    var handle: AuthStateDidChangeListenerHandle!
-    
-    var UserProfle: UserProfile?
+
+    var currentUser: UserInfo?
+//    var handle: AuthStateDidChangeListenerHandle!
+//
+//    var UserProfle: UserProfile?
     
     private init() {}
     
@@ -67,14 +68,13 @@ enum FirebaseAuthError: Error {
 extension FirebaseService: FirebaseAuthService {
     
     // MARK: Create User
-    
     func createUser(user: UserLoginInfo) -> Observable<Result<Bool, FirebaseAuthError>> {
         
         return Observable.create { (observer) in
             
             let task = Task {
+                
                 do {
-                    
                     let result = try await FirebaseAuth.Auth.auth().createUser(withEmail: user.email, password: user.password)
                     try await result.user.sendEmailVerification()
                     
@@ -187,8 +187,6 @@ extension FirebaseService {
                 print("Thread3: \(Thread.current)")
                 do {
                     
-                    //                    guard let strongSelf = self else { return }
-                    
                     guard let clientID = FirebaseApp.app()?.options.clientID else { fatalError() }
                     
                     let config = GIDConfiguration(clientID: clientID)
@@ -235,31 +233,24 @@ extension FirebaseService {
         
         return Observable.create { [weak self] (observer) in
             //            guard let strongSelf = self else { return }
-            if AccessToken.current != nil {
-                print("token: \(AccessToken.current?.tokenString)")
+            if let token = AccessToken.current, !token.isExpired  {
+                print("token: \(token.tokenString)")
                 
-                let credential = FacebookAuthProvider.credential(withAccessToken: AccessToken.current!.tokenString)
+                let credential = FacebookAuthProvider.credential(withAccessToken: token.tokenString)
                 
-                self?.handle = FirebaseAuth.Auth.auth().addStateDidChangeListener({ (auth, user) in
+                self?.auth.signIn(with: credential) { (_, error) in
                     
-                    FirebaseAuth.Auth.auth().signIn(with: credential) { (_, error) in
-                        
-                        guard error == nil else {
-                            print("error2: \(error?.localizedDescription)")
-                            observer.onNext(.failure(FirebaseAuthError.NetworkError))
-                            observer.onCompleted()
-                            return
-                        }
-                        
-                        if user != nil {
-                            
-                            observer.onNext(.success(true))
-                            observer.onCompleted()
-                        }
+                    guard error == nil else {
+                        print("error2: \(error?.localizedDescription)")
+                        observer.onNext(.failure(FirebaseAuthError.NetworkError))
+                        observer.onCompleted()
+                        return
                     }
-                })
-                
-                print("success")
+                    
+                    observer.onNext(.success(true))
+                    observer.onCompleted()
+                    
+                }
             } else {
                 
                 loginManager.logIn(permissions: ["public_profile", "email"], from: rootViewController) { (result, error) in
@@ -274,36 +265,23 @@ extension FirebaseService {
                     }
                     
                     let credential = FacebookAuthProvider.credential(withAccessToken: AccessToken.current!.tokenString)
-                    
-                    self?.handle = FirebaseAuth.Auth.auth().addStateDidChangeListener({ (auth, user) in
+                          
+                    self?.auth.signIn(with: credential) { (user, error) in
                         
-                        FirebaseAuth.Auth.auth().signIn(with: credential) { (user, error) in
-                            
-                            guard error == nil else {
-                                print("error2: \(error?.localizedDescription)")
-                                observer.onNext(.failure(FirebaseAuthError.NetworkError))
-                                observer.onCompleted()
-                                return
-                            }
-                            
-                            if user != nil {
-                                
-                                observer.onNext(.success(true))
-                                observer.onCompleted()
-                            }
+                        guard error == nil else {
+                            print("error2: \(error?.localizedDescription)")
+                            observer.onNext(.failure(FirebaseAuthError.NetworkError))
+                            observer.onCompleted()
+                            return
                         }
-                    })
-                    
-                    
+                            
+                        observer.onNext(.success(true))
+                        observer.onCompleted()
+                    }
                 }
             }
             
-            return Disposables.create { [weak self] in
-                
-                if let handle = self?.handle {
-                    FirebaseAuth.Auth.auth().removeStateDidChangeListener(handle)
-                }
-            }
+            return Disposables.create()
         }
     }
 }
@@ -334,19 +312,11 @@ extension FirebaseService {
                     print("만료된 토큰")
                     self?.openKakaoService()
                 }
-            
-            self?.handle = FirebaseAuth.Auth.auth().addStateDidChangeListener({ (auth, user) in
-                print("addStateDidChangeListener")
-                if user != nil {
-                    observer.onNext(.success(true))
-                    observer.onCompleted()
-                }
-            })
-   
-            return Disposables.create { [weak self] in
-                FirebaseAuth.Auth.auth().removeStateDidChangeListener((self?.handle)!)
-                print("removeStateDidChangeListener")
-            }
+            print("onNext")
+            observer.onNext(.success(true))
+            observer.onCompleted()
+                
+            return Disposables.create()
         }
     }
     

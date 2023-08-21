@@ -48,14 +48,14 @@ class AppCoordinator: Coordinator {
     private func makeLoginCoordinator() {
         let loginCoordinator = appSceneDIContainer.makeLoginCoordinator(navigationController: navigationController)
         loginCoordinator.start()
-        
+        print("Auth: \(FirebaseAuth.Auth.auth().currentUser)")
         childCoordinators.append(loginCoordinator)
     }
     
     private func makeHomeCoordinator() {
         let homeCoordinator = appSceneDIContainer.makeHomeCoordinator(navigationController: navigationController)
         homeCoordinator.start()
-        
+        print("Auth: \(FirebaseAuth.Auth.auth().currentUser)")
         childCoordinators.append(homeCoordinator)
     }
     

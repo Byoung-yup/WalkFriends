@@ -42,7 +42,7 @@ class DefaultDataUseCase {
                 guard let self = self else { return }
                 
                 do {
-                    try await self.dataBaseRepository.fetchUserData2()
+                    try await self.dataBaseRepository.fetchUserData()
                 } catch let err as DatabaseError {
                     observer.onNext(.failure(err))
                     observer.onCompleted()
@@ -73,16 +73,18 @@ extension DefaultDataUseCase: DataUseCase {
 
                 do {
                     
-                    try await strongSelf.dataBaseRepository.createUserProfile(with: userProfile)
                     try await strongSelf.storageRepository.uploadImageData(with: jpegData)
-
+                    print("storageRepository.uploadImageData")
+                    try await strongSelf.dataBaseRepository.createUserProfile(with: userProfile)
+                    print("dataBaseRepository.createUserProfile")
                     observer.onNext(.success(true))
                     observer.onCompleted()
-
+                    print("onNext:(true)")
                 } catch let err as DatabaseError {
 
                     observer.onNext(.failure(err))
                     observer.onCompleted()
+                    print("onNext:(err)")
                 }
             }
 
@@ -101,35 +103,42 @@ extension DefaultDataUseCase: DataUseCase {
             let task = Task { [weak self] in
                 
                 guard let strongSelf = self else { return }
-                             
-                await withThrowingTaskGroup(of: Void.self) { group in
-                    
-                        group.addTask {
-                            
-                            do {
-                                try await strongSelf.dataBaseRepository.createUserProfile(with: userProfile)
-                            } catch {
-                                observer.onNext(.failure(DatabaseError.UnknownError))
-                                observer.onCompleted()
-                            }
-                            
-                        }
-                        
-                        group.addTask {
-                            
-                            do {
-                                try await strongSelf.storageRepository.uploadImageData(with: jpegData)
-                            } catch {
-                                observer.onNext(.failure(DatabaseError.UnknownError))
-                                observer.onCompleted()
-                            }
-                            
-                        }
-                        
-                }
                 
-                observer.onNext(.success(true))
-                observer.onCompleted()
+                do {
+                    
+                    try await withThrowingTaskGroup(of: Void.self) { group in
+                        
+                            group.addTask {
+                                
+                                
+                                    try await strongSelf.dataBaseRepository.createUserProfile(with: userProfile)
+                                
+                                print("dataBaseRepository.createUserProfile")
+                            }
+                            
+                            group.addTask {
+                                
+                                
+                                    try await strongSelf.storageRepository.uploadImageData(with: jpegData)
+                               
+                                print("storageRepository.uploadImageData")
+                            }
+                            
+                    }
+                    
+                    observer.onNext(.success(true))
+                    observer.onCompleted()
+                    print("onNext")
+                    return
+                    
+                } catch let err as DatabaseError {
+                    observer.onNext(.failure(err))
+                    observer.onCompleted()
+                    print("onNext(err)")
+                    return
+                }
+                             
+                
             }
             
             return Disposables.create {

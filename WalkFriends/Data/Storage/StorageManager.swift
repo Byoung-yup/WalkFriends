@@ -22,11 +22,14 @@ extension StorageManager {
     
     func uploadImageData(with data: Data) async throws {
         
+        guard let uid = FirebaseService.shard.auth.currentUser?.uid else {
+            throw DatabaseError.UnknownError
+        }
+        
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
         
-        let fileRef = storage.reference().child("images/\((FirebaseService.shard.auth.currentUser?.uid)!)_profile.jpg")
-        
+        let fileRef = storage.reference().child("images/\(uid)_profile.jpg")
         
         do {
              _ = try await fileRef.putDataAsync(data, metadata: metaData)
