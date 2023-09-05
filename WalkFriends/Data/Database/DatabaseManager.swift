@@ -201,7 +201,7 @@ extension DatabaseManager: DataRepository {
     
     func uploadMapData2(with userData: UserMap, uid: String) async throws {
         do {
-            try await db.collection("Maps").document(uid).setData(userData.toJSON2(uid: uid, count: userData.imageDatas.count))
+            try await db.collection("Maps").document(uid).setData(userData.toJSON2(uid: uid))
         } catch let err {
             print("uploadMapData2 err: \(err.localizedDescription)")
             throw DatabaseError.UnknownError

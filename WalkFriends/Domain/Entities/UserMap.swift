@@ -36,7 +36,7 @@ extension UserMap {
         ]
     }
     
-    func toJSON2(uid: String, count: Int) -> [String: Any] {
+    func toJSON2(uid: String) -> [String: Any] {
         
         return [
            "uid": uid,
@@ -46,7 +46,6 @@ extension UserMap {
            "memo": memo,
            "time": time,
            "upload_Date": Date().getCurrenTime(),
-           "imageCount": count,
            "popular": popular
         ]
     }

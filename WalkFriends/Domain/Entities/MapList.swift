@@ -17,7 +17,6 @@ struct MapList: Decodable {
     let date: String
     let email: String
     let popular: Int
-    let imageCount: Int
 //    let distance: String
     let time: String
     
@@ -30,7 +29,6 @@ struct MapList: Decodable {
         case date = "upload_Date"
         case email = "email"
         case popular = "popular"
-        case imageCount = "imageCount"
 //        case distance = "distance"
         case time = "time"
     }
