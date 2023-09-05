@@ -16,7 +16,7 @@ class PhotoListCell: UICollectionViewCell {
     
     lazy var imageView: UIImageView = {
        let view = UIImageView()
-        view.contentMode = .scaleToFill
+        view.contentMode = .scaleAspectFill
         view.layer.cornerRadius = 15
         view.layer.masksToBounds = true
         return view

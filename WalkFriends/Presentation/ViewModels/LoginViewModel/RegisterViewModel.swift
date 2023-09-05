@@ -32,12 +32,13 @@ final class RegisterViewModel: ViewModel {
         let isValidConfirmPassword: Driver<Bool>
         let isValidRegister: Driver<Bool>
         let registerTrigger: Observable<Result<Bool, FirebaseAuthError>>
+        let isLoding: Observable<Bool>
     }
     
     // MARK: - Properties
     
-    //    var actionDelegate: RegisterViewModelActionDelegate?
     let actions: RegisterViewModelActions
+    private let isLoding: PublishRelay<Bool> = PublishRelay()
     
     // MARK: - Init
     init(actions: RegisterViewModelActions) {
@@ -60,7 +61,11 @@ final class RegisterViewModel: ViewModel {
         let user = Observable.combineLatest(input.email, input.password) { UserLoginInfo(email: $0, password: $1) }
         
         let register = input.register.withLatestFrom(user)
-            .flatMapLatest {
+            .flatMapLatest { [weak self] in
+                
+                guard let self = self else { fatalError() }
+                
+                self.isLoding.accept(true)
                 return FirebaseService.shard.createUser(user: $0)
             }
         
@@ -68,7 +73,8 @@ final class RegisterViewModel: ViewModel {
                       isValidPassword: checkPassword,
                       isValidConfirmPassword: checkConfirmPassword,
                       isValidRegister: checkRegister,
-                      registerTrigger: register)
+                      registerTrigger: register,
+                      isLoding: isLoding.asObservable())
     }
     
 }

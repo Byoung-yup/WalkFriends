@@ -30,13 +30,16 @@ final class RunCoordinator: NSObject, Coordinator {
         let actions = RunViewModelActions(toBack: toBack,
                                           showShareViewController: showShareViewController)
         let vc = dependencies.makeRunViewController(actions: actions)
+        vc.modalPresentationStyle = .fullScreen
         
-        navigationController.pushViewController(vc, animated: true)
-//        navigationController.navigationBar.isHidden = false
+        navigationController.view.layer.add(CATransition().segueFromBottom(), forKey: kCATransition)
+        navigationController.pushViewController(vc, animated: false)
+        navigationController.navigationBar.isHidden = true
     }
     
     private func toBack() {
-        navigationController.popViewController(animated: true)
+        navigationController.view.layer.add(CATransition().segueFromTop(), forKey: kCATransition)
+        navigationController.popViewController(animated: false)
         dependencies.dismiss(self, nil)
     }
     

@@ -18,8 +18,10 @@ protocol DataRepository {
 //    func createMapData(with userData: UserMap, completion: @escaping (Result<String, DatabaseError>) -> Void)
     func createMapData(with userData: UserMap, uid: String, urls: [String])
     func uploadMapData(with userData: UserMap, uid: String, urls: [String]) async throws
+    func uploadMapData2(with userData: UserMap, uid: String) async throws
     func fetchMapListData() -> Observable<[MapList]>
     func fetchMapListData2() async throws -> [MapList?]
+    func fetchMapListData3() async throws -> [MapList]
 }
 
 protocol NetworkService {

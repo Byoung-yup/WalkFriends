@@ -344,8 +344,9 @@ class LoginViewController: UIViewController {
         
         output.loginTrigger
 //            .observe(on: MainScheduler.instance)
+            .debug()
             .subscribe(onNext: { [weak self] result in
-                
+                print("로그인 에러: \(result)")
 //                guard let strongSelf = self else { return }
 //
 //                switch result {
@@ -364,6 +365,14 @@ class LoginViewController: UIViewController {
                 if state { self?.loginViewModel.actions.signIn() }
                 
             }).disposed(by: disposeBag)
+        
+        output.signIn
+            .debug()
+            .catchAndReturn(false)
+            .subscribe(onNext: { result in
+                print("로그인 상태: \(result)")
+            }).disposed(by: disposeBag)
+            
         
         //        output.loginTrigger_Google
         //            .observe(on: MainScheduler.instance)

@@ -32,7 +32,8 @@ final class ShareInfoCoordinator: NSObject, Coordinator {
         let actions = ShareInfoViewModelActions(toBack: toBack)
         let vc = dependencies.makeShareViewController(actions: actions, mapInfo: mapInfo)
         
-        navigationController.pushViewController(vc, animated: true)
+        navigationController.view.layer.add(CATransition().segueFromBottom(), forKey: kCATransition)
+        navigationController.pushViewController(vc, animated: false)
     }
     
     private func toBack() {

@@ -19,7 +19,7 @@ struct RunViewModelActions {
 
 struct MapInfo {
     let address: String
-    let image: UIImage
+    let imageData: Data
 }
 
 final class RunViewModel: ViewModel {
@@ -180,7 +180,7 @@ final class RunViewModel: ViewModel {
             
             let image = self.drawLineOnImage(snapshot: snapshot, coordinators: coordinators)
 //            print("image: \(image)")
-            self.reverseGeocoding(image: image, coordinate: coordinators.first!)
+            self.reverseGeocoding(imageData: image, coordinate: coordinators.first!)
             // Don't just pass snapshot.image, pass snapshot itself!
 //            return self.drawLineOnImage(snapshot: snapshot, coordinators: coordinators)
 //            self.reverseGeocoding(image: image!, coordinate: coordinators.first!)
@@ -229,7 +229,7 @@ final class RunViewModel: ViewModel {
         
     }
     
-    func drawLineOnImage(snapshot: MKMapSnapshotter.Snapshot, coordinators: [CLLocationCoordinate2D]) -> UIImage {
+    func drawLineOnImage(snapshot: MKMapSnapshotter.Snapshot, coordinators: [CLLocationCoordinate2D]) -> Data {
         let image = snapshot.image
         
         // for Retina screen
@@ -267,12 +267,15 @@ final class RunViewModel: ViewModel {
         // end the graphics context
         UIGraphicsEndImageContext()
         
-        return resultImage!
+        let data = resultImage?.jpegData(compressionQuality: 0.7)
+//        let newImage = UIImage(data: data!)
+        
+        return data!
     }
     
     // MARK: - Get Placemark city address
     
-    private func reverseGeocoding(image: UIImage, coordinate: CLLocationCoordinate2D) {
+    private func reverseGeocoding(imageData: Data, coordinate: CLLocationCoordinate2D) {
         
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         let geocoder = CLGeocoder()
@@ -284,7 +287,7 @@ final class RunViewModel: ViewModel {
             
             guard let placemarks = placemark, let placemarkInfo = placemarks.last else { return }
             
-            self.actions.showShareViewController(MapInfo(address: placemarkInfo.address, image: image))
+            self.actions.showShareViewController(MapInfo(address: placemarkInfo.address, imageData: imageData))
             return
         }
     }

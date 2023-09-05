@@ -21,7 +21,7 @@ final class ShareInfoViewModel: ViewModel {
     
     struct Input {
         //        let addressText: Observable<String>
-        let selectedImages: Observable<[UIImage]>
+        let selectedImages: Observable<[Data]>
         let titleText: Observable<String>
         let memoText: Observable<String>
         let timeText: Observable<String>
@@ -72,12 +72,12 @@ final class ShareInfoViewModel: ViewModel {
                 self.actions.toBack()
             })
                 
-        let user_Map_Images: PublishRelay<[UIImage]> = PublishRelay()
+        let user_Map_Images: PublishRelay<[Data]> = PublishRelay()
         let user_Selected_Images = input.selectedImages
             .map { [weak self] in
                 guard let self = self else { fatalError() }
                 
-                user_Map_Images.accept([self.mapInfo.image] + $0)
+                user_Map_Images.accept([self.mapInfo.imageData] + $0)
             }
                 
         let user_Map_InfoData = Observable.combineLatest(user_Map_Images, input.titleText, input.memoText, input.timeText)
@@ -86,12 +86,12 @@ final class ShareInfoViewModel: ViewModel {
                 
 //                user_Map_Image.accept([self.mapInfo.image] + $0)
                 print("images: \($0)")
-                return UserMap(address: self.mapInfo.address, images: $0, title: $1, memo: $2, time: $3, popular: 0)
+                return UserMap(address: self.mapInfo.address, imageDatas: $0, title: $1, memo: $2, time: $3, popular: 0)
             }
         
         let save_isEnabled = user_Map_InfoData
             .map {
-                return $0.images.count > 1 && !$0.title.isEmpty && !$0.memo.isEmpty && !$0.time.isEmpty
+                return $0.imageDatas.count > 1 && !$0.title.isEmpty && !$0.memo.isEmpty && !$0.time.isEmpty
             }
         
         let save = input.submit.withLatestFrom(user_Map_InfoData)
@@ -99,7 +99,7 @@ final class ShareInfoViewModel: ViewModel {
                 guard let self = self else { fatalError() }
                 
                 self.isLoding.accept(true)
-                return self.dataUseCase.shareData(with: $0)
+                return self.dataUseCase.shareData2(with: $0)
             }
         
         

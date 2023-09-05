@@ -7,7 +7,11 @@
 
 import Foundation
 import RxSwift
-import RxCocoa
+import SDWebImage
+
+struct MapListDetailViewModelActions {
+    
+}
 
 final class MapListDetailViewModel: ViewModel {
     
@@ -20,37 +24,28 @@ final class MapListDetailViewModel: ViewModel {
     // MARK: - Output
     
     struct Output {
-        let urls: Driver<[String]>
+        let item: Observable<FinalMapList>
     }
     
     // MARK: - Properties
     
-    private let item: MapList
-    
+    private let item: Observable<FinalMapList>
     private let dataUseCase: DataUseCase
+    let actions: MapListDetailViewModelActions
     
     // MARK: - Initailize
     
-    init(dataUseCase: DataUseCase, item: MapList) {
+    init(dataUseCase: DataUseCase, item: FinalMapList, actions: MapListDetailViewModelActions) {
         self.dataUseCase = dataUseCase
-        self.item = item
+        self.item = Observable.just(item)
+        self.actions = actions
     }
     
     // MARK: - Transform
     
     func transform(input: Input) -> Output {
         
-        let imageUrls = Driver.just(item.imageUrls)
         
-        return Output(urls: imageUrls)
+        return Output(item: item)
     }
-    
-    // MARK: - Download Image Data
-
-//    private func downloadImageData() -> Observable<[Data]> {
-//
-//        return dataUseCase.downLoadImages(urls: item.imageUrls)
-//    }
 }
-
-

@@ -21,6 +21,7 @@ extension UserProfileData {
         return [
             "email": email,
             "nickName": nickName,
+            "favorite" : []
         ]
     }
 }

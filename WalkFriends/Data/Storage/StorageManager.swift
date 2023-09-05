@@ -12,7 +12,7 @@ import FirebaseAuth
 
 final class StorageManager: ImageRepository {
     
-    private let storage = Storage.storage()
+    private let storageRef = Storage.storage().reference()
     
 }
 
@@ -29,7 +29,7 @@ extension StorageManager {
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
         
-        let fileRef = storage.reference().child("images/\(uid)_profile.jpg")
+        let fileRef = storageRef.child("images/\(uid)_profile.jpg")
         
         do {
              _ = try await fileRef.putDataAsync(data, metadata: metaData)
@@ -93,7 +93,7 @@ extension StorageManager {
     func uploadImageArrayData2(with data: [Data], uid: String) async throws -> [String] {
         
         let metaData = StorageMetadata()
-        metaData.contentType = "image/jpg"
+        metaData.contentType = "image/jpeg"
         
         return try await withThrowingTaskGroup(of: String.self) { group in
             
@@ -101,7 +101,7 @@ extension StorageManager {
             
             for (index, item) in data.enumerated() {
                 
-                let fileRef = storage.reference().child("Maps/\(uid)/\(index).jpg")
+                let fileRef = storageRef.child("Maps/\(uid)/\(index).jpeg")
                 
                 group.addTask {
                     
@@ -113,18 +113,64 @@ extension StorageManager {
                         print("err: \(err.localizedDescription)")
                         throw DatabaseError.UnknownError
                     }
-                    
                 }
                 
-                for try await urlStr in group {
-                    urls.append(urlStr)
+                for try await url in group {
+                    urls.append(url)
                 }
             }
-     
             return urls
-            
         }
     }
     
-
+    func uploadImageArrayData3(with data: [Data], uid: String) async throws {
+        
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpeg"
+        
+        return await withThrowingTaskGroup(of: Void.self) { group in
+            
+//            var refArrays: [StorageReference] = []
+            
+            for (index, item) in data.enumerated() {
+                
+                let fileRef = storageRef.child("Maps/\(uid)/\(index).jpeg")
+                
+                group.addTask {
+                    
+                    do {
+                        _ = try await fileRef.putDataAsync(item, metadata: metaData)
+                    } catch let err {
+                        print("err: \(err.localizedDescription)")
+                        throw DatabaseError.UnknownError
+                    }
+                }
+            }
+        }
+    }
+    
+    func fetchImageReference(maplists: [MapList]) async throws -> [FinalMapList] {
+        
+        return try await withThrowingTaskGroup(of: FinalMapList.self) { group in
+            
+            for maplist in maplists {
+                let fileRef = storageRef.child("Maps/\(maplist.uid)/")
+                print("fileRef: \(fileRef)")
+                group.addTask {
+                    
+                    do {
+                        
+                        let refAll = try await fileRef.listAll().items
+                        print("refAll: \(refAll)")
+                        return FinalMapList(reference: refAll, mapList: maplist)
+                    } catch {
+                        throw DatabaseError.UnknownError
+                    }
+                }
+            }
+            
+            return try await group
+                .reduce(into: [FinalMapList](), { $0.append($1) })
+        }
+    }
 }

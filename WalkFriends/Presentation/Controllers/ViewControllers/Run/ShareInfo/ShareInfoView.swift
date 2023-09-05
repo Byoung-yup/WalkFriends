@@ -11,7 +11,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class ShareInfoView: UIView {
+final class ShareInfoView: UIView {
     
     // MARK: - UI Properties
     

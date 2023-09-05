@@ -122,7 +122,7 @@ extension UIViewController {
             let options = PHImageRequestOptions()
             options.isSynchronous = true
             
-            imageManager.requestImage(for: assetImages[i], targetSize: size, contentMode: .aspectFit, options: options) { (result, info) in
+            imageManager.requestImage(for: assetImages[i], targetSize: size, contentMode: .aspectFill, options: options) { (result, info) in
                 
                 guard let result = result else {
                     return
@@ -130,7 +130,7 @@ extension UIViewController {
                 thumbnail = result
             }
             
-            let data = thumbnail.jpegData(compressionQuality: 1.0)
+            let data = thumbnail.jpegData(compressionQuality: 0.7)
             
             guard let data = data else {
                 fatalError("Data not found")

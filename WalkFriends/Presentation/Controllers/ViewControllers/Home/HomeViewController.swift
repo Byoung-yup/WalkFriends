@@ -170,15 +170,16 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        print("deinit - \(self.description)")
-    }
+    // MARK: - LifeCycle
     
-    // MARK: - viewDidLoad
+//    override func loadView() {
+//        super.loadView()
+//        print("loadView")
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+//        print("viewDidLoad")
         view.backgroundColor = .white
         
         drawBackground()
@@ -195,17 +196,43 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
 //        print("current user email: \(FirebaseService.shard.currentUser?.email)")
     }
     
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        print("viewWillAppear")
+//    }
+//
+//    override func viewWillLayoutSubviews() {
+//        super.viewWillLayoutSubviews()
+//        print("viewWillLayoutSubviews")
+//    }
+//
 //    override func viewDidLayoutSubviews() {
 //        super.viewDidLayoutSubviews()
-        
-//        profileView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-//        profileView.layer.cornerRadius = 20
-        
-//        profileView.layer.shadowColor = UIColor.gray.cgColor
-//        profileView.layer.shadowRadius = 20
-//        profileView.layer.shadowOffset = CGSize(width: 0, height: 10)
-//        profileView.layer.shadowOpacity = 0.5
-
+//        print("viewDidLayoutSubviews")
+//    }
+    
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        print("viewDidAppear")
+//    }
+//
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        print("viewWillDisappear")
+//    }
+//
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        print("viewDidDisappear")
+//    }
+    
+    deinit {
+        print("deinit - \(self.description)")
+    }
+    
+//    override func didReceiveMemoryWarning() {
+//        super.didReceiveMemoryWarning()
+//        print("didReceiveMemoryWarning")
 //    }
     
     // MARK: - Configure UI
@@ -313,13 +340,42 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
                 
             }).disposed(by: disposeBag)
         
-//        homeViewModel.items.bind(to: mapListView.mapListTableView.rx.items(cellIdentifier: MapListViewCell.identifier, cellType: MapListViewCell.self)) { (row, element, cell) in
+        output.fetch_MapLists
+            .map {
+                var x: [FinalMapList] = []
+                switch $0 {
+                case .success(let maplists):
+                    x.append(contentsOf: maplists)
+                case .failure(let err):
+                    break
+                }
+                return x
+            }
+            .bind(to: mapListView.mapListTableView.rx.items(cellIdentifier: MapListViewCell.identifier, cellType: MapListViewCell.self)) { (row, element, cell) in
+                cell.mapList = element
+                print("maplist: \(element)")
+                cell.selectionStyle = .none
+            }.disposed(by: disposeBag)
+        
+//        output.mapListItems.bind(to: mapListView.mapListTableView.rx.items(cellIdentifier: MapListViewCell.identifier, cellType: MapListViewCell.self)) { (row, element, cell) in
 //            cell.mapList = element
 //            cell.selectionStyle = .none
 //        }.disposed(by: disposeBag)
         
         mapListView.mapListTableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
+        
+        mapListView.mapListTableView
+            .rx
+            .modelSelected(FinalMapList.self)
+            .subscribe(onNext: { [weak self] mapList in
+                
+                guard let self = self else { return }
+                
+                self.homeViewModel.actions.showMapListDetailViewController(mapList)
+//                print("mapList: \(mapList)")
+                
+            }).disposed(by: disposeBag)
         
         runBtn
             .rx
@@ -364,13 +420,19 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             })
             .disposed(by: disposeBag)
         
-        output.fetch_MapList
-            .subscribe(onNext: { result in
-                
-                print("fetch_MapList: \(result)")
-                
-            }).disposed(by: disposeBag)
+//        output.fetch_MapLists
+//            .subscribe(onNext: { [weak self] result in
 //
+//                guard let self = self else { return }
+//
+//                switch result {
+//                case .success(let items):
+//                    self.homeViewModel.mapListItems.accept(items)
+//                case .failure(let err):
+//                    break
+//                }
+//
+//            }).disposed(by: disposeBag)
 //        homeViewModel.items
 //            .bind(to: homeListView.collectionView.rx.items(cellIdentifier: "HomeListCell", cellType: HomeListCell.self)) { (row, text, cell) in
 //                cell.label.text = "\(text)"

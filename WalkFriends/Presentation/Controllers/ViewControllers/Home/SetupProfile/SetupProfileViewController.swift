@@ -17,6 +17,14 @@ class SetupProfileViewController: UIViewController {
     
     // MARK: - UI Components
     
+    lazy var indicatorView: UIActivityIndicatorView = {
+        let indicatorView = UIActivityIndicatorView()
+        indicatorView.style = .medium
+        indicatorView.color = .white
+        indicatorView.hidesWhenStopped = true
+        return indicatorView
+    }()
+    
     lazy var imageView: UIImageView = {
         let config = UIImage.SymbolConfiguration(pointSize: 40, weight: .regular)
         let defaultImage = UIImage(systemName: "person.crop.circle", withConfiguration: config)
@@ -37,6 +45,17 @@ class SetupProfileViewController: UIViewController {
         return tf
     }()
     
+    lazy var alertLbl: UILabel = {
+        let lbl = UILabel()
+        lbl.font = .systemFont(ofSize: 14, weight: .light)
+        lbl.textColor = .red
+        lbl.backgroundColor = .white
+        lbl.adjustsFontSizeToFitWidth = true
+        lbl.isHidden = true
+        lbl.text = "이미 존재하는 닉네임 입니다."
+        return lbl
+    }()
+    
 //    lazy var userGenderSgControl: UISegmentedControl = {
 //        let items = ["남", "여"]
 //        let sg = UISegmentedControl(items: items)
@@ -51,7 +70,6 @@ class SetupProfileViewController: UIViewController {
         btn.setTitleColor(.white, for: .normal)
         btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 15)
         btn.layer.cornerRadius = 25
-        btn.isEnabled = false
         return btn
     }()
     
@@ -75,7 +93,7 @@ class SetupProfileViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - viewDidLoad
+    // MARK: - lifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,6 +107,14 @@ class SetupProfileViewController: UIViewController {
         
         binding()
         
+    }
+    
+    deinit {
+        print("\(self.description) - deinit")
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     // MARK: - viewDidLayoutSubviews
@@ -120,6 +146,18 @@ class SetupProfileViewController: UIViewController {
             make.height.equalTo(50)
         }
         
+        view.addSubview(alertLbl)
+        alertLbl.snp.makeConstraints { make in
+            make.left.equalTo(userNicknameTextField.snp.left).offset(10)
+            make.top.equalTo(userNicknameTextField.safeAreaLayoutGuide.snp.bottom)
+        }
+        
+//        view.addSubview(alertLbl)
+//        alertLbl.snp.makeConstraints { make in
+//            make.top.equalTo(userNicknameTextField.safeAreaLayoutGuide.snp.bottom)
+//            make.centerX.equalTo(userNicknameTextField.snp.centerX).offset(10)
+//        }
+        
 //        view.addSubview(userGenderSgControl)
 //        userGenderSgControl.snp.makeConstraints { make in
 //            make.top.equalTo(userNicknameTextField.snp.bottom).offset(15)
@@ -134,6 +172,12 @@ class SetupProfileViewController: UIViewController {
             make.left.equalTo(userNicknameTextField.safeAreaLayoutGuide.snp.left)
             make.right.equalTo(userNicknameTextField.safeAreaLayoutGuide.snp.right)
             make.height.equalTo(50)
+        }
+        
+        createProfileBtn.addSubview(indicatorView)
+        indicatorView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalTo(30)
         }
         
 //        setupSegmentControl()
@@ -156,7 +200,19 @@ class SetupProfileViewController: UIViewController {
         let output = setupProfileViewModel.transform(input: input)
         
         output.createEnabled
-            .drive(createProfileBtn.rx.isEnabled)
+            .asDriver(onErrorJustReturn: false)
+            .drive(onNext: { [weak self] state in
+                
+                guard let self = self else { return }
+                
+                if state {
+                    self.createProfileBtn.backgroundColor = .main_Color
+                    self.createProfileBtn.isEnabled = true
+                } else {
+                    self.createProfileBtn.backgroundColor = .systemGray
+                    self.createProfileBtn.isEnabled = false   
+                }
+            })
             .disposed(by: disposeBag)
 
         output.create
@@ -167,9 +223,15 @@ class SetupProfileViewController: UIViewController {
 
                 switch result {
                 case .success(_):
-                    break
+                    strongSelf.setupProfileViewModel.actions.createProfile()
                 case .failure(let err):
-                    strongSelf.showAlert(error: err)
+                    
+                    switch err {
+                    case .ExistNicknameError:
+                        strongSelf.alertLbl.isHidden = false
+                    default:
+                        strongSelf.showAlert(error: err)
+                    }
                 }
 
             }).disposed(by: disposeBag)
@@ -182,6 +244,27 @@ class SetupProfileViewController: UIViewController {
                 
                 strongSelf.presentImagePicker()
           
+            }).disposed(by: disposeBag)
+        
+        output.isLoding
+            .bind(to: indicatorView.rx.isAnimating)
+            .disposed(by: disposeBag)
+        
+        output.isLoding
+            .asDriver(onErrorJustReturn: false)
+            .drive(onNext: { [weak self] state in
+//                print("isLoding: \(state)")
+                if state {
+//                    print("true excute")
+                    self?.createProfileBtn.setTitle("", for: .normal)
+                    self?.view.isUserInteractionEnabled = false
+                }
+                else {
+//                    print("false excute")
+                    self?.createProfileBtn.setTitle("공유하기", for: .normal)
+                    self?.view.isUserInteractionEnabled = true
+                }
+                
             }).disposed(by: disposeBag)
     }
 }

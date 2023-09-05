@@ -13,19 +13,19 @@ import SnapKit
 
 class MapListDetailViewController: UIViewController {
     
-    let tableView: UITableView = {
-       let view = UITableView()
-        view.register(MapListDetailViewCell.self, forCellReuseIdentifier: MapListDetailViewCell.identifier)
-        view.separatorStyle = .none
-        view.backgroundColor = .white
-        return view
-    }()
-    
     // MARK: - Properties
     
     private let mapListDetailViewModel: MapListDetailViewModel
     
     let disposeBag = DisposeBag()
+    
+    // MARK: - UI Properties
+    
+    private lazy var contentView: MapDetailView = {
+        let view = MapDetailView()
+        view.backgroundColor = .white
+        return view
+    }()
     
     // MARK: - viewDidLoad
     
@@ -52,12 +52,10 @@ class MapListDetailViewController: UIViewController {
     
     private func confgureUI() {
         
-        view.addSubview(tableView)
-        tableView.snp.makeConstraints { make in
+        view.addSubview(contentView)
+        contentView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
-            make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            make.left.right.bottom.equalToSuperview()
         }
     }
     
@@ -68,22 +66,13 @@ class MapListDetailViewController: UIViewController {
         let input = MapListDetailViewModel.Input()
         let output = mapListDetailViewModel.transform(input: input)
         
-        tableView
-            .rx
-            .setDelegate(self)
-            .disposed(by: disposeBag)
-        
-        output.urls.drive(tableView.rx.items(cellIdentifier: "MapListDetailViewCell", cellType: MapListDetailViewCell.self)) { row, element, cell in
-            cell.configureCell(url: element)
-        }.disposed(by: disposeBag)
+        output.item
+            .subscribe(onNext: { [weak self] item in
+                
+                guard let self = self else { return }
+                print("item: \(item)")
+                self.contentView.item = item
+            }).disposed(by: disposeBag)
     }
     
-    
-}
-
-extension MapListDetailViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
-    }
 }

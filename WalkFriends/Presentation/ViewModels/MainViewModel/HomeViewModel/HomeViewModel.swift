@@ -28,6 +28,7 @@ struct HomeViewModelActions {
     let showSetupProfileViewController: () -> Void
     let fetchError: () -> Void
     let showRunViewController: () -> Void
+    let showMapListDetailViewController: (FinalMapList) -> Void
 }
 
 class HomeViewModel: ViewModel {
@@ -61,8 +62,13 @@ class HomeViewModel: ViewModel {
     struct Output {
         let fetchTrigger: Observable<Result<Bool, DatabaseError>>
         let toggle_Btn_Trigger: Observable<Category_Action>
-        let fetch_MapList: Observable<Result<[MapList?], DatabaseError>>
+        let fetch_MapLists: Observable<Result<[FinalMapList], DatabaseError>>
+//        let mapListItems: Observable<[FinalMapList]>
     }
+    
+    // MARK: - Properties
+    
+//    var mapListItems: PublishRelay<[MapList?]> = PublishRelay<[MapList?]>()
     
     // MARK: - Initailize
     
@@ -82,9 +88,23 @@ class HomeViewModel: ViewModel {
             input.distance_Btn.map { _ in Category_Action.Distance }
         )
         
-        let fetch_MapList = dataUseCase.fetchMapListData()
+        let fetch_MapLists = dataUseCase.fetchMapListData()
+//            .debug()
+//            .subscribe(onNext: { [weak self] result in
+//                
+//                guard let self = self else { fatalError() }
+//                
+//                switch result {
+//                case .success(let items):
+//                    self.mapListItems.accept(items)
+//                case .failure(let err):
+//                    break
+//                }
+//            })
                 
-        return Output(fetchTrigger: fetch, toggle_Btn_Trigger: toggle_Btn, fetch_MapList: fetch_MapList)
+        return Output(fetchTrigger: fetch,
+                      toggle_Btn_Trigger: toggle_Btn,
+                      fetch_MapLists: fetch_MapLists)
     }
     
 }

@@ -17,7 +17,8 @@ protocol DataUseCase: UseCase {
     func createProfile2(with userProfile: UserProfileData) -> Observable<Result<Bool, DatabaseError>>
     
     func shareData(with userData: UserMap) -> Observable<Result<Bool, DatabaseError>>
-    func fetchMapListData() -> Observable<Result<[MapList?], DatabaseError>>
+    func shareData2(with userData: UserMap) -> Observable<Result<Bool, DatabaseError>>
+    func fetchMapListData() -> Observable<Result<[FinalMapList], DatabaseError>>
 //    func downLoadImages(urls: [String]) -> Observable<[Data]>
 }
 
@@ -73,18 +74,17 @@ extension DefaultDataUseCase: DataUseCase {
 
                 do {
                     
-                    try await strongSelf.storageRepository.uploadImageData(with: jpegData)
-                    print("storageRepository.uploadImageData")
                     try await strongSelf.dataBaseRepository.createUserProfile(with: userProfile)
-                    print("dataBaseRepository.createUserProfile")
+                    try await strongSelf.storageRepository.uploadImageData(with: jpegData)
+                    
                     observer.onNext(.success(true))
                     observer.onCompleted()
-                    print("onNext:(true)")
+//                    print("onNext:(true)")
                 } catch let err as DatabaseError {
-
+                    print("err: \(err)")
                     observer.onNext(.failure(err))
                     observer.onCompleted()
-                    print("onNext:(err)")
+//                    print("onNext:(err)")
                 }
             }
 
@@ -167,10 +167,8 @@ extension DefaultDataUseCase: DataUseCase {
 //    }
     
     func shareData(with userData: UserMap) -> Observable<Result<Bool, DatabaseError>> {
-//        print("shareData()")
-        let jpegDatas = userData.images.map { $0.convertJPEGData() }
-//        let jpeg_Map_Image = userData.map_Image.convertJPEGData()
-//        jpegDatas.append(jpeg_Map_Image)
+
+        let jpegDatas = userData.imageDatas
         let uid = UUID().uuidString
         
         
@@ -206,7 +204,38 @@ extension DefaultDataUseCase: DataUseCase {
         
     }
     
-    func fetchMapListData() -> Observable<Result<[MapList?], DatabaseError>> {
+    func shareData2(with userData: UserMap) -> Observable<Result<Bool, DatabaseError>> {
+        
+        let jpegDatas = userData.imageDatas
+        let uid = UUID().uuidString
+        
+        return Observable.create { (observer) in
+            
+            let task = Task { [weak self] in
+                
+                guard let strongSelf = self else { return }
+                
+                do {
+                    try await strongSelf.storageRepository.uploadImageArrayData3(with: jpegDatas, uid: uid)
+                    try await strongSelf.dataBaseRepository.uploadMapData2(with: userData, uid: uid)
+                } catch let err as DatabaseError {
+                    observer.onNext(.failure(err))
+                    observer.onCompleted()
+                    return
+                }
+                
+                observer.onNext(.success(true))
+                observer.onCompleted()
+                return
+            }
+            
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+    
+    func fetchMapListData() -> Observable<Result<[FinalMapList], DatabaseError>> {
         
         return Observable.create { (observer) in
             
@@ -214,16 +243,17 @@ extension DefaultDataUseCase: DataUseCase {
                 
                 guard let self = self else { return }
                 
-                var mapLists: [MapList?] = []
+                var finalMapLists: [FinalMapList] = []
                 
                 do {
-                    mapLists = try await self.dataBaseRepository.fetchMapListData2()
+                    let mapLists = try await self.dataBaseRepository.fetchMapListData3()
+                    finalMapLists = try await self.storageRepository.fetchImageReference(maplists: mapLists)
                 } catch let err as DatabaseError {
                     observer.onNext(.failure(err))
                     observer.onCompleted()
                 }
                 
-                observer.onNext(.success(mapLists))
+                observer.onNext(.success(finalMapLists))
                 observer.onCompleted()
                 return
                 

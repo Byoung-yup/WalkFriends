@@ -34,6 +34,7 @@ final class LoginViewModel: ViewModel {
         let loginEnabled: Observable<Bool>
         let loginTrigger: Observable<Result<Bool, FirebaseAuthError>>
         let isLoginState: Observable<Bool>
+        let signIn: Observable<Bool>
 //        let loginTrigger_Google: Observable<Result<Bool, FirebaseAuthError>>
 //        let loginTrigger_Facebook: Observable<Result<Bool, FirebaseAuthError>>
 //        let loginTrigger_Kakao: Observable<Result<Bool, FirebaseAuthError>>
@@ -69,7 +70,7 @@ final class LoginViewModel: ViewModel {
         
         let login = input.login.withLatestFrom(userInfo)
             .flatMapLatest {
-                return FirebaseService.shard.signIn(with: $0) }
+                return FirebaseService.shard.signIn2(with: $0) }
         
         let googleSignIn = input.google_SignIn
             .flatMap { return FirebaseService.shard.googleSignIn() }
@@ -80,8 +81,11 @@ final class LoginViewModel: ViewModel {
         let kakaoSignIn = input.kakak_SignIn
             .flatMap { return FirebaseService.shard.kakaoSignIn() }
         
-        let login_merge = Observable.merge(login, googleSignIn, fbSignIn, kakaoSignIn)
+        let login_merge = Observable.merge(googleSignIn, fbSignIn, kakaoSignIn)
         
-        return Output(loginEnabled: loginEnabled, loginTrigger: login_merge, isLoginState: isLoginState.asObservable())
+        return Output(loginEnabled: loginEnabled,
+                      loginTrigger: login_merge,
+                      isLoginState: isLoginState.asObservable(),
+        signIn: login)
     }
 }

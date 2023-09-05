@@ -7,10 +7,11 @@
 
 import Foundation
 import UIKit
+import FirebaseStorage
 
 struct UserMap {
     let address: String
-    let images: [UIImage]
+    let imageDatas: [Data]
 //    let map_Image: UIImage
     let title: String
     let memo: String
@@ -31,6 +32,21 @@ extension UserMap {
            "time": time,
            "upload_Date": Date().getCurrenTime(),
            "imageUrls": urls,
+           "popular": popular
+        ]
+    }
+    
+    func toJSON2(uid: String, count: Int) -> [String: Any] {
+        
+        return [
+           "uid": uid,
+           "email": (FirebaseService.shard.auth.currentUser?.email)!,
+           "address": address,
+           "title": title,
+           "memo": memo,
+           "time": time,
+           "upload_Date": Date().getCurrenTime(),
+           "imageCount": count,
            "popular": popular
         ]
     }

@@ -75,6 +75,15 @@ final class AppSceneDIContainer {
         return ShareInfoViewModel(dataUseCase: makeDefaultUseCase(), actions: actions, mapInfo: mapInfo)
     }
     
+    // MARK: - MapListDetail View
+    func makeMapListDetailViewController(actions: MapListDetailViewModelActions, item: FinalMapList) -> MapListDetailViewController {
+        return MapListDetailViewController(mapListDetailViewModel: makeMapListDetailViewModel(actions: actions, item: item))
+    }
+    
+    func makeMapListDetailViewModel(actions: MapListDetailViewModelActions, item: FinalMapList) -> MapListDetailViewModel {
+        return MapListDetailViewModel(dataUseCase: makeDefaultUseCase(), item: item, actions: actions)
+    }
+    
     // MARK: - Info View
     func makeInfoViewController(actions: InfoViewModelActions) -> InfoViewController {
         return InfoViewController(infoViewModel: makeInfoViewModel(actions: actions))
@@ -114,6 +123,11 @@ final class AppSceneDIContainer {
         return ShareInfoCoordinator(navigationController: navigationController, dependenceis: dependencies, mapInfo: mapInfo)
     }
     
+    // MARK: MapListDetail Coordinator
+    func makeMapListDetailCoordinator(navigationController: UINavigationController, dependencies: MapListDetailCoordinatorDependencies, item: FinalMapList) -> MapListDetailCoordinator {
+        return MapListDetailCoordinator(navigationController: navigationController, dependencies: dependencies, item: item)
+    }
+    
     // MARK: - Info Coordinator
     func makeInfoCoordinator(navigationController: UINavigationController, dependencies: InfoCoordinatorDependencies) -> InfoCoordinator {
         return InfoCoordinator(navigationController: navigationController, dependecies: dependencies)
@@ -131,5 +145,5 @@ final class AppSceneDIContainer {
 }
 
 extension AppSceneDIContainer: LoginCoordinatorDependencies {}
-extension AppSceneDIContainer: HomeCoordinatorDepedencies {}
+extension AppSceneDIContainer: HomeCoordinatorDependencies {}
  

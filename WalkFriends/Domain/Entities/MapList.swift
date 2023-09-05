@@ -6,16 +6,18 @@
 //
 
 import Foundation
+import FirebaseStorage
 
 struct MapList: Decodable {
     let uid: String
     let address: String
-    let imageUrls: [String]
+//    let imageUrls: [String]
     let title: String
     let memo: String
     let date: String
     let email: String
     let popular: Int
+    let imageCount: Int
 //    let distance: String
     let time: String
     
@@ -24,11 +26,17 @@ struct MapList: Decodable {
         case address = "address"
         case title = "title"
         case memo = "memo"
-        case imageUrls = "imageUrls"
+//        case imageUrls = "imageUrls"
         case date = "upload_Date"
         case email = "email"
         case popular = "popular"
+        case imageCount = "imageCount"
 //        case distance = "distance"
         case time = "time"
     }
+}
+
+struct FinalMapList {
+    let reference: [StorageReference]
+    let mapList: MapList
 }

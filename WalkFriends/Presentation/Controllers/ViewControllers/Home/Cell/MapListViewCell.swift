@@ -7,6 +7,9 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import SDWebImage
+import FirebaseStorageUI
 
 class MapListViewCell: UITableViewCell {
     
@@ -31,9 +34,9 @@ class MapListViewCell: UITableViewCell {
     
     lazy var thumbnailView: UIImageView = {
         let imgView = UIImageView()
-        imgView.contentMode = .scaleAspectFill
+        imgView.contentMode = .scaleToFill
         imgView.backgroundColor = .red
-        imgView.image = UIImage(named: "Register_View_Bg")
+//        imgView.image = UIImage(named: "Register_View_Bg")
         return imgView
     }()
     
@@ -153,11 +156,13 @@ class MapListViewCell: UITableViewCell {
     
     // MARK: - Properties
     
-    var mapList: MapList? = nil {
+    var mapList: FinalMapList? = nil {
         didSet {
             configureCell()
         }
     }
+    
+    let disposeBag = DisposeBag()
     
     // MARK: - Initailize
     
@@ -220,11 +225,28 @@ class MapListViewCell: UITableViewCell {
     
     private func configureCell() {
         
-//        titleLbl.text = mapList?.title
-//        subTitleLbl.text = mapList?.address
-//        popular_Lbl.text = mapList?.popular.numberFormatter()
-//        distance_Lbl.text = mapList?.distance
-//        time_Lbl.text = mapList!.time + "m"
+        guard let finalMapList = mapList else { return }
+        
+//        guard let url = URL(string: mapList.imageUrls[1]) else { return }
+//        let urlRequest = URLRequest(url: url!)
+//
+//        URLSession.shared.rx
+//            .response(request: urlRequest)
+//            .observe(on: MainScheduler.instance)
+//            .subscribe(onNext: { [weak self] (_, data) in
+//                print("data: \(data)")
+//                self?.thumbnailView.image = UIImage(data: data)
+//            }).disposed(by: disposeBag)
+        
+        let placeholderImage = UIImage(named: "waveform.circle")
+        
+        thumbnailView.sd_setImage(with: finalMapList.reference[1], placeholderImage: placeholderImage)
+        
+        titleLbl.text = finalMapList.mapList.title
+        subTitleLbl.text = finalMapList.mapList.address
+        popular_Lbl.text = finalMapList.mapList.popular.numberFormatter()
+        distance_Lbl.text = "20km"
+        time_Lbl.text = finalMapList.mapList.time + "m"
     }
     
 }

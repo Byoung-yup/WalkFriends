@@ -22,6 +22,7 @@ protocol DefaultService: FirebaseAuthService {
     func createUser(user: UserLoginInfo) -> Observable<Result<Bool, FirebaseAuthError>>
     func signIn(with userInfo: UserLoginInfo) -> Observable<Result<Bool, FirebaseAuthError>>
     func logout() -> Observable<Result<Bool, FirebaseAuthError>>
+    func signIn2(with userInfo: UserLoginInfo) -> Single<Bool>
 }
 
 protocol GoogleService: FirebaseAuthService {
@@ -138,6 +139,47 @@ extension FirebaseService: FirebaseAuthService {
                     default:
                         observer.onNext(.failure(FirebaseAuthError.NetworkError))
                         observer.onCompleted()
+                    }
+                }
+            }
+            
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+    
+    func signIn2(with userInfo: UserLoginInfo) -> Single<Bool> {
+        
+        return Single.create { (single) in
+            
+            let task = Task {
+                do {
+                    
+                    let authResult = try await FirebaseAuth.Auth.auth().signIn(withEmail: userInfo.email, password: userInfo.password)
+                    guard authResult.user.isEmailVerified else {
+                        
+                        try FirebaseAuth.Auth.auth().signOut()
+                        single(.failure(FirebaseAuthError.AuthenticationError))
+                        return
+                        
+                    }
+                    
+                    single(.success(true))
+                    
+                } catch let err as NSError {
+                    let errorCode = AuthErrorCode.Code(rawValue: err.code)
+                    
+                    switch errorCode {
+                    case .wrongPassword:
+                        single(.failure(FirebaseAuthError.WrongPasswordError))
+                        
+                    case .userNotFound:
+                        single(.failure(FirebaseAuthError.UserNotFoundError))
+                        
+                    default:
+                        single(.failure(FirebaseAuthError.NetworkError))
+                        
                     }
                 }
             }

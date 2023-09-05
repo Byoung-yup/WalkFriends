@@ -9,12 +9,13 @@ import Foundation
 import UIKit
 import CoreLocation
 
-protocol HomeCoordinatorDepedencies {
+protocol HomeCoordinatorDependencies {
     // MARK: coordinator
     func makeSetupProfileCoordinator(navigationController: UINavigationController, dependencies: SetupProfileCoordinatorDependencies) -> SetupProfileCoordinator
     func makeInfoCoordinator(navigationController: UINavigationController, dependencies: InfoCoordinatorDependencies) -> InfoCoordinator
     func makeRunCoordinator(navigationController: UINavigationController, dependencies: RunCoordinatorDependencies) -> RunCoordinator
     func makeShareCoordinator(navigationController: UINavigationController, dependencies: ShareInfoCoordinatorDepedencies, mapInfo: MapInfo) -> ShareInfoCoordinator
+    func makeMapListDetailCoordinator(navigationController: UINavigationController, dependencies: MapListDetailCoordinatorDependencies, item: FinalMapList) -> MapListDetailCoordinator
     
     // MARK: viewController
     func makeHomeViewController(actions: HomeViewModelActions) -> HomeViewController
@@ -22,6 +23,7 @@ protocol HomeCoordinatorDepedencies {
     func makeSetupProfileViewController(actions: SetupViewModelActions) -> SetupProfileViewController
     func makeRunViewController(actions: RunViewModelActions) -> RunViewController
     func makeShareViewController(actions: ShareInfoViewModelActions, mapInfo: MapInfo) -> ShareInfoViewController
+    func makeMapListDetailViewController(actions: MapListDetailViewModelActions, item: FinalMapList) -> MapListDetailViewController
     
     // MARK: dismiss
     func dismissHomeViewController(_ coordinator: HomeCoordinator)
@@ -33,9 +35,9 @@ final class HomeCoordinator: NSObject, Coordinator {
     var childCoordinators: [NSObject] = []
     
     private let navigationController: UINavigationController
-    private let dependencies: HomeCoordinatorDepedencies
+    private let dependencies: HomeCoordinatorDependencies
     
-    init(navigationController: UINavigationController, dependencies: HomeCoordinatorDepedencies) {
+    init(navigationController: UINavigationController, dependencies: HomeCoordinatorDependencies) {
         self.navigationController = navigationController
         self.dependencies = dependencies
     }
@@ -44,7 +46,8 @@ final class HomeCoordinator: NSObject, Coordinator {
         let actions = HomeViewModelActions(showInfoViewController: showInfoViewController,
                                            showSetupProfileViewController: showSetupProfileViewController,
                                            fetchError: fetchError,
-                                           showRunViewController: showRunViewController)
+                                           showRunViewController: showRunViewController,
+                                           showMapListDetailViewController: showMapListDetailViewController)
         let vc = dependencies.makeHomeViewController(actions: actions)
         
         navigationController.pushViewController(vc, animated: true)
@@ -82,6 +85,13 @@ final class HomeCoordinator: NSObject, Coordinator {
         
         childCoordinators.append(shareCoordinator)
     }
+    
+    private func showMapListDetailViewController(item: FinalMapList) {
+        let mapListDetailCoordinator = dependencies.makeMapListDetailCoordinator(navigationController: navigationController, dependencies: self, item: item)
+        mapListDetailCoordinator.start()
+        
+        childCoordinators.append(mapListDetailCoordinator)
+    }
 }
 
 extension HomeCoordinator: InfoCoordinatorDependencies {
@@ -112,7 +122,7 @@ extension HomeCoordinator: RunCoordinatorDependencies {
     
     func dismiss(_ coordinator: RunCoordinator, _ mapInfo: MapInfo?) {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
-        
+        navigationController.navigationBar.isHidden = false
         if let mapInfo = mapInfo {
             showShareViewController(mapInfo: mapInfo)
         }
@@ -128,6 +138,14 @@ extension HomeCoordinator: ShareInfoCoordinatorDepedencies {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
         navigationController.navigationBar.isHidden = false
     }
+}
+
+extension HomeCoordinator: MapListDetailCoordinatorDependencies {
+    func makeMapListDetailViewController(actions: MapListDetailViewModelActions, item: FinalMapList) -> MapListDetailViewController {
+        return dependencies.makeMapListDetailViewController(actions: actions, item: item)
+    }
+    
+    
 }
 
 // MARK: - HomeViewModelActionDelegate

@@ -11,11 +11,13 @@ import FirebaseFirestore
 import RxSwift
 import RxCocoa
 import FirebaseAuth
+import FirebaseStorage
 
 enum DatabaseError: Error {
     case NotFoundUserError
     case DatabaseFetchError
     case UnknownError
+    case ExistNicknameError
 }
 
 final class DatabaseManager {
@@ -100,15 +102,28 @@ extension DatabaseManager: DataRepository {
 //    }
     
     func createUserProfile(with data: UserProfileData) async throws {
-        throw DatabaseError.UnknownError
+        
         guard let uid = FirebaseService.shard.auth.currentUser?.uid else {
             throw DatabaseError.UnknownError
         }
         
         do {
+            let snapshot = try await db.collection("Users").whereField("nickName", isEqualTo: data.nickName).getDocuments()
+            
+            // 닉네임 중복 여부
+            guard snapshot.documents.isEmpty else {
+                throw DatabaseError.ExistNicknameError
+            }
+            
             try await db.collection("Users").document(uid).setData(data.toJSON())
-        } catch {
-            throw DatabaseError.UnknownError
+        } catch let err {
+            
+            switch err {
+            case is DatabaseError:
+                throw DatabaseError.ExistNicknameError
+            default:
+                throw DatabaseError.UnknownError
+            }
         }
     }
         
@@ -184,6 +199,15 @@ extension DatabaseManager: DataRepository {
         }
     }
     
+    func uploadMapData2(with userData: UserMap, uid: String) async throws {
+        do {
+            try await db.collection("Maps").document(uid).setData(userData.toJSON2(uid: uid, count: userData.imageDatas.count))
+        } catch let err {
+            print("uploadMapData2 err: \(err.localizedDescription)")
+            throw DatabaseError.UnknownError
+        }
+    }
+    
     func fetchMapListData() -> Observable<[MapList]> {
         
         return Observable.create { [weak self] (observer) in
@@ -243,6 +267,35 @@ extension DatabaseManager: DataRepository {
             return try await group
                 .reduce(into: [MapList?](), { $0.append($1) })
                 .compactMap { $0 }
+        }
+    }
+    
+    func fetchMapListData3() async throws -> [MapList] {
+        
+        return try await withThrowingTaskGroup(of: MapList.self) { group in
+            
+            let snapshot = try await db.collection("Maps").getDocuments()
+            
+            let documnets = snapshot.documents
+            
+            for documnet in documnets {
+                
+                let data = documnet.data()
+                
+                group.addTask {
+                    
+                    do {
+                        let jsonData = try JSONSerialization.data(withJSONObject: data, options: .fragmentsAllowed)
+                        return try JSONDecoder().decode(MapList.self, from: jsonData)
+                    } catch let err {
+                        print("err: \(err.localizedDescription)")
+                        throw DatabaseError.UnknownError
+                    }
+                }
+            }
+            
+            return try await group
+                .reduce(into: [MapList](), { $0.append($1) })
         }
     }
 }

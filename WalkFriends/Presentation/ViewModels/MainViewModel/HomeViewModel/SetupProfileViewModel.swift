@@ -7,7 +7,6 @@
 
 import Foundation
 import RxSwift
-import RxCocoa
 //import FirebaseAuth
 
 struct SetupViewModelActions {
@@ -24,12 +23,13 @@ final class SetupProfileViewModel: ViewModel {
     
     struct Output {
         let create: Observable<Result<Bool, DatabaseError>>
-        let createEnabled: Driver<Bool>
+        let createEnabled: Observable<Bool>
+        let isLoding: Observable<Bool>
     }
     
     private let dataUseCase: DataUseCase
     let actions: SetupViewModelActions
-    
+    private let isLoding: PublishSubject<Bool> = PublishSubject()
     
     // MARK: - Initialize
     
@@ -38,6 +38,9 @@ final class SetupProfileViewModel: ViewModel {
         self.actions = actions
     }
     
+    deinit {
+        print("SetupProfileViewModel - deinit")
+    }
 }
 
 extension SetupProfileViewModel {
@@ -45,34 +48,33 @@ extension SetupProfileViewModel {
     func transform(input: Input) -> Output {
         
         guard let email = FirebaseService.shard.auth.currentUser?.providerData[0].email else { fatalError() }
-        
-//        let gender = input.userGender.map { $0 == 0 ? "남자" : "여자" }
-//
+
         let userProfile = Observable.combineLatest(input.profileImage, input.usernickName) { (image, nickname) in
             return UserProfileData(image: image, email: email, nickName: nickname)
         }
 
-        let canCreate = input.usernickName
+        let isEnabled = input.usernickName
             .map { $0.count >= 2 }
-            .asDriver(onErrorJustReturn: false)
 
         let create = input.createTrigger.withLatestFrom(userProfile)
             .flatMapLatest { [weak self] data in
-                return (self?.dataUseCase.createProfile(with: data))!
+                
+                guard let self = self else { fatalError() }
+                
+                self.isLoding.onNext(true)
+                return self.dataUseCase.createProfile(with: data)
+                
             }
             .observe(on: MainScheduler.instance)
-            .do(onNext: { [weak self] result in
+            .do(onNext: { [weak self] _ in
                 
-                switch result {
-                case .success(_):
-                    self?.actions.createProfile()
-                    break
-                case .failure(_):
-                    break
-                }
+                guard let self = self else { return }
+                
+                self.isLoding.onNext(false)
             })
         
         return Output(create: create,
-                      createEnabled: canCreate)
+                      createEnabled: isEnabled,
+                      isLoding: isLoding.asObservable())
     }
 }

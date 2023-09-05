@@ -90,7 +90,7 @@ class ShareInfoViewController: UIViewController {
     
     let disposeBag = DisposeBag()
 
-    var userSelectedImages: PublishRelay = PublishRelay<[UIImage]>()
+    var userSelectedImages: PublishRelay = PublishRelay<[Data]>()
     
     // MARK: - viewDidLoad
     
@@ -212,10 +212,13 @@ class ShareInfoViewController: UIViewController {
         let output = shareInfoViewModel.transform(input: input)
         
         DispatchQueue.main.async { [weak self] in
-//            self?.shareInfoView.titleTextField.placeholder = output.mapInfo.address
-//            self?.shareInfoView.titleTextField.text = output.mapInfo.address
-            self?.shareInfoView.addressInfoLbl.text = self?.shareInfoViewModel.mapInfo.address
-            self?.shareInfoView.thumbnailView.image = self?.shareInfoViewModel.mapInfo.image
+            
+            guard let self = self else { return }
+            
+            let imageData = self.shareInfoViewModel.mapInfo.imageData
+            
+            self.shareInfoView.addressInfoLbl.text = self.shareInfoViewModel.mapInfo.address
+            self.shareInfoView.thumbnailView.image = UIImage(data: imageData)
         }
         
         output.dismiss
@@ -281,7 +284,7 @@ class ShareInfoViewController: UIViewController {
             }).disposed(by: disposeBag)
         
         userSelectedImages.bind(to: shareInfoView.photoCollectionView.rx.items(cellIdentifier: PhotoListCell.identifier, cellType: PhotoListCell.self)) { row ,element , cell in
-            cell.imageView.image = element
+            cell.imageView.image = UIImage(data: element)
         }.disposed(by: disposeBag)
         
         shareInfoView.rx
@@ -391,7 +394,7 @@ extension ShareInfoViewController {
         
         let imagePicker = ImagePickerController()
         
-        configureImagePicker(imagePicker, selection: 3)
+        configureImagePicker(imagePicker, selection: 20)
         
         presentImagePicker(imagePicker, select: { (asset) in
             
@@ -419,7 +422,7 @@ extension ShareInfoViewController {
         
         if AssetImages.count != 0 {
             
-            var images: [UIImage] = []
+            var imageDatas: [Data] = []
             
             for i in 0 ..< AssetImages.count {
                 
@@ -430,18 +433,18 @@ extension ShareInfoViewController {
                 
                 var thumbnail = UIImage()
                 
-                imageManager.requestImage(for: AssetImages[i], targetSize: CGSize(width: 100, height: 200), contentMode: .aspectFit, options: option) {
+                imageManager.requestImage(for: AssetImages[i], targetSize: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width / 2), contentMode: .aspectFit, options: option) {
                     (result, info) in
                     thumbnail = result!
                 }
                 
                 let data = thumbnail.jpegData(compressionQuality: 0.7)
-                let newImage = UIImage(data: data!)
+//                let newImage = UIImage(data: data!)
                 
-                images.append(newImage! as UIImage)
+                imageDatas.append(data!)
             }
             
-            userSelectedImages.accept(images)
+            userSelectedImages.accept(imageDatas)
         }
     }
 }

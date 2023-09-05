@@ -37,8 +37,18 @@ class RunViewController: UIViewController {
 //        btn.setTitleColor(.green, for: .normal)
 //        return btn
 //    }()
+    private let backBtn: UIButton = {
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .medium)
+        let image = UIImage(systemName: "xmark", withConfiguration: symbolConfig)
+        let btn = UIButton(type: .system)
+        btn.tintColor = .black
+        btn.backgroundColor = .white
+        btn.setImage(image, for: .normal)
+        return btn
+    }()
+    
 //
-    lazy var stopBtn: UIButton = {
+    private let stopBtn: UIButton = {
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 40, weight: .medium)
         let image = UIImage(systemName: "stop.circle.fill", withConfiguration: symbolConfig)
         let btn = UIButton(type: .system)
@@ -64,29 +74,25 @@ class RunViewController: UIViewController {
     
     private let disposeBag = DisposeBag()
     
-    // MARK: - viewDidLoad
+    // MARK: - LifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
-        //        locationManager.delegate = self
         
         configureUI()
         binding()
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        print("viewWillAppear")
-//        runViewModel.locationManager.startUpdatingLocation()
-//    }
-//
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        print("viewDidDisappear")
-//        runViewModel.locationManager.stopUpdatingLocation()
-//    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        backBtn.layer.cornerRadius = backBtn.frame.width / 2
+        backBtn.clipsToBounds = true
+    }
+    
+    
     
     // MARK: - Initialize
     
@@ -107,12 +113,19 @@ class RunViewController: UIViewController {
     
     private func configureUI() {
         
-        navigationController?.navigationBar.backgroundColor = .clear
+//        navigationController?.navigationBar.backgroundColor = .clear
         
         view.addSubview(mapView)
         mapView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.left.right.bottom.equalToSuperview()
+//            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.top.left.right.bottom.equalToSuperview()
+        }
+        
+        mapView.addSubview(backBtn)
+        backBtn.snp.makeConstraints { make in
+            make.top.equalTo(mapView.safeAreaLayoutGuide.snp.top).offset(21)
+            make.left.equalTo(mapView.safeAreaLayoutGuide.snp.left).offset(21)
+            make.width.height.equalTo(30)
         }
         
         mapView.addSubview(stopBtn)
@@ -147,12 +160,17 @@ class RunViewController: UIViewController {
         
 //        var points: [CLLocationCoordinate2D] = []
         
-        let input = RunViewModel.Input(toBack: rx.isPopping.asObservable(),
+        let input = RunViewModel.Input(toBack: backBtn.rx.tap.asObservable(),
                                        stop: stopBtn.rx.tap.asObservable())
         let output = runViewModel.transform(input: input)
         
         output.toBack
-            .subscribe()
+            .subscribe(onNext: { [weak self] in
+                
+                guard let self = self else { return }
+                
+                self.runViewModel.actions.toBack()
+            })
             .disposed(by: disposeBag)
         
         output.didChangeAuthorization
