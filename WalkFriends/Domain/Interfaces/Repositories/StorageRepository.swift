@@ -16,5 +16,6 @@ protocol ImageRepository {
     func uploadImageArrayData2(with data: [Data], uid: String) async throws -> [String]
     func uploadImageArrayData3(with data: [Data], uid: String) async throws
 //    func downLoadImages(uid: String) -> [URL]
-    func fetchImageReference(maplists: [MapList]) async throws -> [FinalMapList]
+    func fetch_MapListsImageReference(maplists: [MapList]) async throws -> [FinalMapList]
+    func fetch_UserProfileImageReference(userData: UserProfile) async throws -> FinalUserProfile
 }

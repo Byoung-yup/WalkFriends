@@ -33,29 +33,29 @@ class AppCoordinator: Coordinator {
         if (FirebaseAuth.Auth.auth().currentUser != nil) {
             makeHomeCoordinator()
         } else {
-            makeLoginCoordinator()
+            makeLaunchCoordinator()
         }
     }
     
-//    private func showLaunchViewController() {
-//        
-//        let coordinator = LaunchCoordinator(navigationController: navigationController)
-//        coordinator.start()
-//        
-//        childCoordinators.append(coordinator)
-//    }
-    
-    private func makeLoginCoordinator() {
-        let loginCoordinator = appSceneDIContainer.makeLoginCoordinator(navigationController: navigationController)
-        loginCoordinator.start()
-        print("Auth: \(FirebaseAuth.Auth.auth().currentUser)")
-        childCoordinators.append(loginCoordinator)
+    private func makeLaunchCoordinator() {
+        
+        let launchCoordinator = appSceneDIContainer.makeLaunchCoordinator(navigationController: navigationController)
+        launchCoordinator.start()
+        
+        childCoordinators.append(launchCoordinator)
     }
+    
+//    private func makeLoginCoordinator() {
+//        let loginCoordinator = appSceneDIContainer.makeLoginCoordinator(navigationController: navigationController)
+//        loginCoordinator.start()
+//        print("Auth: \(FirebaseAuth.Auth.auth().currentUser)")
+//        childCoordinators.append(loginCoordinator)
+//    }
     
     private func makeHomeCoordinator() {
         let homeCoordinator = appSceneDIContainer.makeHomeCoordinator(navigationController: navigationController)
         homeCoordinator.start()
-        print("Auth: \(FirebaseAuth.Auth.auth().currentUser)")
+//        print("Auth: \(FirebaseAuth.Auth.auth().currentUser)")
         childCoordinators.append(homeCoordinator)
     }
     
@@ -91,7 +91,8 @@ extension AppCoordinator: AppSceneDIContainerDelegate {
         case is LoginCoordinator:
             makeHomeCoordinator()
         case is HomeCoordinator:
-            makeLoginCoordinator()
+//            makeLoginCoordinator()
+            break
         default:
             break
         }

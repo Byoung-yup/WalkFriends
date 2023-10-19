@@ -29,7 +29,7 @@ extension StorageManager {
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
         
-        let fileRef = storageRef.child("images/\(uid)_profile.jpg")
+        let fileRef = storageRef.child("images/\(uid)/profile.jpeg")
         
         do {
              _ = try await fileRef.putDataAsync(data, metadata: metaData)
@@ -149,19 +149,18 @@ extension StorageManager {
         }
     }
     
-    func fetchImageReference(maplists: [MapList]) async throws -> [FinalMapList] {
+    func fetch_MapListsImageReference(maplists: [MapList]) async throws -> [FinalMapList] {
         
         return try await withThrowingTaskGroup(of: FinalMapList.self) { group in
             
             for maplist in maplists {
+                
                 let fileRef = storageRef.child("Maps/\(maplist.uid)/")
-                print("fileRef: \(fileRef)")
+
                 group.addTask {
                     
                     do {
-                        
                         let refAll = try await fileRef.listAll().items
-                        print("refAll: \(refAll)")
                         return FinalMapList(reference: refAll, mapList: maplist)
                     } catch {
                         throw DatabaseError.UnknownError
@@ -171,6 +170,19 @@ extension StorageManager {
             
             return try await group
                 .reduce(into: [FinalMapList](), { $0.append($1) })
+        }
+    }
+    
+    func fetch_UserProfileImageReference(userData: UserProfile) async throws -> FinalUserProfile {
+        
+        let fileRef = storageRef.child("images/\(userData.uid)/")
+        
+        do {
+            let image_Reference = try await fileRef.list(maxResults: 1).items.first!
+            print("image_Reference: \(image_Reference)")
+            return FinalUserProfile(reference: image_Reference, profile: userData)
+        } catch {
+            throw DatabaseError.UnknownError
         }
     }
 }

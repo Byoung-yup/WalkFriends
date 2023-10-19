@@ -6,21 +6,17 @@
 //
 
 import Foundation
-import UIKit
+import FirebaseStorage
 
-public struct UserProfile: Decodable {
+struct UserProfile: Decodable {
     let email: String
     let nickName: String
+    let favorite: [String]
+    let uid: String
 }
 
-//extension UserProfile {
-//    
-//    func toDomain() -> [String: Any] {
-//        
-//        return [
-//            "email": email,
-//            "nickName": nickName,
-//            "gender": gender
-//        ]
-//    }
-//}
+
+struct FinalUserProfile {
+    let reference: StorageReference
+    let profile: UserProfile
+}

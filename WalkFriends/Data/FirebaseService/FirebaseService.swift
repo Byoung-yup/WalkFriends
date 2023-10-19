@@ -46,7 +46,7 @@ final class FirebaseService {
         return auth
     }()
 
-    var currentUser: UserInfo?
+//    var currentUser: UserInfo?
 //    var handle: AuthStateDidChangeListenerHandle!
 //
 //    var UserProfle: UserProfile?

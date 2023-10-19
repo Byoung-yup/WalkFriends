@@ -24,6 +24,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let rootViewController = UINavigationController()
         window?.rootViewController = rootViewController
+
+        AppAppearance.naviBarHeight = rootViewController.navigationBar.frame.height
+        let safeArea = window?.safeAreaInsets
+        AppAppearance.safeArea = safeArea
         
         let coordinator = AppCoordinator(navigationController: rootViewController, appSceneDIContainer: appSceneDIContainer)
         coordinator.start()

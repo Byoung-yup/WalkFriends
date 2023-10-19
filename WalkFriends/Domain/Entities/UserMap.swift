@@ -40,7 +40,7 @@ extension UserMap {
         
         return [
            "uid": uid,
-           "email": (FirebaseService.shard.auth.currentUser?.email)!,
+           "writer": FirebaseService.shard.auth.currentUser!.uid,
            "address": address,
            "title": title,
            "memo": memo,

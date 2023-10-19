@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import RxSwift
 import RxCocoa
-import FirebaseStorage
+//import FirebaseStorage
 
 protocol DataUseCase: UseCase {
 //    func excuteProfile() -> Observable<Bool>
@@ -19,7 +19,8 @@ protocol DataUseCase: UseCase {
     func shareData(with userData: UserMap) -> Observable<Result<Bool, DatabaseError>>
     func shareData2(with userData: UserMap) -> Observable<Result<Bool, DatabaseError>>
     func fetchMapListData() -> Observable<Result<[FinalMapList], DatabaseError>>
-//    func downLoadImages(urls: [String]) -> Observable<[Data]>
+
+    func fetchUserData(uid: String) -> Observable<FinalUserProfile>
 }
 
 class DefaultDataUseCase {
@@ -43,7 +44,7 @@ class DefaultDataUseCase {
                 guard let self = self else { return }
                 
                 do {
-                    try await self.dataBaseRepository.fetchUserData()
+                    try await self.dataBaseRepository.fetchUserData(uid: FirebaseService.shard.auth.currentUser!.uid)
                 } catch let err as DatabaseError {
                     observer.onNext(.failure(err))
                     observer.onCompleted()
@@ -61,6 +62,30 @@ class DefaultDataUseCase {
 }
 
 extension DefaultDataUseCase: DataUseCase {
+    
+    func fetchUserData(uid: String) -> Observable<FinalUserProfile> {
+        
+        return Observable.create { (observer) in
+            
+            let task = Task {
+                
+                do {
+                    print("uid: \(uid)")
+                    let userData = try await self.dataBaseRepository.fetchUserData(uid: uid)
+                    let finalUserData = try await self.storageRepository.fetch_UserProfileImageReference(userData: userData)
+                    
+                    observer.onNext(finalUserData)
+                    observer.onCompleted()
+                } catch let err as DatabaseError {
+                    observer.onError(err)
+                }
+            }
+            
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
     
     func createProfile(with userProfile: UserProfileData) -> Observable<Result<Bool, DatabaseError>> {
 
@@ -84,7 +109,6 @@ extension DefaultDataUseCase: DataUseCase {
                     print("err: \(err)")
                     observer.onNext(.failure(err))
                     observer.onCompleted()
-//                    print("onNext:(err)")
                 }
             }
 
@@ -247,16 +271,14 @@ extension DefaultDataUseCase: DataUseCase {
                 
                 do {
                     let mapLists = try await self.dataBaseRepository.fetchMapListData3()
-                    finalMapLists = try await self.storageRepository.fetchImageReference(maplists: mapLists)
+                    finalMapLists = try await self.storageRepository.fetch_MapListsImageReference(maplists: mapLists)
+                    
+                    observer.onNext(.success(finalMapLists))
+                    observer.onCompleted()
                 } catch let err as DatabaseError {
                     observer.onNext(.failure(err))
                     observer.onCompleted()
                 }
-                
-                observer.onNext(.success(finalMapLists))
-                observer.onCompleted()
-                return
-                
             }
             
             return Disposables.create {

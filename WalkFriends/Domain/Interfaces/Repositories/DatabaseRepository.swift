@@ -13,7 +13,7 @@ import FirebaseStorage
 protocol DataRepository {
 //    func fetchUserProfile(completion: @escaping (Result<Bool, DatabaseError>) -> Void)
 //    func fetchUserData() -> Observable<Result<Bool, DatabaseError>>
-    func fetchUserData() async throws 
+    func fetchUserData(uid: String) async throws -> UserProfile
     func createUserProfile(with data: UserProfileData) async throws 
 //    func createMapData(with userData: UserMap, completion: @escaping (Result<String, DatabaseError>) -> Void)
     func createMapData(with userData: UserMap, uid: String, urls: [String])

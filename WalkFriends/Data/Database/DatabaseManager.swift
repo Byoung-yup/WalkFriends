@@ -67,14 +67,21 @@ extension DatabaseManager: DataRepository {
 //        }
 //    }
     
-    func fetchUserData() async throws  {
+    func fetchUserData(uid: String) async throws -> UserProfile {
         
-        let document = try await db.collection("Users").document((FirebaseService.shard.auth.currentUser!.uid)).getDocument()
+        let document = try await db.collection("Users").document(uid).getDocument()
         print("document: \(document)")
-        guard document.exists else {
+        guard document.exists, let data = document.data() else {
             throw DatabaseError.NotFoundUserError
         }
         print("user Exist")
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: data, options: .fragmentsAllowed)
+            return try JSONDecoder().decode(UserProfile.self, from: jsonData)
+        } catch let err {
+            print("err: \(err.localizedDescription)")
+            throw DatabaseError.UnknownError
+        }
     }
     
 //    func fetchUserProfile(completion: @escaping (Result<Bool, DatabaseError>) -> Void) {

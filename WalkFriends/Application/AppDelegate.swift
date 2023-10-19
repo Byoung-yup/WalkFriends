@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         KakaoSDK.initSDK(appKey: "fa3f46e81ac9f379807667f66c67067b")
         
-        AppAppearance.setupAppearance()
+//        AppAppearance.setupAppearance()
         
         return true
     }

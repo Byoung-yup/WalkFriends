@@ -52,4 +52,15 @@ extension Reactive where Base: UIViewController {
                 return navigationController.isMovingFromParent
             }
     }
+    
+    var rx_ViewWillAppear: ControlEvent<Bool> {
+        let source = self.methodInvoked(#selector(Base.viewWillAppear(_:)))
+            .map { $0.first as? Bool ?? false }
+        return ControlEvent(events: source)
+      }
+    
+    var rx_ViewDidAppear: ControlEvent<Bool> {
+        let source = self.methodInvoked(#selector(Base.viewDidAppear)).map { $0.first as? Bool ?? false }
+        return ControlEvent(events: source)
+      }
 }

@@ -12,17 +12,13 @@ extension CLPlacemark {
 
     var address: String {
         var result = ""
-        if let administrativeArea = administrativeArea {
-            result += "\(administrativeArea)"
+        if let country = country {
+            result += "\(country)"
             
-//            if let name = name {
-//                result += " name\(name)"
-//            }
+            if let administrativeArea = administrativeArea {
+                result += " \(administrativeArea)"
+            }
             
-//            if let subAdministrativeArea = subAdministrativeArea {
-//                result += " subAdministrativeArea\(subAdministrativeArea)"
-//            }
-
             if let locality = locality {
                 result += " \(locality)"
             }
@@ -30,39 +26,56 @@ extension CLPlacemark {
             if let subLocality = subLocality {
                 result += " \(subLocality)"
             }
-            
-//            if let country = country {
-//                result += " country\(country)"
+        }
+//        if let administrativeArea = administrativeArea {
+//            result += "\(administrativeArea)"
+//
+////            if let name = name {
+////                result += " 1\(name)"
+////            }
+////
+////            if let subAdministrativeArea = subAdministrativeArea {
+////                result += " 2\(subAdministrativeArea)"
+////            }
+//
+//            if let locality = locality {
+//                result += " \(locality)"
+//            }
+//
+//            if let subLocality = subLocality {
+//                result += " \(subLocality)"
 //            }
             
-            if let thoroughfare = thoroughfare {
-                result += " \(thoroughfare)"
-            }
             
+//
+//            if let thoroughfare = thoroughfare {
+//                result += " 6\(thoroughfare)"
+//            }
+//
 //            if let subThoroughfare = subThoroughfare {
-//                result += " subThoroughfare\(subThoroughfare)"
+//                result += " 7\(subThoroughfare)"
 //            }
-            
+//
 //            if let inlandWater = inlandWater {
-//                result += " inlandWater\(inlandWater)"
+//                result += " 8\(inlandWater)"
 //            }
 //
 //            if let areasOfInterest = areasOfInterest {
-//                result += " areasOfInterest\(areasOfInterest)"
+//                result += " 9\(areasOfInterest)"
 //            }
 //
 //            if let postalCode = postalCode {
-//                result += " postalCode\(postalCode)"
+//                result += " 10\(postalCode)"
 //            }
 //
 //            if let isoCountryCode = isoCountryCode {
-//                result += " isoCountryCode\(isoCountryCode)"
+//                result += " 11\(isoCountryCode)"
 //            }
 //
 //            if let ocean = ocean {
-//                result += " ocean\(ocean)"
+//                result += " 12\(ocean)"
 //            }
-        }
+        
         return result
     }
 

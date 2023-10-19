@@ -12,6 +12,15 @@ import BSImagePicker
 
 extension UIViewController {
     
+    var naviBarHeight: CGFloat {
+        return (navigationController?.navigationBar.frame.height)!
+    }
+    
+    var safeArea: UIEdgeInsets {
+        let window = UIApplication.shared.windows.first
+        return (window?.safeAreaInsets)!
+    }
+    
     // MARK: - Firebase Auth Alert
     
     // MARK: Success
