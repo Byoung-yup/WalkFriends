@@ -61,6 +61,9 @@ extension UIViewController {
         case .NetworkError:
             title = "네트워크 오류 안내"
             message = "네트워크 통신이 원활하지 않습니다."
+        default:
+            title = ""
+            message = ""
         }
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -210,5 +213,33 @@ extension UIViewController {
         requestLocationServiceAlert.addAction(goSetting)
         
         present(requestLocationServiceAlert, animated: true)
+    }
+}
+
+// MARK: Phone Number Format
+
+extension UIViewController {
+    
+    func format(with mask: String, phone: String) -> String {
+        let numbers = phone.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
+        
+        var result = ""
+        var index = numbers.startIndex // numbers iterator
+//        print("Before index: \(index)")
+//        print("numbers.endIndex: \(numbers.endIndex)")
+        // iterate over the mask characters until the iterator of numbers ends
+        for ch in mask where index < numbers.endIndex {
+            if ch == "X" {
+                // mask requires a number in this place, so take the next one
+                result.append(numbers[index])
+
+                // move numbers iterator to the next index
+                index = numbers.index(after: index)
+//                print("after index: \(index)")
+            } else {
+                result.append(ch) // just append a mask character
+            }
+        }
+        return result
     }
 }

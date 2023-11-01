@@ -26,11 +26,13 @@ final class LocationViewController: UIViewController {
         return manager
     }()
     var authorizationStatus: CLAuthorizationStatus!
+    var currentLocation: CLLocation!
     
     private var searchCompleter: MKLocalSearchCompleter?
-    private var searchRegion: MKCoordinateRegion = MKCoordinateRegion(MKMapRect.world)
-//    private var search_Text: String = ""
+//    private var searchRegion: MKCoordinateRegion = MKCoordinateRegion(MKMapRect.world)
     var completerResults: BehaviorRelay<[String]> = BehaviorRelay(value: [])
+    
+//    let testItem = BehaviorRelay(value: ["경기도 수원시 장안구 정자동"])
     
     // MARK: - UI Properties
     
@@ -39,6 +41,14 @@ final class LocationViewController: UIViewController {
     //        btn.tintColor = .black
     //        return btn
     //    }()
+    
+    lazy var indicatorView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.backgroundColor = .clear
+        view.tintColor = .gray
+        view.hidesWhenStopped = true
+        return view
+    }()
     
     lazy var back_Btn: UIButton = {
         var config = UIButton.Configuration.plain()
@@ -76,7 +86,7 @@ final class LocationViewController: UIViewController {
         let tf = UITextField(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0))
         tf.textColor = .black
         tf.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
-        tf.backgroundColor = .lightGray
+        tf.backgroundColor = .lightGray.withAlphaComponent(0.5)
         tf.borderStyle = .roundedRect
         tf.returnKeyType = .search
         return tf
@@ -106,6 +116,7 @@ final class LocationViewController: UIViewController {
         tbView.register(LocationListCell.self, forCellReuseIdentifier: LocationListCell.identifier)
         tbView.separatorStyle = .none
         tbView.showsVerticalScrollIndicator = false
+        tbView.keyboardDismissMode = .onDrag
         return tbView
     }()
     
@@ -129,7 +140,7 @@ final class LocationViewController: UIViewController {
         configureUI()
         binding()
         
-        locationManager.requestWhenInUseAuthorization()
+//        locationManager.requestWhenInUseAuthorization()
         //        location_TextField.delegate = self
         searchCompleter = MKLocalSearchCompleter()
         searchCompleter?.delegate = self
@@ -168,6 +179,12 @@ final class LocationViewController: UIViewController {
             make.right.equalTo(view.safeAreaLayoutGuide).offset(-21)
             make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        view.addSubview(indicatorView)
+        indicatorView.snp.makeConstraints { make in
+            make.center.equalTo(location_TableView.snp.center)
+            make.width.height.equalTo(50)
+        }
         //
         //        titleView.addSubview(title_StackView)
         //        title_StackView.snp.makeConstraints { make in
@@ -189,24 +206,10 @@ final class LocationViewController: UIViewController {
         
         let naviItem = UINavigationItem()
         let left_CustomView = UIBarButtonItem(customView: back_Btn)
-        //        let right_CustomView = UIBarButtonItem(customView: searchBar)
-        //        searchBar.widthAnchor.constraint(equalToConstant: view.frame.width - back_Btn.frame.width).isActive = true
-        //        print("width: \(back_Btn.frame.width)")
-        //        let searchVC2 = UISearchController()
         
         naviItem.titleView = location_TextField
         naviItem.leftBarButtonItem = left_CustomView
         
-//        searchVC.hidesNavigationBarDuringPresentation = false
-//        searchVC.searchBar.showsCancelButton = false
-//        searchVC.searchBar.setImage(UIImage(), for: UISearchBar.Icon.search, state: .normal)
-        
-        //        back_Btn.snp.makeConstraints { make in
-        //            make.width.height.equalTo(naviBarHeight)
-        //        }
-        //        naviItem.rightBarButtonItem = right_CustomView
-        
-        //        naviItem.rightBarButtonItem = customView
         navigationBar.setItems([naviItem], animated: false)
         
         view.addSubview(navigationBar)
@@ -224,6 +227,8 @@ final class LocationViewController: UIViewController {
     
     private func binding() {
         
+        let textFieldObservable = location_TextField.rx.text.orEmpty
+        
         let input = LocationViewModel.Input(toBack_Trigger: back_Btn.rx.tap.asObservable())
         let output = locationViewModel.transform(input: input)
         
@@ -233,29 +238,29 @@ final class LocationViewController: UIViewController {
             .disposed(by: disposeBag)
 
         
-        locationManager
-            .rx
-            .didChangeAuthorization
-            .subscribe(onNext: { [weak self] (_, status) in
-
-                guard let self = self else { return }
-//                print("status: \(status)")
-                switch status {
-                case .denied:
-                    self.showPopup()
-                case .notDetermined:
+//        locationManager
+//            .rx
+//            .didChangeAuthorization
+//            .subscribe(onNext: { [weak self] (_, status) in
+//
+//                guard let self = self else { return }
+////                print("status: \(status)")
+//                switch status {
+//                case .denied:
 //                    self.showPopup()
-                    break
-                case .restricted:
-                    print("Authorization: restricted")
-                case .authorizedAlways, .authorizedWhenInUse:
-                    print("authorizedAlways")
-                    self.locationManager.startUpdatingLocation()
-                default:
-                    break
-                }
-
-            }).disposed(by: disposeBag)
+//                case .notDetermined:
+////                    self.showPopup()
+//                    break
+//                case .restricted:
+//                    print("Authorization: restricted")
+//                case .authorizedAlways, .authorizedWhenInUse:
+//                    print("authorizedAlways")
+//                    self.locationManager.startUpdatingLocation()
+//                default:
+//                    break
+//                }
+//                self.authorizationStatus = status
+//            }).disposed(by: disposeBag)
         
 //        locationManager
 //            .rx
@@ -266,19 +271,20 @@ final class LocationViewController: UIViewController {
 //                self?.search_CurrentLocation(location: location)
 //            }).disposed(by: disposeBag)
         
-        locationManager
-            .rx
-            .didUpdateLocations
-            .take(1)
-            .subscribe(onNext: { [weak self] (_, location) in
-//                print("locations: \(location)")
-                self?.search_CurrentLocation(location: location.last!)
-            }).disposed(by: disposeBag)
+//        locationManager
+//            .rx
+//            .didUpdateLocations
+//            .take(1)
+//            .subscribe(onNext: { [weak self] (_, location) in
+////                print("locations: \(location)")
+////                self?.completerResults.accept([])
+////                self?.search_CurrentLocation(location: location.last!)
+//            }).disposed(by: disposeBag)
         
         completerResults
             .bind(to: location_TableView.rx.items(cellIdentifier: LocationListCell.identifier, cellType: LocationListCell.self)) { (row, item, cell) in
                 cell.location_Lbl.text = item
-                cell.selectionStyle = .default
+                cell.selectionStyle = .none
             }.disposed(by: disposeBag)
         
         location_TableView.rx.modelSelected(String.self)
@@ -292,32 +298,62 @@ final class LocationViewController: UIViewController {
         location_TextField
             .rx
             .text.orEmpty
-//            .filter { $0.count >= 1 }
+            .filter { $0.count >= 1 }
+            .observe(on: MainScheduler.instance)
+//            .map { $0.components(separatedBy: " ") }
+//            .filter { !$0.contains("로") && !$0.contains("번길") }
+//            .map { $0.joined(separator: " ") }
             .subscribe(onNext: { [weak self] str in
 
                 guard let self = self else { return }
                 
+//                var filteredInput = str.components(separatedBy: " ")
+//                if filteredInput.contains("로") || filteredInput.contains("번길") {
+//                    filteredInput = [""]
+//                }
+//
+//                print("filteredInput: \(filteredInput)")
+//                let queryFragment = filteredInput.joined(separator: " ")
+//                print("queryFragment: \(queryFragment)")
                 self.searchCompleter?.queryFragment = str
-//                print("str: \(str)")
-                if str.isEmpty {
-                    print("str.isEmpty")
-                    self.title_Lbl.text = "검색 결과"
-                    
-                } else {
-                    self.title_Lbl.text = "'\(str)'검색 결과"
-                    
-                }
-//                self.title_Lbl.text = "'\(str)'검색 결과"
                 
+//                if str.isEmpty {
+//
+//                    self.title_Lbl.text = "검색 결과"
+//
+//                } else {
+//                    self.title_Lbl.text = "'\(str)'검색 결과"
+//
+//                }
+                self.title_Lbl.text = "'\(str)'검색 결과"
+
 //                self.setup_TableView_Placeholder()
             }).disposed(by: disposeBag)
-        
-        
+            
         
 //        NotificationCenter.default.rx.notification(UIApplication.didBecomeActiveNotification)
 //            .subscribe(onNext: { [weak self] _ in
+//                print("Active")
 //                guard let self = self else { return }
-//                self.showPopup()
+//
+//                switch self.authorizationStatus {
+//                case .denied:
+//                    self.locationManager.stopUpdatingLocation()
+//                    self.showPopup()
+//                case .notDetermined:
+////                    self.showPopup()
+//                    break
+//                case .restricted:
+//                    print("Authorization: restricted")
+//                case .authorizedAlways, .authorizedWhenInUse:
+//                    print("authorizedAlways")
+//                    self.locationManager.startUpdatingLocation()
+//                    self.completerResults.accept([])
+//                    self.search_CurrentLocation(location: self.currentLocation)
+//                default:
+//                    break
+//                }
+//
 //            }).disposed(by: disposeBag)
         
         //        searchVC.searchBar
@@ -348,6 +384,7 @@ final class LocationViewController: UIViewController {
         //                self.searchCompleter?.queryFragment = self.search_Text
         //
         //            }).disposed(by: disposeBag)
+        
     }
 }
 
@@ -365,20 +402,44 @@ extension LocationViewController {
 
 extension LocationViewController {
     
-    private func search_CurrentLocation(location: CLLocation) {
-        
-        let geocoder = CLGeocoder()
-        let locale = Locale(identifier: "Ko-kr")
+//    private func search_CurrentLocation(location: CLLocation) {
+//
+//        let geocoder = CLGeocoder()
+//        let locale = Locale(identifier: "Ko-kr")
+//
+//        geocoder.reverseGeocodeLocation(location, preferredLocale: locale) { [weak self] (placemark, error) in
+//
+//            guard let self = self else { return }
+//
+//            guard let placemarks = placemark, let placemarkInfo = placemarks.first else { return }
+//            print(placemarkInfo)
+//            self.completerResults.accept([placemarkInfo.address])
+//
+//
+//        }
+//    }
+    
+    private func searchForAddress(address: String) {
+        print("searchForAddress address: \(address)")
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = address
 
-        geocoder.reverseGeocodeLocation(location, preferredLocale: locale) { [weak self] (placemark, error) in
-
+        let search = MKLocalSearch(request: request)
+        search.start { [weak self] (response, error) in
             guard let self = self else { return }
+            guard let response = response else {
+                if let error = error {
+                    print("주소 검색 에러: \(error.localizedDescription)")
+                }
+                return
+            }
 
-            guard let placemarks = placemark, let placemarkInfo = placemarks.first else { return }
-            print(placemarkInfo)
-            self.completerResults.accept([placemarkInfo.address])
-
-
+            for mapItem in response.mapItems {
+                let placemark = mapItem.placemark
+//                print("placemark: \(placemark)")
+                let address = placemark.address
+                self.completerResults.accept(self.completerResults.value + [address])
+            }
         }
     }
 }
@@ -424,22 +485,36 @@ extension LocationViewController {
 //}
 
 extension LocationViewController: MKLocalSearchCompleterDelegate {
-    
+
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        print("completerDidUpdateResults")
+//        print("completerDidUpdateResults")
 //        let query = ["로", "번길"]
         completerResults.accept([])
-        
-        let items = completer.results.filter { $0.title.contains("대한민국") }.filter { !$0.title.contains("번길") }.filter{ !$0.title.contains("로") }
 
-        
+        let items = completer.results.filter { $0.title.contains("대한민국") }
+//            .map { $0.title.replacingOccurrences(of: "대한민국", with: "") }
         
         for item in items {
-            completerResults.accept(completerResults.value + [item.title])
+
+            if item.title.contains("로") || item.title.contains("번길") {
+                continue
+            } else {
+                let newItem = item.title.replacingOccurrences(of: "대한민국", with: "")
+                completerResults.accept(completerResults.value + [newItem])
+            }
+//            let filterd = item.components(separatedBy: " ").filter {
+//                !$0.contains("로") && !$0.contains("번길")
+//            }
+//            let joined = filterd.joined(separator: " ")
+            
         }
+//
+//        for item in items {
+//            completerResults.accept(completerResults.value + [item])
+//        }
         setup_TableView_Placeholder()
-        
-        
+//
+//
 //        for item in items {
 //            //            print("item: \(item)")
 //            //            completerResults.accept(completerResults.value + [item.title])

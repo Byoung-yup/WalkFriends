@@ -6,9 +6,10 @@
 //
 
 import Foundation
-import CoreLocation
+//import CoreLocation
+import MapKit
 
-extension CLPlacemark {
+extension MKPlacemark {
 
     var address: String {
         var result = ""

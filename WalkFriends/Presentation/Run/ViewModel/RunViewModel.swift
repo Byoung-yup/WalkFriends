@@ -287,7 +287,7 @@ final class RunViewModel: ViewModel {
             
             guard let placemarks = placemark, let placemarkInfo = placemarks.last else { return }
             
-            self.actions.showShareViewController(MapInfo(address: placemarkInfo.address, imageData: imageData))
+//            self.actions.showShareViewController(MapInfo(address: placemarkInfo.address, imageData: imageData))
             return
         }
     }

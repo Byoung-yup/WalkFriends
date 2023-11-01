@@ -10,7 +10,7 @@ import UIKit
 
 protocol LoginCoordinatorDependencies {
     // MARK: dismiss
-    func dismissLoginViewController(_ coordinator: LoginCoordinator)
+    func dismiss(_ coordinator: LoginCoordinator)
     
     // MARK: Coordinator
 //    func makeRegisterCoordinator(navigationController: UINavigationController, dependencies: RegisterCoordinatorDependencies) -> RegisterCoordinator
@@ -36,8 +36,9 @@ class LoginCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let actions = LoginViewModelActions(signIn: signIn)
-        
+        let actions = LoginViewModelActions(signIn: signIn,
+                                            toBack: dismiss)
+            
         let vc = dependencies.makeLoginViewController(actions: actions)
         
         navigationController.pushViewController(vc, animated: true)
@@ -52,7 +53,12 @@ class LoginCoordinator: NSObject, Coordinator {
 //    }
     
     private func signIn() {
-        dependencies.dismissLoginViewController(self)
+        navigationController.popViewController(animated: true)
+    }
+    
+    private func dismiss() {
+        navigationController.popViewController(animated: true)
+        dependencies.dismiss(self)
     }
     
 //    private func showResetViewController() {

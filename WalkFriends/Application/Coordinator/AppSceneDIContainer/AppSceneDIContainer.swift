@@ -21,6 +21,14 @@ final class AppSceneDIContainer {
         return DefaultDataUseCase(dataBaseRepository: DatabaseManager(), storageRepository: StorageManager())
     }
     
+    func makeAuthUsecase() -> AuthenticationUsecase {
+        return AuthenticationUsecase(authRepository: FirebaseManager(), dataBaseRepository: DatabaseManager())
+    }
+    
+    func makeDataUsecase() -> DatabaseUsecase {
+        return DatabaseUsecase(dataBaseRepository: DatabaseManager(), storageRepository: StorageManager())
+    }
+    
     // MARK: - View
     
     // MARK: Launch View
@@ -47,7 +55,7 @@ final class AppSceneDIContainer {
     }
     
     func makeLoginViewModel(actions: LoginViewModelActions) -> LoginViewModel {
-        return LoginViewModel(actions: actions, dataUseCase: makeDefaultUseCase())
+        return LoginViewModel(actions: actions, authUseCase: makeAuthUsecase())
     }
     
     // MARK: Reset View
@@ -182,9 +190,9 @@ final class AppSceneDIContainer {
     // MARK: - Dismiss
     
     // MARK: Dismiss LoginViewController
-    func dismissLoginViewController(_ coordinator: LoginCoordinator) {
-        delegate?.dismiss(coordinator)
-    }
+//    func dismissLoginViewController(_ coordinator: LoginCoordinator) {
+//        delegate?.dismiss(coordinator)
+//    }
     
     // MARK: Dismiss HomeViewController
     func dismissHomeViewController(_ coordinator: HomeCoordinator) {
@@ -193,6 +201,6 @@ final class AppSceneDIContainer {
 }
 
 extension AppSceneDIContainer: LaunchCoordinatorDependencies {}
-extension AppSceneDIContainer: LoginCoordinatorDependencies {}
+//extension AppSceneDIContainer: LoginCoordinatorDependencies {}
 extension AppSceneDIContainer: HomeCoordinatorDependencies {}
  

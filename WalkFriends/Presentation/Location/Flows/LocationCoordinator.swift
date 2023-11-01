@@ -15,7 +15,7 @@ protocol LocationCoordinatorDependencies {
     
     // MARK: ViewController
     func makeLocationViewController(actions: LocationViewModelActions) -> LocationViewController
-    
+    func makeLoginViewController(actions: LoginViewModelActions) -> LoginViewController
     
     // MARK: Dismiss
     func toBack(_ coordinator: LocationCoordinator)
@@ -56,11 +56,11 @@ final class LocationCoordinator: NSObject, Coordinator {
 
 extension LocationCoordinator: LoginCoordinatorDependencies {
     
-    func dismissLoginViewController(_ coordinator: LoginCoordinator) {
-        <#code#>
+    func dismiss(_ coordinator: LoginCoordinator) {
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
     }
     
     func makeLoginViewController(actions: LoginViewModelActions) -> LoginViewController {
-        <#code#>
+        return dependencies.makeLoginViewController(actions: actions)
     }
 }

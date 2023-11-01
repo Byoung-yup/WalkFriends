@@ -18,6 +18,11 @@ import KakaoSDKUser
 
 protocol FirebaseAuthService {}
 
+protocol AutheticationService: FirebaseAuthService {
+    func verifyPhoneNumber(number: String) -> Observable<Result<Bool, FirebaseAuthError>>
+    
+}
+
 protocol DefaultService: FirebaseAuthService {
     func createUser(user: UserLoginInfo) -> Observable<Result<Bool, FirebaseAuthError>>
     func signIn(with userInfo: UserLoginInfo) -> Observable<Result<Bool, FirebaseAuthError>>
@@ -43,6 +48,7 @@ final class FirebaseService {
     
     var auth = {
         let auth = FirebaseAuth.Auth.auth()
+        auth.languageCode = "kr"
         return auth
     }()
 
@@ -55,19 +61,50 @@ final class FirebaseService {
     
 }
 
-enum FirebaseAuthError: Error {
-    case AlreadyEmailError
-    case InvalidEmailError
-    case WeakPasswordError
-    case UserNotFoundError
-    case WrongPasswordError
-    case AuthenticationError
-    case NetworkError
-}
+//enum FirebaseAuthError: Error {
+//    case AlreadyEmailError
+//    case InvalidEmailError
+//    case WeakPasswordError
+//    case UserNotFoundError
+//    case WrongPasswordError
+//    case AuthenticationError
+//    case NetworkError
+//}
 
 
 extension FirebaseService: FirebaseAuthService {
     
+    // MARK: - Phone Number Authentication
+    
+    // MARK: verifyPhoneNumber
+    
+    func verifyPhoneNumber(number: String) -> Observable<Result<Bool, FirebaseAuthError>> {
+        
+        return Observable.create { (observer) in
+            
+            let task = Task {
+                
+                do {
+                    let verificationID = try await PhoneAuthProvider.provider().verifyPhoneNumber(number, uiDelegate: nil)
+                    
+                    UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
+                    
+                    observer.onNext(.success(true))
+                    observer.onCompleted()
+                } catch let err as NSError {
+                    let errorCode = AuthErrorCode.Code(rawValue: err.code)
+                    print("error: \(err.localizedDescription)")
+                    observer.onNext(.failure(.NetworkError))
+                    observer.onCompleted()
+                }
+            }
+            return Disposables.create {
+                task.cancel()
+            }
+        }
+    }
+    
+
     // MARK: Create User
     func createUser(user: UserLoginInfo) -> Observable<Result<Bool, FirebaseAuthError>> {
         

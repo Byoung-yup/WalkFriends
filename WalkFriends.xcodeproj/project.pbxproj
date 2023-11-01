@@ -45,6 +45,7 @@
 		B05690572AC2AEB10043BB8B /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05690562AC2AEB00043BB8B /* ProfileCell.swift */; };
 		B0596AF82A37FAD000BDD8EA /* StorageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0596AF72A37FAD000BDD8EA /* StorageRepository.swift */; };
 		B05B7F6729ED02F100685D6F /* Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B7F6629ED02F100685D6F /* Reactive.swift */; };
+		B05C08112AE65A44005ACA2A /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05C08102AE65A44005ACA2A /* Toast.swift */; };
 		B05C3D9C2A176F8C00D23AB7 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05C3D9B2A176F8C00D23AB7 /* UIViewController.swift */; };
 		B062D8092A0B6451005C9FD3 /* MapListDetailViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B062D8072A0B6451005C9FD3 /* MapListDetailViewCell.swift */; };
 		B062D80A2A0B6451005C9FD3 /* MapListDetailViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B062D8082A0B6451005C9FD3 /* MapListDetailViewCell.xib */; };
@@ -71,6 +72,10 @@
 		B07B48922AC187B00032EE58 /* UIScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07B48912AC187B00032EE58 /* UIScrollView.swift */; };
 		B07DDB6D29BF1BB50012F26A /* SetupProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07DDB6C29BF1BB50012F26A /* SetupProfileViewModel.swift */; };
 		B07DDB6F29BF1C860012F26A /* SetupProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07DDB6E29BF1C860012F26A /* SetupProfileCoordinator.swift */; };
+		B080A6B32AF0E458007B5560 /* AuthenticationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B080A6B22AF0E458007B5560 /* AuthenticationRepository.swift */; };
+		B080A6B52AF0E49B007B5560 /* AuthenticationUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B080A6B42AF0E49B007B5560 /* AuthenticationUsecase.swift */; };
+		B080A6B72AF0E4AB007B5560 /* DatabaseUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B080A6B62AF0E4AB007B5560 /* DatabaseUsecase.swift */; };
+		B080A6B92AF0E63D007B5560 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B080A6B82AF0E63D007B5560 /* FirebaseManager.swift */; };
 		B08531CE29B87F9E00209127 /* RunCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08531CD29B87F9E00209127 /* RunCoordinator.swift */; };
 		B08531D229B87FAF00209127 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08531D129B87FAF00209127 /* HomeCoordinator.swift */; };
 		B08531D629B87FBF00209127 /* InfoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08531D529B87FBF00209127 /* InfoCoordinator.swift */; };
@@ -151,6 +156,7 @@
 		B05690562AC2AEB00043BB8B /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
 		B0596AF72A37FAD000BDD8EA /* StorageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageRepository.swift; sourceTree = "<group>"; };
 		B05B7F6629ED02F100685D6F /* Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reactive.swift; sourceTree = "<group>"; };
+		B05C08102AE65A44005ACA2A /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		B05C3D9B2A176F8C00D23AB7 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		B062D8072A0B6451005C9FD3 /* MapListDetailViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListDetailViewCell.swift; sourceTree = "<group>"; };
 		B062D8082A0B6451005C9FD3 /* MapListDetailViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapListDetailViewCell.xib; sourceTree = "<group>"; };
@@ -177,6 +183,10 @@
 		B07B48912AC187B00032EE58 /* UIScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollView.swift; sourceTree = "<group>"; };
 		B07DDB6C29BF1BB50012F26A /* SetupProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileViewModel.swift; sourceTree = "<group>"; };
 		B07DDB6E29BF1C860012F26A /* SetupProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupProfileCoordinator.swift; sourceTree = "<group>"; };
+		B080A6B22AF0E458007B5560 /* AuthenticationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationRepository.swift; sourceTree = "<group>"; };
+		B080A6B42AF0E49B007B5560 /* AuthenticationUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationUsecase.swift; sourceTree = "<group>"; };
+		B080A6B62AF0E4AB007B5560 /* DatabaseUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseUsecase.swift; sourceTree = "<group>"; };
+		B080A6B82AF0E63D007B5560 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		B08531CD29B87F9E00209127 /* RunCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunCoordinator.swift; sourceTree = "<group>"; };
 		B08531D129B87FAF00209127 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		B08531D529B87FBF00209127 /* InfoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InfoCoordinator.swift; path = "../New Group/InfoCoordinator.swift"; sourceTree = "<group>"; };
@@ -244,6 +254,7 @@
 		B00AADB129B9EF5D008053B6 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				B080A6B22AF0E458007B5560 /* AuthenticationRepository.swift */,
 				B00AADB229B9EF77008053B6 /* DatabaseRepository.swift */,
 				B0596AF72A37FAD000BDD8EA /* StorageRepository.swift */,
 			);
@@ -253,6 +264,7 @@
 		B014403029E00B6B000E4EB3 /* FirebaseService */ = {
 			isa = PBXGroup;
 			children = (
+				B080A6B82AF0E63D007B5560 /* FirebaseManager.swift */,
 				B07391562993601000903C1F /* FirebaseService.swift */,
 			);
 			path = FirebaseService;
@@ -732,6 +744,8 @@
 		B07971BC29B1D0C20038BE9D /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
+				B080A6B42AF0E49B007B5560 /* AuthenticationUsecase.swift */,
+				B080A6B62AF0E4AB007B5560 /* DatabaseUsecase.swift */,
 				B07971BD29B1D1AB0038BE9D /* DefaultUseCase.swift */,
 				B07971BF29B1D1F00038BE9D /* Protocol */,
 			);
@@ -901,6 +915,7 @@
 				B02321222AAA10B6007E3FC8 /* CategoryView.swift */,
 				B02321242AAA3D14007E3FC8 /* CategoryButton.swift */,
 				B050CAAA2AB8213500124BAC /* CircleButton.swift */,
+				B05C08102AE65A44005ACA2A /* Toast.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -1077,7 +1092,9 @@
 				B076312229E6A84A009B39C0 /* UIImage.swift in Sources */,
 				B02321252AAA3D14007E3FC8 /* CategoryButton.swift in Sources */,
 				B0C273B8299B6B92005B3AAD /* HomeViewController.swift in Sources */,
+				B080A6B92AF0E63D007B5560 /* FirebaseManager.swift in Sources */,
 				B0414EEF2ACE890700E202BD /* LaunchCoordinator.swift in Sources */,
+				B080A6B32AF0E458007B5560 /* AuthenticationRepository.swift in Sources */,
 				B04022C32A56634700647431 /* Int.swift in Sources */,
 				B04234C82AAF642E00AF5FAB /* CustomCollectionViewCell.swift in Sources */,
 				B034D94C29E1568700B90AB2 /* RegisterCoordinator.swift in Sources */,
@@ -1085,6 +1102,7 @@
 				B0C3BF5D29DC09A700471D60 /* ShareInfoViewModel.swift in Sources */,
 				B04D83BD2ABAB6110036D571 /* MapListTableView.swift in Sources */,
 				B02828E829E94400008B22CF /* MapList.swift in Sources */,
+				B080A6B52AF0E49B007B5560 /* AuthenticationUsecase.swift in Sources */,
 				B0414EF12ACE89AF00E202BD /* LaunchViewModel.swift in Sources */,
 				B09DC7992990DD7D008558EA /* AppCoordinator.swift in Sources */,
 				B0936E6A2A20A8EB00EB03A5 /* UserLoginModel.swift in Sources */,
@@ -1103,6 +1121,7 @@
 				B07DDB6F29BF1C860012F26A /* SetupProfileCoordinator.swift in Sources */,
 				B044858F2AB2D1A400AC0799 /* CustomCollectionViewFlowLayout.swift in Sources */,
 				B090808929DEB86700DDAEBC /* ShareInfoView.swift in Sources */,
+				B080A6B72AF0E4AB007B5560 /* DatabaseUsecase.swift in Sources */,
 				B0414EF72ACE90A700E202BD /* LocationViewModel.swift in Sources */,
 				B09DC79B2990DEA2008558EA /* TabBarCoordinator.swift in Sources */,
 				B09DC7842990DBF2008558EA /* AppDelegate.swift in Sources */,
@@ -1132,6 +1151,7 @@
 				B03E1EA22ABD5EA700CC1C56 /* InfoCell.swift in Sources */,
 				B0483D0229D6BCAC001941C1 /* ShareInfoCoordinator.swift in Sources */,
 				B0C56F3829924443004E83B8 /* String.swift in Sources */,
+				B05C08112AE65A44005ACA2A /* Toast.swift in Sources */,
 				B0758FBA2AD0019F004ACFB3 /* LocationListCell.swift in Sources */,
 				B0414EF92ACE90D000E202BD /* LocationViewController.swift in Sources */,
 				B0483CFF29D6BC4E001941C1 /* ShareInfoViewController.swift in Sources */,
@@ -1295,7 +1315,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WalkFriends/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "프로그램을 실행하기 위해서 사용자 위치 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "원활한 서비스 이용을 위해 현재 위치를 확인합나다.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "원활한 서비스 이용을 위해 현재 위치를 확인합나다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 접근을 위해 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -1331,7 +1352,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WalkFriends/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "프로그램을 실행하기 위해서 사용자 위치 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "원활한 서비스 이용을 위해 현재 위치를 확인합나다.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "원활한 서비스 이용을 위해 현재 위치를 확인합나다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진 접근을 위해 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;

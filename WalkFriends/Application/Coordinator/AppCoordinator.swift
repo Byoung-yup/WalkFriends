@@ -27,7 +27,7 @@ class AppCoordinator: Coordinator {
     }
     
     func start() {
-        
+        try! FirebaseAuth.Auth.auth().signOut()
         appSceneDIContainer.delegate = self
         
         if (FirebaseAuth.Auth.auth().currentUser != nil) {

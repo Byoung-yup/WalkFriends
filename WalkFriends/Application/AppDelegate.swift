@@ -11,6 +11,8 @@ import FBSDKLoginKit
 import GoogleSignIn
 import FirebaseAuth
 import KakaoSDKCommon
+import UserNotifications
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,6 +25,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         KakaoSDK.initSDK(appKey: "fa3f46e81ac9f379807667f66c67067b")
         
 //        AppAppearance.setupAppearance()
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.badge,.sound,.alert], completionHandler: { (granted,error) in })
+        application.registerForRemoteNotifications()
         
         return true
     }

@@ -16,6 +16,7 @@ protocol LaunchCoordinatorDependencies {
     // MARK: - ViewController
     func makeLaunchViewController(actions: LaunchViewModelActions) -> LaunchViewController
     func makeLocationViewController(actions: LocationViewModelActions) -> LocationViewController
+    func makeLoginViewController(actions: LoginViewModelActions) -> LoginViewController
 }
 
 final class LaunchCoordinator: NSObject, Coordinator {
@@ -49,6 +50,10 @@ final class LaunchCoordinator: NSObject, Coordinator {
 
 // MARK: - LocationCoordinatorDependencies
 extension LaunchCoordinator: LocationCoordinatorDependencies {
+    
+    func makeLoginViewController(actions: LoginViewModelActions) -> LoginViewController {
+        return dependencies.makeLoginViewController(actions: actions)
+    }
     
     func makeLoginCoordinator(navigationController: UINavigationController, dependencies: LoginCoordinatorDependencies) -> LoginCoordinator {
         return self.dependencies.makeLoginCoordinator(navigationController: navigationController, dependencies: dependencies)
