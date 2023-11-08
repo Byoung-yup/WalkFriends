@@ -18,7 +18,7 @@ protocol LocationCoordinatorDependencies {
     func makeLoginViewController(actions: LoginViewModelActions) -> LoginViewController
     
     // MARK: Dismiss
-    func toBack(_ coordinator: LocationCoordinator)
+    func toBack(_ coordinator: LocationCoordinator, _ createUser_Trigger: Bool?)
 }
 
 final class LocationCoordinator: NSObject, Coordinator {
@@ -42,8 +42,8 @@ final class LocationCoordinator: NSObject, Coordinator {
     }
     
     private func toBack() {
+        dependencies.toBack(self, nil)
         navigationController.popViewController(animated: true)
-        dependencies.toBack(self)
     }
     
     private func showLoginViewController() {
@@ -56,8 +56,17 @@ final class LocationCoordinator: NSObject, Coordinator {
 
 extension LocationCoordinator: LoginCoordinatorDependencies {
     
-    func dismiss(_ coordinator: LoginCoordinator) {
+    func dismiss(_ coordinator: LoginCoordinator, _ createUser_Trigger: Bool?) {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
+        
+        guard let isExited = createUser_Trigger else { return }
+        
+        if isExited {
+            dependencies.toBack(self, isExited)
+        } else {
+            dependencies.toBack(self, isExited)
+        }
+//        navigationController.popViewController(animated: false)
     }
     
     func makeLoginViewController(actions: LoginViewModelActions) -> LoginViewController {

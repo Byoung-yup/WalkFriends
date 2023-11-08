@@ -28,7 +28,7 @@ final class LaunchViewModel: ViewModel {
     
     // MARK: - Properties
     
-    private let actions: LaunchViewModelActions
+    let actions: LaunchViewModelActions
     
     // MARK: - Init
     
@@ -39,7 +39,7 @@ final class LaunchViewModel: ViewModel {
     func transform(input: Input) -> Output {
         
         let show_Location = input.location_Trigger
-            .do(onNext: actions.showLocationViewController )
+            
         
         return Output(show_Location: show_Location)
     }

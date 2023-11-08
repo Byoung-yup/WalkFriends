@@ -8,12 +8,10 @@
 import Foundation
 import UIKit
 import RxSwift
-import RxRelay
 
 struct LoginViewModelActions {
     //    let showRegisterViewController: () -> Void
-    let signIn: () -> Void
-    let toBack: () -> Void
+    let dismiss: (Bool?) -> Void
     //    let showResetViewController: () -> Void
 }
 
@@ -43,9 +41,9 @@ final class LoginViewModel: ViewModel {
     // MARK: - Output {
     
     struct Output {
-        let certification: Observable<Result<Bool, FirebaseError>>
+        let certification: Observable<Result<Bool, FBError>>
         let toBack: Observable<Void>
-        let start: Observable<Result<Bool, FirebaseAuthError>>
+        let start: Observable<Result<Bool, FBError>>
         //        let loginEnabled: Observable<Bool>
         //        let loginTrigger: Observable<Result<Bool, FirebaseAuthError>>
         //        let isLoginState: Observable<Bool>
@@ -59,7 +57,7 @@ final class LoginViewModel: ViewModel {
     
     let actions: LoginViewModelActions
     private let authUseCase: AuthenticationUsecase
-    //    let isLoginState: BehaviorRelay<Bool> = BehaviorRelay(value: false)
+    let isLoading: PublishSubject<Bool> = PublishSubject()
     
     // MARK: - Init
     init(actions: LoginViewModelActions, authUseCase: AuthenticationUsecase) {
@@ -75,14 +73,14 @@ final class LoginViewModel: ViewModel {
     func transform(input: Input) -> Output {
         
         let toBack_Trigger = input.toBack_Trigger
-            .do(onNext: actions.toBack)
-                
-                
-                let certification = input.certification_Trigger.withLatestFrom(input.phoneNumber)
-                .flatMapLatest { [weak self] _ in
-                    guard let self = self else { fatalError() }
-                    return self.authUseCase.verifyPhoneNumber("+82 010 0000 0000")
-                }
+        
+        
+        let certification = input.certification_Trigger.withLatestFrom(input.phoneNumber)
+            .flatMapLatest { [weak self] _ in
+                guard let self = self else { fatalError() }
+//                print("num \($0)")
+                return self.authUseCase.verifyPhoneNumber("+82 000")
+            }
         
         let code = Observable.combineLatest(input.phoneNumber, input.authenticationNumber) {
             return AuthCode(number: $0, code: $1)
@@ -91,6 +89,7 @@ final class LoginViewModel: ViewModel {
         let start_Trigger = input.start_Trigger.withLatestFrom(code)
             .flatMapLatest { [weak self] in
                 guard let self = self else { fatalError() }
+                self.isLoading.onNext(true)
                 return self.authUseCase.signIn($0)
             }
         

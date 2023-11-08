@@ -300,7 +300,6 @@
 			isa = PBXGroup;
 			children = (
 				B0C273B7299B6B92005B3AAD /* HomeViewController.swift */,
-				B0A2D38D29BB08F000B6412F /* SetupProfileViewController.swift */,
 				B01AB89E2ABC13CE00AAC6CE /* Cell */,
 			);
 			path = View;
@@ -310,7 +309,6 @@
 			isa = PBXGroup;
 			children = (
 				B076C6CC299CC1CF00EFDA7F /* HomeViewModel.swift */,
-				B07DDB6C29BF1BB50012F26A /* SetupProfileViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -630,7 +628,6 @@
 			isa = PBXGroup;
 			children = (
 				B08531D129B87FAF00209127 /* HomeCoordinator.swift */,
-				B07DDB6E29BF1C860012F26A /* SetupProfileCoordinator.swift */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -702,6 +699,7 @@
 				B03B31D92ABC131800453C6B /* Register */,
 				B079F0CB2AC9E396001A10E0 /* Reset */,
 				B05A5A9C2ABC127B00873F60 /* Login */,
+				B08D5FCC2AFB574500DB4BBD /* Setup */,
 				B01AB89B2ABC139A00AAC6CE /* Home */,
 				B05B5A7A2ABC16F80034E75B /* Info */,
 				B05B5A702ABC15230034E75B /* Run */,
@@ -799,6 +797,40 @@
 			children = (
 			);
 			path = Garbage;
+			sourceTree = "<group>";
+		};
+		B08D5FCC2AFB574500DB4BBD /* Setup */ = {
+			isa = PBXGroup;
+			children = (
+				B08D5FCF2AFB575B00DB4BBD /* Flows */,
+				B08D5FCE2AFB575500DB4BBD /* ViewModel */,
+				B08D5FCD2AFB575000DB4BBD /* View */,
+			);
+			path = Setup;
+			sourceTree = "<group>";
+		};
+		B08D5FCD2AFB575000DB4BBD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B0A2D38D29BB08F000B6412F /* SetupProfileViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B08D5FCE2AFB575500DB4BBD /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				B07DDB6C29BF1BB50012F26A /* SetupProfileViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		B08D5FCF2AFB575B00DB4BBD /* Flows */ = {
+			isa = PBXGroup;
+			children = (
+				B07DDB6E29BF1C860012F26A /* SetupProfileCoordinator.swift */,
+			);
+			path = Flows;
 			sourceTree = "<group>";
 		};
 		B0936E6B2A20A8F300EB03A5 /* Model */ = {

@@ -10,7 +10,7 @@ import UIKit
 
 protocol SetupProfileCoordinatorDependencies {
     func makeSetupProfileViewController(actions: SetupViewModelActions) -> SetupProfileViewController
-    func dismiss(_ coordinator: SetupProfileCoordinator)
+//    func dismiss(_ coordinator: SetupProfileCoordinator)
 }
 
 final class SetupProfileCoordinator: NSObject, Coordinator {
@@ -26,17 +26,22 @@ final class SetupProfileCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let actions = SetupViewModelActions(createProfile: createProfile)
+        let actions = SetupViewModelActions()
         let vc = dependencies.makeSetupProfileViewController(actions: actions)
         
-        navigationController.pushViewController(vc, animated: true)
-        navigationController.navigationBar.isHidden = false
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.type = .push
+        transition.subtype = .fromTop
+        
+        navigationController.view.layer.add(transition, forKey: kCATransition)
+        navigationController.pushViewController(vc, animated: false)
     }
     
-    private func createProfile() {
-        navigationController.popViewController(animated: false)
-        dependencies.dismiss(self)
-    }
+//    private func createProfile() {
+//        navigationController.popViewController(animated: false)
+//        dependencies.dismiss(self)
+//    }
 }
 
 //extension SetupProfileCoordinator {

@@ -28,13 +28,16 @@ class AppCoordinator: Coordinator {
     
     func start() {
         try! FirebaseAuth.Auth.auth().signOut()
-        appSceneDIContainer.delegate = self
-        
-        if (FirebaseAuth.Auth.auth().currentUser != nil) {
-            makeHomeCoordinator()
-        } else {
-            makeLaunchCoordinator()
-        }
+//        appSceneDIContainer.delegate = self
+        print("User: \(Auth.auth().currentUser)")
+        print("User UID: \(Auth.auth().currentUser?.uid)")
+        print("User NUM: \(Auth.auth().currentUser?.phoneNumber)")
+        makeLaunchCoordinator()
+//        if (FirebaseAuth.Auth.auth().currentUser != nil) {
+//            makeHomeCoordinator()
+//        } else {
+//            makeLaunchCoordinator()
+//        }
     }
     
     private func makeLaunchCoordinator() {
@@ -52,12 +55,12 @@ class AppCoordinator: Coordinator {
 //        childCoordinators.append(loginCoordinator)
 //    }
     
-    private func makeHomeCoordinator() {
-        let homeCoordinator = appSceneDIContainer.makeHomeCoordinator(navigationController: navigationController)
-        homeCoordinator.start()
-//        print("Auth: \(FirebaseAuth.Auth.auth().currentUser)")
-        childCoordinators.append(homeCoordinator)
-    }
+//    private func makeHomeCoordinator() {
+//        let homeCoordinator = appSceneDIContainer.makeHomeCoordinator(navigationController: navigationController)
+//        homeCoordinator.start()
+////        print("Auth: \(FirebaseAuth.Auth.auth().currentUser)")
+//        childCoordinators.append(homeCoordinator)
+//    }
     
 //    private func showMainViewController() {
 //
@@ -81,23 +84,23 @@ class AppCoordinator: Coordinator {
     
 }
 
-extension AppCoordinator: AppSceneDIContainerDelegate {
-    
-    func dismiss(_ coordinator: Coordinator) {
-        print("Before childCoordinators: \(childCoordinators)")
-        childCoordinators = childCoordinators.filter { $0 !== coordinator }
-        print("After childCoordinators: \(childCoordinators)")
-        switch coordinator {
-        case is LoginCoordinator:
-            makeHomeCoordinator()
-        case is HomeCoordinator:
-//            makeLoginCoordinator()
-            break
-        default:
-            break
-        }
-    }
-}
+//extension AppCoordinator: AppSceneDIContainerDelegate {
+//
+//    func dismiss(_ coordinator: Coordinator) {
+//        print("Before childCoordinators: \(childCoordinators)")
+//        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+//        print("After childCoordinators: \(childCoordinators)")
+//        switch coordinator {
+//        case is LoginCoordinator:
+//            makeHomeCoordinator()
+//        case is HomeCoordinator:
+////            makeLoginCoordinator()
+//            break
+//        default:
+//            break
+//        }
+//    }
+//}
 
 //extension AppCoordinator: LoginCoordinatorDelegate {
 //

@@ -234,8 +234,9 @@ final class LocationViewController: UIViewController {
         
         output.toBack
             .asDriver(onErrorJustReturn: ())
-            .drive()
-            .disposed(by: disposeBag)
+            .drive(onNext: { [weak self] in
+                self?.locationViewModel.actions.toBack()
+            }).disposed(by: disposeBag)
 
         
 //        locationManager
@@ -292,7 +293,7 @@ final class LocationViewController: UIViewController {
                 
                 guard let self = self else { return }
 //                print(item)
-                self.locationViewModel.showLoginViewController()
+                self.locationViewModel.actions.showLoginViewController()
             }).disposed(by: disposeBag)
         
         location_TextField

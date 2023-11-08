@@ -7,31 +7,58 @@
 
 import FirebaseAuth
 import RxSwift
+import SwiftKeychainWrapper
 
-enum FirebaseAuthError: Error {
-    case AlreadyEmailError
-    case InvalidEmailError
-    case WeakPasswordError
-    case UserNotFoundError
-    case WrongPasswordError
-    case AuthenticationError
-    case NetworkError
-    //
-    case NotFoundVerifycation
-    case InvalidCredential
-    case UserDisabled
-    case MissingVerificationID
-    case InvalidVerificationID
-    case SessionExpired
-    case UnknownError
-}
+//enum FirebaseAuthError: Error {
+//    case AlreadyEmailError
+//    case InvalidEmailError
+//    case WeakPasswordError
+//    case UserNotFoundError
+//    case WrongPasswordError
+//    case AuthenticationError
+//    case NetworkError
+//    //
+//    case NotFoundVerifycation
+//    case InvalidCredential
+//    case UserDisabled
+//    case MissingVerificationID
+//    case InvalidVerificationID
+//    case SessionExpired
+//    case UnknownError
+//}
 
-enum FirebaseError: Error {
+enum FBError: Error {
+    // Verifycation
     case CaptchaCheckFailed
     case QuotaExceeded
     case InvalidPhoneNumber
     case MissingPhoneNumber
+    
+    // Auth
+    case NotFoundVerifycation
+    case UserDisabled
+    case SessionExpired
+    
+    // Database
+    case NotFoundUserError
+    case DatabaseFetchError
+    case ExistNicknameError
+    
+    // Storage
+    
+    // ETC
+    case UnknownError
 }
+
+//enum FirebaseError: Error {
+//    case NotFoundVerifycation
+//    case InvalidCredential
+//    case UserDisabled
+//    case MissingVerificationID
+//    case InvalidVerificationID
+//    case SessionExpired
+//    case UnknownError
+//}
 
 final class FirebaseManager {
     
@@ -40,11 +67,13 @@ final class FirebaseManager {
         auth.languageCode = "kr"
         return auth
     }()
+    
+//    var handle: AuthStateDidChangeListenerHandle!
 }
 
 extension FirebaseManager: AuthRepository {
     
-    func verifyPhoneNumber(phoneNumber: String) -> Observable<Result<Bool, FirebaseError>> {
+    func verifyPhoneNumber(phoneNumber: String) -> Observable<Result<Bool, FBError>> {
         
         return Observable.create { (observer) in
             
@@ -55,13 +84,13 @@ extension FirebaseManager: AuthRepository {
                     let errorCode = AuthErrorCode.Code(rawValue: (error! as NSError).code)
                     switch errorCode {
                     case .captchaCheckFailed:
-                        observer.onNext(.failure(FirebaseError.CaptchaCheckFailed))
+                        observer.onNext(.failure(.CaptchaCheckFailed))
                     case .quotaExceeded:
-                        observer.onNext(.failure(FirebaseError.QuotaExceeded))
+                        observer.onNext(.failure(.QuotaExceeded))
                     case .invalidPhoneNumber:
-                        observer.onNext(.failure(FirebaseError.InvalidPhoneNumber))
+                        observer.onNext(.failure(.InvalidPhoneNumber))
                     case .missingPhoneNumber:
-                        observer.onNext(.failure(FirebaseError.MissingPhoneNumber))
+                        observer.onNext(.failure(.MissingPhoneNumber))
                     default:
                         break
                     }
@@ -79,7 +108,7 @@ extension FirebaseManager: AuthRepository {
         }
     }
     
-    func signIn(phoneNumber: String, code: String) -> Observable<Result<Bool, FirebaseAuthError>> {
+    func signIn(phoneNumber: String, code: String) -> Observable<Result<Bool, FBError>> {
         
         let verificationID = UserDefaults.standard.string(forKey: "authVerificationID") ?? ""
         
@@ -89,36 +118,63 @@ extension FirebaseManager: AuthRepository {
         )
         
         return Observable.create { (observer) in
- 
-            Auth.auth().signIn(with: credential) { (authResult, error) in
+            
+            let task = Task {
                 
-                guard error == nil else {
+                do {
+                    _ = try await Auth.auth().signIn(with: credential)
                     
-                    let errorCode = AuthErrorCode.Code(rawValue: (error! as NSError).code)
+                    Auth.auth().addStateDidChangeListener({ (auth, user) in
+                        
+                        if let currentUser = auth.currentUser {
+//                            print("Listener Auth UID: \(currentUser.uid)")
+//                            print("Listener Auth NUM: \(currentUser.phoneNumber)")
+                            KeychainWrapper.standard.set("\(currentUser.uid)", forKey: "UID")
+                            KeychainWrapper.standard.set("\(phoneNumber)", forKey: "PhoneNumber")
+                            
+                            observer.onNext(.success(true))
+                            observer.onCompleted()
+                        }
+                        
+//                        print("Listener Auth: \(auth)")
+//                        print("Listener Auth UID: \(auth.currentUser?.uid)")
+//                        print("Listener Auth NUM: \(auth.currentUser?.phoneNumber)")
+//                        print("Listener User: \(user)")
+//                        print("Listener User UID: \(user?.providerData[0].uid)")
+                        
+                        
+                    })
+                } catch let err as NSError {
+                    let errorCode = AuthErrorCode.Code(rawValue: err.code)
                     
                     switch errorCode {
-                    case .invalidCredential:
-                        observer.onNext(.failure(.InvalidCredential))
                     case .userDisabled:
                         observer.onNext(.failure(.UserDisabled))
-                    case .missingVerificationID:
-                        observer.onNext(.failure(.MissingVerificationID))
-                    case .invalidVerificationID:
-                        observer.onNext(.failure(.InvalidVerificationID))
                     case .sessionExpired:
                         observer.onNext(.failure(.SessionExpired))
                     default:
                         observer.onNext(.failure(.UnknownError))
                     }
                     observer.onCompleted()
-                    return
                 }
-                
-                observer.onNext(.success(true))
-                observer.onCompleted()
-                
             }
-            return Disposables.create()
+ 
+//            Auth.auth().signIn(with: credential) { (authResult, error) in
+//
+//                guard error == nil else {
+//
+//
+//                    observer.onCompleted()
+//                    return
+//                }
+//
+//                observer.onNext(.success(phoneNumber))
+//                observer.onCompleted()
+//
+//            }
+            return Disposables.create {
+                task.cancel()
+            }
         }
     }
 }

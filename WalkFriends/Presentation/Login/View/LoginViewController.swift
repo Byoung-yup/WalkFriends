@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import FirebaseAuth
 import RxKeyboard
-//import AnyFormatKit
+import SwiftKeychainWrapper
 
 class LoginViewController: UIViewController {
     
@@ -21,7 +21,7 @@ class LoginViewController: UIViewController {
     
     let disposeBag = DisposeBag()
     
-    var handle: AuthStateDidChangeListenerHandle!
+//    var handle: AuthStateDidChangeListenerHandle!
     
     var limitTime: Int = 300 // 5분
     
@@ -48,11 +48,14 @@ class LoginViewController: UIViewController {
         return bar
     }()
     
-//    lazy var indicatorView: UIActivityIndicatorView = {
-//        let view = UIActivityIndicatorView()
-//        view.style = .medium
-//        return view
-//    }()
+    lazy var indicatorView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.style = .large
+        view.color = .gray
+        view.backgroundColor = .clear
+        view.hidesWhenStopped = true
+        return view
+    }()
     
 //    lazy var loginLabel: UILabel = {
 //        let lbl = UILabel()
@@ -114,7 +117,7 @@ class LoginViewController: UIViewController {
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
         btn.backgroundColor = .main_Color.withAlphaComponent(0.3)
         btn.layer.cornerRadius = 5
-        btn.isEnabled = false
+//        btn.isEnabled = false
         return btn
     }()
     
@@ -304,7 +307,7 @@ class LoginViewController: UIViewController {
         drawBackground()
 //        set_Delegate()
         binding()
-        
+//        indicatorView.startAnimating()
         
         //        for family in UIFont.familyNames.sorted() {
         //            let names = UIFont.fontNames(forFamilyName: family)
@@ -355,6 +358,7 @@ class LoginViewController: UIViewController {
         view.addSubview(sub_Login_Label)
         view.addSubview(phoneNumber_TextField)
         view.addSubview(certification_Btn)
+        view.addSubview(indicatorView)
         
         
         login_Label.snp.makeConstraints { make in
@@ -380,6 +384,10 @@ class LoginViewController: UIViewController {
             make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(21)
             make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-21)
             make.height.equalTo(45)
+        }
+        
+        indicatorView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
         
 //        view.addSubview(loginLabel)
@@ -482,15 +490,15 @@ class LoginViewController: UIViewController {
     
     // MARK: - Set Delegate
     
-    private func set_Delegate() {
-        phoneNumber_TextField.delegate = self
-    }
+//    private func set_Delegate() {
+//        phoneNumber_TextField.delegate = self
+//    }
     
     // MARK: - Binding
     
     private func binding() {
         
-        let input = LoginViewModel.Input(phoneNumber: phoneNumber_TextField.rx.text.orEmpty.asObservable(),
+        let input = LoginViewModel.Input(phoneNumber: phoneNumber_TextField.rx.text.orEmpty.filter { $0.count <= 13                                                 }.asObservable(),
                                          authenticationNumber: certificationNumber_TextField.rx.text.orEmpty.asObservable(),
                                          certification_Trigger: certification_Btn.rx.tap.asObservable(),
                                          start_Trigger: start_Btn.rx.tap.asObservable(),
@@ -517,19 +525,37 @@ class LoginViewController: UIViewController {
                         text = "유효하지 않는 전화번호 입니다."
                     case .MissingPhoneNumber:
                         text = "전화번호가 제공되지 않았습니다."
+                    default:
+                        break
                     }
                     Toast.show(text, keyboardHeight: self.keyboardHeight + self.view.safeAreaInsets.bottom)
                 }
             }).disposed(by: disposeBag)
         
         output.start
-            .subscribe(onNext: { status in
-                print("Sign In Status: \(status)")
+            .subscribe(onNext: { [weak self] status in
+                
+                switch status {
+                case .success(let bool):
+                    if bool {
+                        self?.loginViewModel.actions.dismiss(true)
+                    } else {
+                        self?.loginViewModel.actions.dismiss(false)
+                    }
+                case .failure(let err):
+                    self?.loginViewModel.actions.dismiss(nil)
+                    self?.showAlert(error: err)
+                }
             }).disposed(by: disposeBag)
         
         output.toBack
-            .observe(on: MainScheduler.instance)
-            .subscribe()
+            .asDriver(onErrorJustReturn: ())
+            .drive(onNext: { [weak self] in
+                self?.loginViewModel.actions.dismiss(nil)
+            }).disposed(by: disposeBag)
+        
+        loginViewModel.isLoading
+            .bind(to: indicatorView.rx.isAnimating)
             .disposed(by: disposeBag)
         
         phoneNumber_TextField
@@ -540,6 +566,7 @@ class LoginViewController: UIViewController {
 
                 guard let self = self, let text = self.phoneNumber_TextField.text else { return }
                 let formattedText = self.format(phoneNumber: text)
+//                print("formattedText: \(formattedText)")
                 self.phoneNumber_TextField.text = formattedText
             }).disposed(by: disposeBag)
         
@@ -549,7 +576,7 @@ class LoginViewController: UIViewController {
             .rx
             .text.orEmpty
             .subscribe(onNext: { [weak self] str in
-                print("str: \(str)")
+//                print("str: \(str)")
 //                print("count: \(str.count)")
                 guard let self = self else { return }
                 
@@ -567,7 +594,6 @@ class LoginViewController: UIViewController {
             .tap
             .asDriver()
             .drive(onNext: { [weak self] in
-                print("tap")
                 self?.updateUI()
             }).disposed(by: disposeBag)
         
@@ -739,8 +765,6 @@ extension LoginViewController {
         login_Label.isHidden = true
         sub_Login_Label.isHidden = true
         
-        certification_Btn.isEnabled = false
-        
         phoneNumber_TextField.resignFirstResponder()
         phoneNumber_TextField.isUserInteractionEnabled = false
         phoneNumber_TextField.layer.borderColor = UIColor.gray.cgColor
@@ -781,6 +805,7 @@ extension LoginViewController {
             
 //            Toast.show("인증번호가 문자로 전송됐습니다.", keyboardHeight: self.keyboardHeight + self.view.safeAreaInsets.bottom)
             
+            self.certification_Btn.isEnabled = false
             self.certification_Btn.backgroundColor = .main_Color.withAlphaComponent(0.3)
             
             self.certificationNumber_TextField.becomeFirstResponder()
@@ -887,19 +912,21 @@ extension LoginViewController: UITextFieldDelegate {
 extension LoginViewController {
     
     func format(phoneNumber: String) -> String {
-            var cleanedPhoneNumber = phoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-            let mask = "XXX XXXX XXXX" // 휴대전화 번호 포맷을 지정합니다.
-            var result = ""
-            var index = cleanedPhoneNumber.startIndex
-
-            for character in mask where index < cleanedPhoneNumber.endIndex {
-                if character == "X" {
-                    result.append(cleanedPhoneNumber[index])
-                    index = cleanedPhoneNumber.index(after: index)
-                } else {
-                    result.append(character)
-                }
+        let cleanedPhoneNumber = phoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+        let mask = "XXX XXXX XXXX" // 휴대전화 번호 포맷을 지정합니다.
+        var result = ""
+        var index = cleanedPhoneNumber.startIndex
+//        print("startIndex: \(cleanedPhoneNumber.startIndex)")
+//        print("endIndex: \(cleanedPhoneNumber.endIndex)")
+        for character in mask where index < cleanedPhoneNumber.endIndex {
+            if character == "X" {
+                result.append(cleanedPhoneNumber[index])
+                index = cleanedPhoneNumber.index(after: index)
+            } else {
+                result.append(character)
             }
-            return result
         }
+//        print("result: \(result)")
+        return result
+    }
 }

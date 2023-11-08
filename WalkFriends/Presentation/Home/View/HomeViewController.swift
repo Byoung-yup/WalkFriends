@@ -361,144 +361,144 @@ class HomeViewController: UIViewController {
     
     private func Binding() {
         
-        let category_Btns: [UIButton] = [categoryView.category_All_Btn,
-                                         categoryView.category_Popular_Btn,
-                                         categoryView.category_Time_Btn,
-                                         categoryView.category_Latest_Btn]
-        
-        let input = HomeViewModel.Input(default_Btn: categoryView.category_All_Btn.rx.tap,
-                                        popular_Btn: categoryView.category_Popular_Btn.rx.tap,
-                                        time_Btn: categoryView.category_Time_Btn.rx.tap,
-                                        latest_Btn: categoryView.category_Latest_Btn.rx.tap)
-        let output = homeViewModel.transform(input: input)
-        
-        output.toggle_Btn_Trigger
-//            .observe(on: MainScheduler.asyncInstance)
-            .subscribe(onNext: { category in
-                
-//                print(category)
-                for btn in category_Btns {
-
-                    if btn.tag == category.rawValue {
-
-                        btn.backgroundColor = .main_Color
-                        btn.setTitleColor(.white, for: .normal)
-                        btn.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
-                    } else {
-//                        print("X tag: \(btn.tag)")
-
-                        btn.backgroundColor = .white
-                        btn.setTitleColor(.black, for: .normal)
-                        btn.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .light)
-                    }
-                }
-                
-            }).disposed(by: disposeBag)
-        
-        output.fetch_MapLists
-            .map {
-                var x: [FinalMapList] = []
-                switch $0 {
-                case .success(let maplists):
-                    x.append(contentsOf: maplists)
-                case .failure(let err):
-                    break
-                }
-                return x
-            }
-            .bind(to: mapListTableView.rx.items(cellIdentifier: MapListViewCell.identifier, cellType: MapListViewCell.self)) { (row, element, cell) in
-                cell.mapList = element
-//                print("maplist: \(element)")
-                cell.selectionStyle = .none
-            }.disposed(by: disposeBag)
-        
-//        output.mapListItems.bind(to: mapListView.mapListTableView.rx.items(cellIdentifier: MapListViewCell.identifier, cellType: MapListViewCell.self)) { (row, element, cell) in
-//            cell.mapList = element
-//            cell.selectionStyle = .none
-//        }.disposed(by: disposeBag)
-        
-        mapListTableView.rx.setDelegate(self)
-            .disposed(by: disposeBag)
-        
-        mapListTableView
-            .rx
-            .modelSelected(FinalMapList.self)
-            .subscribe(onNext: { [weak self] mapList in
-                
-                guard let self = self else { return }
-                
-                // Test
-//                let vc = MapListDetailViewController(mapListDetailViewModel: MapListDetailViewModel(dataUseCase: DefaultDataUseCase(dataBaseRepository: DatabaseManager(), storageRepository: StorageManager()), item: mapList, actions: MapListDetailViewModelActions()))
-//                vc.modalPresentationStyle = .overFullScreen
-//                self.present(vc, animated: false)
-                self.homeViewModel.actions.showMapListDetailViewController(mapList)
-//                print("mapList: \(mapList)")
-                
-            }).disposed(by: disposeBag)
-        
-        runBtn
-            .rx
-            .tap
-            .subscribe(onNext: { [weak self] in
-                
-                guard let strongSelf = self else { return }
-                
-                strongSelf.homeViewModel.actions.showRunViewController()
-                
-            }).disposed(by: disposeBag)
-        
-        
-        profile_Btn
-            .rx
-            .tap
-            .bind(onNext: { [weak self] in
-                
-                guard let strongSelf = self else { return }
-                    
-                strongSelf.homeViewModel.actions.showInfoViewController()
-                
-            }).disposed(by: disposeBag)
-        
-        output.fetchTrigger
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] result in
-                print("user Exist: \(result)")
-                guard let strongSelf = self else { return }
-                
-                switch result {
-                case .success(_):
-                    break
-                case.failure(let err):
-                    
-                    if err == .NotFoundUserError {
-                        strongSelf.homeViewModel.actions.showSetupProfileViewController()
-                    } else {
-                        strongSelf.homeViewModel.actions.fetchError()
-                    }
-                }
-            })
-            .disposed(by: disposeBag)
-        
-//        output.fetch_MapLists
-//            .subscribe(onNext: { [weak self] result in
+//        let category_Btns: [UIButton] = [categoryView.category_All_Btn,
+//                                         categoryView.category_Popular_Btn,
+//                                         categoryView.category_Time_Btn,
+//                                         categoryView.category_Latest_Btn]
 //
-//                guard let self = self else { return }
+//        let input = HomeViewModel.Input(default_Btn: categoryView.category_All_Btn.rx.tap,
+//                                        popular_Btn: categoryView.category_Popular_Btn.rx.tap,
+//                                        time_Btn: categoryView.category_Time_Btn.rx.tap,
+//                                        latest_Btn: categoryView.category_Latest_Btn.rx.tap)
+//        let output = homeViewModel.transform(input: input)
 //
-//                switch result {
-//                case .success(let items):
-//                    self.homeViewModel.mapListItems.accept(items)
-//                case .failure(let err):
-//                    break
+//        output.toggle_Btn_Trigger
+////            .observe(on: MainScheduler.asyncInstance)
+//            .subscribe(onNext: { category in
+//
+////                print(category)
+//                for btn in category_Btns {
+//
+//                    if btn.tag == category.rawValue {
+//
+//                        btn.backgroundColor = .main_Color
+//                        btn.setTitleColor(.white, for: .normal)
+//                        btn.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+//                    } else {
+////                        print("X tag: \(btn.tag)")
+//
+//                        btn.backgroundColor = .white
+//                        btn.setTitleColor(.black, for: .normal)
+//                        btn.titleLabel?.font = UIFont.systemFont(ofSize: 13, weight: .light)
+//                    }
 //                }
 //
 //            }).disposed(by: disposeBag)
-//        homeViewModel.items
-//            .bind(to: homeListView.collectionView.rx.items(cellIdentifier: "HomeListCell", cellType: HomeListCell.self)) { (row, text, cell) in
-//                cell.label.text = "\(text)"
+//
+//        output.fetch_MapLists
+//            .map {
+//                var x: [FinalMapList] = []
+//                switch $0 {
+//                case .success(let maplists):
+//                    x.append(contentsOf: maplists)
+//                case .failure(let err):
+//                    break
+//                }
+//                return x
+//            }
+//            .bind(to: mapListTableView.rx.items(cellIdentifier: MapListViewCell.identifier, cellType: MapListViewCell.self)) { (row, element, cell) in
+//                cell.mapList = element
+////                print("maplist: \(element)")
+//                cell.selectionStyle = .none
 //            }.disposed(by: disposeBag)
 //
-//        homeListView.collectionView.rx.setDelegate(self)
+////        output.mapListItems.bind(to: mapListView.mapListTableView.rx.items(cellIdentifier: MapListViewCell.identifier, cellType: MapListViewCell.self)) { (row, element, cell) in
+////            cell.mapList = element
+////            cell.selectionStyle = .none
+////        }.disposed(by: disposeBag)
+//
+//        mapListTableView.rx.setDelegate(self)
 //            .disposed(by: disposeBag)
+//
+//        mapListTableView
+//            .rx
+//            .modelSelected(FinalMapList.self)
+//            .subscribe(onNext: { [weak self] mapList in
+//
+//                guard let self = self else { return }
+//
+//                // Test
+////                let vc = MapListDetailViewController(mapListDetailViewModel: MapListDetailViewModel(dataUseCase: DefaultDataUseCase(dataBaseRepository: DatabaseManager(), storageRepository: StorageManager()), item: mapList, actions: MapListDetailViewModelActions()))
+////                vc.modalPresentationStyle = .overFullScreen
+////                self.present(vc, animated: false)
+//                self.homeViewModel.actions.showMapListDetailViewController(mapList)
+////                print("mapList: \(mapList)")
+//
+//            }).disposed(by: disposeBag)
+//
+//        runBtn
+//            .rx
+//            .tap
+//            .subscribe(onNext: { [weak self] in
+//
+//                guard let strongSelf = self else { return }
+//
+//                strongSelf.homeViewModel.actions.showRunViewController()
+//
+//            }).disposed(by: disposeBag)
+//
+//
+//        profile_Btn
+//            .rx
+//            .tap
+//            .bind(onNext: { [weak self] in
+//
+//                guard let strongSelf = self else { return }
+//
+//                strongSelf.homeViewModel.actions.showInfoViewController()
+//
+//            }).disposed(by: disposeBag)
+//
+//        output.fetchTrigger
+//            .observe(on: MainScheduler.instance)
+//            .subscribe(onNext: { [weak self] result in
+//                print("user Exist: \(result)")
+//                guard let strongSelf = self else { return }
+//
+//                switch result {
+//                case .success(_):
+//                    break
+//                case.failure(let err):
+//
+//                    if err == .NotFoundUserError {
+//                        strongSelf.homeViewModel.actions.showSetupProfileViewController()
+//                    } else {
+//                        strongSelf.homeViewModel.actions.fetchError()
+//                    }
+//                }
+//            })
+//            .disposed(by: disposeBag)
+//
+////        output.fetch_MapLists
+////            .subscribe(onNext: { [weak self] result in
+////
+////                guard let self = self else { return }
+////
+////                switch result {
+////                case .success(let items):
+////                    self.homeViewModel.mapListItems.accept(items)
+////                case .failure(let err):
+////                    break
+////                }
+////
+////            }).disposed(by: disposeBag)
+////        homeViewModel.items
+////            .bind(to: homeListView.collectionView.rx.items(cellIdentifier: "HomeListCell", cellType: HomeListCell.self)) { (row, text, cell) in
+////                cell.label.text = "\(text)"
+////            }.disposed(by: disposeBag)
+////
+////        homeListView.collectionView.rx.setDelegate(self)
+////            .disposed(by: disposeBag)
     
     }
     
@@ -510,7 +510,7 @@ class HomeViewController: UIViewController {
 //            .subscribe(onNext: { [weak self] result in
 //
 //                if result {
-//                    
+//
 //                } else {
 //                    self?.setupProfile()
 //                }

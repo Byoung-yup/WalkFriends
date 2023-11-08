@@ -29,7 +29,7 @@ final class LocationViewModel: ViewModel {
     
     // MARK: - Properties
     
-    private let actions: LocationViewModelActions
+    let actions: LocationViewModelActions
     
     deinit {
         print("LocationViewModel - deinit")
@@ -45,14 +45,9 @@ final class LocationViewModel: ViewModel {
             
         
         let toBack = input.toBack_Trigger
-            .do(onNext: actions.toBack )
                 
                 
         
         return Output(toBack: toBack)
-    }
-    
-    func showLoginViewController() {
-        actions.showLoginViewController()
     }
 }

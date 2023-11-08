@@ -17,10 +17,17 @@ class SetupProfileViewController: UIViewController {
     
     // MARK: - UI Components
     
+    lazy var navigationBar: UINavigationBar = {
+        let bar = UINavigationBar(frame: CGRect(x: 0, y: safeArea.top, width: view.frame.size.width, height: naviBarHeight))
+        bar.shadowImage = UIImage()
+        bar.setBackgroundImage(UIImage(), for: .default)
+        return bar
+    }()
+    
     lazy var indicatorView: UIActivityIndicatorView = {
         let indicatorView = UIActivityIndicatorView()
-        indicatorView.style = .medium
-        indicatorView.color = .white
+        indicatorView.style = .large
+        indicatorView.color = .gray
         indicatorView.hidesWhenStopped = true
         return indicatorView
     }()
@@ -113,9 +120,9 @@ class SetupProfileViewController: UIViewController {
         print("\(self.description) - deinit")
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        self.view.endEditing(true)
+//    }
     
     // MARK: - viewDidLayoutSubviews
     
@@ -131,9 +138,11 @@ class SetupProfileViewController: UIViewController {
     
     private func configureUI() {
         
+        setNaviBar()
+        
         view.addSubview(imageView)
         imageView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(40)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
             make.centerX.equalTo(view.snp.centerX)
             make.width.height.equalTo(130)
         }
@@ -174,98 +183,95 @@ class SetupProfileViewController: UIViewController {
             make.height.equalTo(50)
         }
         
-        createProfileBtn.addSubview(indicatorView)
-        indicatorView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.width.height.equalTo(30)
-        }
-        
 //        setupSegmentControl()
     }
     
-//    private func setupSegmentControl() {
-//        
-//        userGenderSgControl.selectedSegmentTintColor = .orange
-//        userGenderSgControl.tintColor = .white
-//        
-//    }
+    private func setNaviBar() {
+
+        let naviItem = UINavigationItem()
+        naviItem.title = "프로필 설정"
+        
+        navigationBar.setItems([naviItem], animated: false)
+
+        view.addSubview(navigationBar)
+    }
     
     // MARK: - Binding
     
     private func binding() {
         
-        let input = SetupProfileViewModel.Input(profileImage: defaultImage.asObservable(),
-                                                usernickName: userNicknameTextField.rx.text.orEmpty.asObservable(),
-                                                createTrigger: createProfileBtn.rx.tap.asObservable())
-        let output = setupProfileViewModel.transform(input: input)
-        
-        output.createEnabled
-            .asDriver(onErrorJustReturn: false)
-            .drive(onNext: { [weak self] state in
-                
-                guard let self = self else { return }
-                
-                if state {
-                    self.createProfileBtn.backgroundColor = .main_Color
-                    self.createProfileBtn.isEnabled = true
-                } else {
-                    self.createProfileBtn.backgroundColor = .systemGray
-                    self.createProfileBtn.isEnabled = false   
-                }
-            })
-            .disposed(by: disposeBag)
-
-        output.create
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] result in
-
-                guard let strongSelf = self else { return }
-
-                switch result {
-                case .success(_):
-                    strongSelf.setupProfileViewModel.actions.createProfile()
-                case .failure(let err):
-                    
-                    switch err {
-                    case .ExistNicknameError:
-                        strongSelf.alertLbl.isHidden = false
-                    default:
-                        strongSelf.showAlert(error: err)
-                    }
-                }
-
-            }).disposed(by: disposeBag)
-        
-        imageView.rx.tapGesture()
-            .when(.recognized)
-            .subscribe(onNext: { [weak self] event in
-                print("touch: \(event)")
-                guard let strongSelf = self else { return }
-                
-                strongSelf.presentImagePicker()
-          
-            }).disposed(by: disposeBag)
-        
-        output.isLoding
-            .bind(to: indicatorView.rx.isAnimating)
-            .disposed(by: disposeBag)
-        
-        output.isLoding
-            .asDriver(onErrorJustReturn: false)
-            .drive(onNext: { [weak self] state in
-//                print("isLoding: \(state)")
-                if state {
-//                    print("true excute")
-                    self?.createProfileBtn.setTitle("", for: .normal)
-                    self?.view.isUserInteractionEnabled = false
-                }
-                else {
-//                    print("false excute")
-                    self?.createProfileBtn.setTitle("공유하기", for: .normal)
-                    self?.view.isUserInteractionEnabled = true
-                }
-                
-            }).disposed(by: disposeBag)
+//        let input = SetupProfileViewModel.Input(profileImage: defaultImage.asObservable(),
+//                                                usernickName: userNicknameTextField.rx.text.orEmpty.asObservable(),
+//                                                createTrigger: createProfileBtn.rx.tap.asObservable())
+//        let output = setupProfileViewModel.transform(input: input)
+//
+//        output.createEnabled
+//            .asDriver(onErrorJustReturn: false)
+//            .drive(onNext: { [weak self] state in
+//
+//                guard let self = self else { return }
+//
+//                if state {
+//                    self.createProfileBtn.backgroundColor = .main_Color
+//                    self.createProfileBtn.isEnabled = true
+//                } else {
+//                    self.createProfileBtn.backgroundColor = .systemGray
+//                    self.createProfileBtn.isEnabled = false
+//                }
+//            })
+//            .disposed(by: disposeBag)
+//
+//        output.create
+//            .observe(on: MainScheduler.instance)
+//            .subscribe(onNext: { [weak self] result in
+//
+//                guard let strongSelf = self else { return }
+//
+//                switch result {
+//                case .success(_):
+//                    strongSelf.setupProfileViewModel.actions.createProfile()
+//                case .failure(let err):
+//
+//                    switch err {
+//                    case .ExistNicknameError:
+//                        strongSelf.alertLbl.isHidden = false
+//                    default:
+//                        strongSelf.showAlert(error: err)
+//                    }
+//                }
+//
+//            }).disposed(by: disposeBag)
+//
+//        imageView.rx.tapGesture()
+//            .when(.recognized)
+//            .subscribe(onNext: { [weak self] event in
+//                print("touch: \(event)")
+//                guard let strongSelf = self else { return }
+//
+//                strongSelf.presentImagePicker()
+//
+//            }).disposed(by: disposeBag)
+//
+//        output.isLoding
+//            .bind(to: indicatorView.rx.isAnimating)
+//            .disposed(by: disposeBag)
+//
+//        output.isLoding
+//            .asDriver(onErrorJustReturn: false)
+//            .drive(onNext: { [weak self] state in
+////                print("isLoding: \(state)")
+//                if state {
+////                    print("true excute")
+//                    self?.createProfileBtn.setTitle("", for: .normal)
+//                    self?.view.isUserInteractionEnabled = false
+//                }
+//                else {
+////                    print("false excute")
+//                    self?.createProfileBtn.setTitle("공유하기", for: .normal)
+//                    self?.view.isUserInteractionEnabled = true
+//                }
+//
+//            }).disposed(by: disposeBag)
     }
 }
 

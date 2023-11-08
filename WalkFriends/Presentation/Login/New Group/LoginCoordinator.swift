@@ -9,9 +9,9 @@ import Foundation
 import UIKit
 
 protocol LoginCoordinatorDependencies {
-    // MARK: dismiss
-    func dismiss(_ coordinator: LoginCoordinator)
-    
+    // MARK: Dismiss
+    func dismiss(_ coordinator: LoginCoordinator, _ createUser_Trigger: Bool?)
+
     // MARK: Coordinator
 //    func makeRegisterCoordinator(navigationController: UINavigationController, dependencies: RegisterCoordinatorDependencies) -> RegisterCoordinator
 //    func makeResetCoordinator(navigationController: UINavigationController, dependencies: ResetCoordinatorDependencies) -> ResetCoordinator
@@ -36,8 +36,7 @@ class LoginCoordinator: NSObject, Coordinator {
     }
     
     func start() {
-        let actions = LoginViewModelActions(signIn: signIn,
-                                            toBack: dismiss)
+        let actions = LoginViewModelActions(dismiss: dismiss)
             
         let vc = dependencies.makeLoginViewController(actions: actions)
         
@@ -52,13 +51,23 @@ class LoginCoordinator: NSObject, Coordinator {
 //        childCoordinators.append(registerCoordinator)
 //    }
     
-    private func signIn() {
-        navigationController.popViewController(animated: true)
-    }
-    
-    private func dismiss() {
-        navigationController.popViewController(animated: true)
-        dependencies.dismiss(self)
+    private func dismiss(_ isExisted: Bool?) {
+        print("1")
+        guard let isExisted = isExisted else {
+            print("1-1")
+            dependencies.dismiss(self, nil)
+            navigationController.popViewController(animated: true)
+            return
+        }
+        
+        if isExisted {
+            print("2")
+            dependencies.dismiss(self, isExisted)
+        } else {
+            print("3")
+            dependencies.dismiss(self, isExisted)
+        }
+//        navigationController.popViewController(animated: false)
     }
     
 //    private func showResetViewController() {

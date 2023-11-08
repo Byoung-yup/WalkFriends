@@ -129,9 +129,9 @@ final class LaunchViewController: UIViewController {
         let output = launchViewModel.transform(input: input)
         
         output.show_Location
-            .debug()
             .asDriver(onErrorJustReturn: ())
-            .drive()
-            .disposed(by: disposeBag)
+            .drive(onNext: { [weak self] in
+                self?.launchViewModel.actions.showLocationViewController()
+            }).disposed(by: disposeBag)
     }
 }

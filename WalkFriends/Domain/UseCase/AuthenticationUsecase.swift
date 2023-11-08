@@ -9,12 +9,12 @@ import Foundation
 import RxSwift
 
 final class AuthenticationUsecase {
-    
+
     private let authRepository: AuthRepository
     private let dataBaseRepository: DataRepository
-    
+
     private let disposeBag: DisposeBag = DisposeBag()
-    
+
     init(authRepository: AuthRepository, dataBaseRepository: DataRepository) {
         self.authRepository = authRepository
         self.dataBaseRepository = dataBaseRepository
@@ -22,25 +22,31 @@ final class AuthenticationUsecase {
 }
 
 extension AuthenticationUsecase {
-    
+
     // MARK: - Phone Authentication
-    
-    func verifyPhoneNumber(_ phoneNumber: String) -> Observable<Result<Bool, FirebaseError>> {
-        
+
+    func verifyPhoneNumber(_ phoneNumber: String) -> Observable<Result<Bool, FBError>> {
+
         return authRepository.verifyPhoneNumber(phoneNumber: phoneNumber)
     }
-    
-    func signIn(_ data: AuthCode) -> Observable<Result<Bool, FirebaseAuthError>> {
+
+    func signIn(_ data: AuthCode) -> Observable<Result<Bool, FBError>> {
+        return Observable<Result<Bool, FBError>>.just(.success(false))
+//        return Observable<Result<Bool, FBError>>.just(.failure(.SessionExpired))
+//        return authRepository.signIn(phoneNumber: data.number, code: data.code)
+//            .flatMap { [weak self] result in
+//
+//
+//                    guard let self = self else { fatalError() }
+//
+//                    switch result {
+//                    case .success(_):
+//                        return self.dataBaseRepository.createUser()
+//                    case .failure(let err):
+//                        return Observable<Result<Bool, FBError>>.just(.failure(err))
+//                    }
+//
+//            }
         
-        return authRepository.signIn(phoneNumber: data.number, code: data.code)
-            .flatMap { result in
-                
-                switch result {
-                case .success(_):
-                    return Observable<Result<Bool, FirebaseAuthError>>.just(.success(true))
-                case .failure(let err):
-                    return Observable<Result<Bool, FirebaseAuthError>>.just(.failure(err))
-                }
-            }
     }
 }
