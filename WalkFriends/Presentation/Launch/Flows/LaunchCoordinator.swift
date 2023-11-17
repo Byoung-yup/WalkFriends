@@ -84,12 +84,14 @@ extension LaunchCoordinator: LocationCoordinatorDependencies {
     
     func toBack(_ coordinator: LocationCoordinator, _ createUser_Trigger: Bool?) {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
-        navigationController.popToRootViewController(animated: false)
+        
         guard let isExisted = createUser_Trigger else { return }
         
         if isExisted {
+            navigationController.popToRootViewController(animated: false)
             showHomeViewController()
         } else {
+            navigationController.popToRootViewController(animated: false)
             showSetupProfileViewController()
         }
     }
@@ -110,5 +112,11 @@ extension LaunchCoordinator: SetupProfileCoordinatorDependencies {
     
     func makeSetupProfileViewController(actions: SetupViewModelActions) -> SetupProfileViewController {
         return dependencies.makeSetupProfileViewController(actions: actions)
+    }
+    
+    func dismiss(_ coordinator: SetupProfileCoordinator) {
+        childCoordinators = childCoordinators.filter { $0 !== coordinator }
+        navigationController.popToRootViewController(animated: false)
+        showHomeViewController()
     }
 }

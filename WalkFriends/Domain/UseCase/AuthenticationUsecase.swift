@@ -31,22 +31,20 @@ extension AuthenticationUsecase {
     }
 
     func signIn(_ data: AuthCode) -> Observable<Result<Bool, FBError>> {
-        return Observable<Result<Bool, FBError>>.just(.success(false))
+//        return Observable<Result<Bool, FBError>>.just(.success(false))
 //        return Observable<Result<Bool, FBError>>.just(.failure(.SessionExpired))
-//        return authRepository.signIn(phoneNumber: data.number, code: data.code)
-//            .flatMap { [weak self] result in
-//
-//
-//                    guard let self = self else { fatalError() }
-//
-//                    switch result {
-//                    case .success(_):
-//                        return self.dataBaseRepository.createUser()
-//                    case .failure(let err):
-//                        return Observable<Result<Bool, FBError>>.just(.failure(err))
-//                    }
-//
-//            }
-        
+        return authRepository.signIn(phoneNumber: data.number, code: data.code)
+            .flatMap { [weak self] result in
+
+                    guard let self = self else { fatalError() }
+
+                    switch result {
+                    case .success(_):
+                        return self.dataBaseRepository.checkUser()
+                    case .failure(let err):
+                        return Observable<Result<Bool, FBError>>.just(.failure(err))
+                    }
+
+            }
     }
 }

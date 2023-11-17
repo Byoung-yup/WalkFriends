@@ -76,10 +76,10 @@ final class LoginViewModel: ViewModel {
         
         
         let certification = input.certification_Trigger.withLatestFrom(input.phoneNumber)
-            .flatMapLatest { [weak self] _ in
+            .flatMapLatest { [weak self] in
                 guard let self = self else { fatalError() }
 //                print("num \($0)")
-                return self.authUseCase.verifyPhoneNumber("+82 000")
+                return self.authUseCase.verifyPhoneNumber("+82 \($0)")
             }
         
         let code = Observable.combineLatest(input.phoneNumber, input.authenticationNumber) {

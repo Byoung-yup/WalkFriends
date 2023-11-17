@@ -26,8 +26,8 @@ final class DatabaseManager {
 //
 extension DatabaseManager: DataRepository {
     
-    // MARK: Create User
-    func createUser() -> Observable<Result<Bool, FBError>> {
+    // MARK: Check User
+    func checkUser() -> Observable<Result<Bool, FBError>> {
 
         let uid = KeychainWrapper.standard.string(forKey: "UID") ?? ""
         
@@ -53,8 +53,42 @@ extension DatabaseManager: DataRepository {
             
             return Disposables.create()
         }
-
-
+    }
+    
+    func createUser(with data: UserProfileData) -> Observable<Result<Bool, FBError>> {
+        
+        let uid = KeychainWrapper.standard.string(forKey: "UID") ?? ""
+        
+        return Observable.create { (observer) in
+            
+            let task = Task {
+                
+                do {
+                    let snapshot = try await Firestore.firestore().collection("Users").whereField("nickName", isEqualTo: data.nickName).getDocuments()
+        
+                    // 닉네임 중복 여부
+                    guard !(snapshot.documents.isEmpty) else {
+//                        print("닉네임 중복 여부: \(snapshot.documents.isEmpty)")
+                        observer.onNext(.failure(.ExistNicknameError))
+                        observer.onCompleted()
+                        return
+                    }
+//                    print("닉네임 중복 여부: \(snapshot.documents.isEmpty)")
+                    try await Firestore.firestore().collection("Users").document(uid).setData(data.toJSON())
+//                    print("업로드")
+                    observer.onNext(.success(true))
+                    observer.onCompleted()
+                    
+                } catch {
+//                    print("throw")
+                    observer.onNext(.failure(.UnknownError))
+                    observer.onCompleted()
+                }
+            }
+            return Disposables.create {
+                task.cancel()
+            }
+        }
     }
     //
     ////    func fetchUserData() -> Observable<Result<Bool, DatabaseError>> {
@@ -143,12 +177,12 @@ extension DatabaseManager: DataRepository {
     //        }
     //
     //        do {
-    //            let snapshot = try await db.collection("Users").whereField("nickName", isEqualTo: data.nickName).getDocuments()
-    //
-    //            // 닉네임 중복 여부
-    //            guard snapshot.documents.isEmpty else {
-    //                throw DatabaseError.ExistNicknameError
-    //            }
+//                let snapshot = try await db.collection("Users").whereField("nickName", isEqualTo: data.nickName).getDocuments()
+//
+//                // 닉네임 중복 여부
+//                guard snapshot.documents.isEmpty else {
+//                    throw DatabaseError.ExistNicknameError
+//                }
     //
     //            try await db.collection("Users").document(uid).setData(data.toJSON())
     //        } catch let err {

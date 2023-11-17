@@ -18,4 +18,5 @@ protocol ImageRepository {
 ////    func downLoadImages(uid: String) -> [URL]
 //    func fetch_MapListsImageReference(maplists: [MapList]) async throws -> [FinalMapList]
 //    func fetch_UserProfileImageReference(userData: UserProfile) async throws -> FinalUserProfile
+    func createUserProfile(with data: Data) -> Observable<Result<Bool, FBError>>
 }

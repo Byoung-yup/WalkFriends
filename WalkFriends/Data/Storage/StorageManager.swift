@@ -9,17 +9,44 @@ import Foundation
 import FirebaseStorage
 import RxSwift
 import FirebaseAuth
-//
+import SwiftKeychainWrapper
+
 final class StorageManager: ImageRepository {
 
     private let storageRef = Storage.storage().reference()
 
 }
 //
-//// MARK: - ImageRepository
+// MARK: - ImageRepository
 //
-//extension StorageManager {
-//
+extension StorageManager {
+    
+    func createUserProfile(with data: Data) -> Observable<Result<Bool, FBError>> {
+        
+        let uid = KeychainWrapper.standard.string(forKey: "UID") ?? ""
+        
+        return Observable.create { [weak self] (observer) in
+            
+            let metaData = StorageMetadata()
+            metaData.contentType = "image/jpeg"
+            
+            self?.storageRef.child("images/\(uid)/profile.jpeg").putData(data, metadata: metaData) { (metadata, error) in
+                
+                guard error == nil else {
+                    print("Storage 업로드 실패")
+                    observer.onNext(.failure(.UnknownError))
+                    observer.onCompleted()
+                    return
+                }
+                print("Storage 업로드 성공")
+                observer.onNext(.success(true))
+                observer.onCompleted()
+            }
+            
+            return Disposables.create()
+        }
+    }
+
 //    func uploadImageData(with data: Data) async throws {
 //
 //        guard let uid = FirebaseService.shard.auth.currentUser?.uid else {
@@ -27,7 +54,7 @@ final class StorageManager: ImageRepository {
 //        }
 //
 //        let metaData = StorageMetadata()
-//        metaData.contentType = "image/jpg"
+//        metaData.contentType = "image/jpeg"
 //
 //        let fileRef = storageRef.child("images/\(uid)/profile.jpeg")
 //
@@ -185,4 +212,4 @@ final class StorageManager: ImageRepository {
 //            throw DatabaseError.UnknownError
 //        }
 //    }
-//}
+}

@@ -51,11 +51,16 @@ final class LocationViewController: UIViewController {
     }()
     
     lazy var back_Btn: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.baseForegroundColor = .clear
-        config.image = UIImage(systemName: "chevron.backward")?.withTintColor(.black, renderingMode: .alwaysOriginal)
-        
-        let btn = UIButton(configuration: config)
+//        var config = UIButton.Configuration.plain()
+//        config.baseForegroundColor = .clear
+//        config.image = UIImage(systemName: "chevron.backward")?.withTintColor(.black, renderingMode: .alwaysOriginal)
+//
+//        let btn = UIButton(configuration: config)
+        let btn = UIButton(type: .system)
+        btn.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+        btn.tintColor = .black
+        btn.backgroundColor = .clear
+//        btn.setContentHuggingPriority(.required, for: .horizontal)
         return btn
     }()
     
@@ -89,14 +94,16 @@ final class LocationViewController: UIViewController {
         tf.backgroundColor = .lightGray.withAlphaComponent(0.5)
         tf.borderStyle = .roundedRect
         tf.returnKeyType = .search
+//        tf.setContentHuggingPriority(.defaultLow, for: .horizontal)
         return tf
     }()
     
     lazy var title_StackView: UIStackView = {
         let stView = UIStackView(arrangedSubviews: [back_Btn, location_TextField])
         stView.axis = .horizontal
-        stView.distribution = .fill
+        stView.distribution = .fillEqually
         //        stView.alignment = .center
+        stView.spacing = 10
         stView.backgroundColor = .clear
         return stView
     }()
@@ -204,11 +211,31 @@ final class LocationViewController: UIViewController {
         //        naviBar.shadowImage = UIImage()
         //        naviBar.setBackgroundImage(UIImage(), for: .default)
         
-        let naviItem = UINavigationItem()
-        let left_CustomView = UIBarButtonItem(customView: back_Btn)
+//        let customView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: naviBarHeight))
+//        customView.backgroundColor = .clear
+//        let stackView = UIStackView(frame: customView.bounds)
+//        stackView.axis = .horizontal
+//        stackView.distribution = .fillEqually
+//        stackView.spacing = 10
+//
+//        back_Btn.setContentHuggingPriority(.required, for: .horizontal)
+//        location_TextField.setContentHuggingPriority(.defaultLow, for: .horizontal)
+//
+//        stackView.addArrangedSubview(back_Btn)
+//        stackView.addArrangedSubview(location_TextField)
         
-        naviItem.titleView = location_TextField
-        naviItem.leftBarButtonItem = left_CustomView
+        let naviItem = UINavigationItem()
+        
+        let left_EmptyView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: naviBarHeight))
+        let left_Item = UIBarButtonItem(customView: left_EmptyView)
+        let right_EmptyView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: naviBarHeight))
+        let right_Item = UIBarButtonItem(customView: right_EmptyView)
+        
+        let left_CustomView = UIBarButtonItem(customView: back_Btn)
+        let right_View = UIBarButtonItem(customView: location_TextField)
+        
+//        naviItem.rightBarButtonItem = right_View
+        naviItem.leftBarButtonItems = [left_Item, left_CustomView, right_Item, right_View]
         
         navigationBar.setItems([naviItem], animated: false)
         
@@ -227,7 +254,7 @@ final class LocationViewController: UIViewController {
     
     private func binding() {
         
-        let textFieldObservable = location_TextField.rx.text.orEmpty
+//        let textFieldObservable = location_TextField.rx.text.orEmpty
         
         let input = LocationViewModel.Input(toBack_Trigger: back_Btn.rx.tap.asObservable())
         let output = locationViewModel.transform(input: input)
@@ -496,8 +523,8 @@ extension LocationViewController: MKLocalSearchCompleterDelegate {
 //            .map { $0.title.replacingOccurrences(of: "대한민국", with: "") }
         
         for item in items {
-
-            if item.title.contains("로") || item.title.contains("번길") {
+            
+            if item.title.contains("로") || item.title.contains("번길") || !(item.title.contains("동")) {
                 continue
             } else {
                 let newItem = item.title.replacingOccurrences(of: "대한민국", with: "")

@@ -304,7 +304,6 @@ class LoginViewController: UIViewController {
         view.backgroundColor = .white
         
         configureUI()
-        drawBackground()
 //        set_Delegate()
         binding()
 //        indicatorView.startAnimating()
@@ -352,6 +351,7 @@ class LoginViewController: UIViewController {
     
     private func configureUI() {
         
+        drawBackground()
         setNaviBar()
         
         view.addSubview(login_Label)
@@ -479,9 +479,11 @@ class LoginViewController: UIViewController {
     private func setNaviBar() {
         
         let naviItem = UINavigationItem()
+        let left_EmptyView = UIView(frame: CGRect(x: 0, y: 0, width: 5, height: naviBarHeight))
+        let left_Item = UIBarButtonItem(customView: left_EmptyView)
         let left_CustomView = UIBarButtonItem(customView: back_Btn)
         
-        naviItem.leftBarButtonItem = left_CustomView
+        naviItem.leftBarButtonItems = [left_Item, left_CustomView]
         
         navigationBar.setItems([naviItem], animated: false)
         
@@ -506,6 +508,7 @@ class LoginViewController: UIViewController {
         let output = loginViewModel.transform(input: input)
         
         output.certification
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] status in
                 print("status: \(status)")
                 guard let self = self else { return }
@@ -533,6 +536,7 @@ class LoginViewController: UIViewController {
             }).disposed(by: disposeBag)
         
         output.start
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] status in
                 
                 switch status {

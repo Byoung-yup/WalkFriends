@@ -46,8 +46,7 @@ final class HomeCoordinator: NSObject, Coordinator {
         let actions = HomeViewModelActions()
         let vc = dependencies.makeHomeViewController(actions: actions)
         
-        navigationController.pushViewController(vc, animated: true)
-        navigationController.navigationBar.isHidden = true
+        navigationController.pushViewController(vc, animated: false)
     }
     
 //    private func showInfoViewController() {

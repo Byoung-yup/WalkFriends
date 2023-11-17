@@ -52,19 +52,16 @@ class LoginCoordinator: NSObject, Coordinator {
 //    }
     
     private func dismiss(_ isExisted: Bool?) {
-        print("1")
+        
         guard let isExisted = isExisted else {
-            print("1-1")
             dependencies.dismiss(self, nil)
             navigationController.popViewController(animated: true)
             return
         }
         
         if isExisted {
-            print("2")
             dependencies.dismiss(self, isExisted)
         } else {
-            print("3")
             dependencies.dismiss(self, isExisted)
         }
 //        navigationController.popViewController(animated: false)

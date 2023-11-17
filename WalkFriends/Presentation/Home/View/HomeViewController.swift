@@ -30,7 +30,7 @@ class HomeViewController: UIViewController {
         let attribtuedString = NSMutableAttributedString(string: lbl.text ?? "")
         let range = (lbl.text! as NSString).range(of: "Friends")
         attribtuedString.addAttribute(.foregroundColor, value: UIColor(red: 0.98, green: 0.66, blue: 0.15, alpha: 1.00), range: range)
-        lbl.font = UIFont(name: "PartyConfetti-Regular", size: 30)
+//        lbl.font = UIFont(name: "PartyConfetti-Regular", size: 30)
         lbl.adjustsFontSizeToFitWidth = true
         lbl.attributedText = attribtuedString
         lbl.textAlignment = .left
@@ -206,11 +206,11 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 //        print("viewDidLoad")
-        view.backgroundColor = .white
+        view.backgroundColor = .red
         
-        drawBackground()
-        configureUI()
-        Binding()
+//        drawBackground()
+//        configureUI()
+//        Binding()
         
 //        let panGestureRecongnizer = UIPanGestureRecognizer(target: self, action: #selector(action))
 //
@@ -269,7 +269,7 @@ class HomeViewController: UIViewController {
     
     private func configureUI() {
 
-        setNavigationbar()
+//        setNavigationbar()
 //        setHeaderView()
 //        view.addSubview(main_Label)
 //        main_Label.snp.makeConstraints { make in
@@ -312,32 +312,32 @@ class HomeViewController: UIViewController {
 //            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(21)
 //        }
         
-        view.addSubview(categoryView)
-        categoryView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.height.equalTo(55)
-            make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
-            make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
-//            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-        }
+//        view.addSubview(categoryView)
+//        categoryView.snp.makeConstraints { make in
+//            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+//            make.height.equalTo(55)
+//            make.left.equalTo(view.safeAreaLayoutGuide.snp.left)
+//            make.right.equalTo(view.safeAreaLayoutGuide.snp.right)
+////            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+//        }
         
-        view.addSubview(mapListTableView)
-        mapListTableView.snp.makeConstraints { make in
-            make.top.equalTo(categoryView.safeAreaLayoutGuide.snp.bottom)
-            make.left.right.bottom.equalToSuperview()
-        }
+//        view.addSubview(mapListTableView)
+//        mapListTableView.snp.makeConstraints { make in
+//            make.top.equalTo(categoryView.safeAreaLayoutGuide.snp.bottom)
+//            make.left.right.bottom.equalToSuperview()
+//        }
         
 //        categoryView.snp.makeConstraints { make in
 //            make.width.equalToSuperview()
 //            make.height.equalTo(55)
 //        }
         
-        view.addSubview(runBtn)
-        runBtn.snp.makeConstraints { make in
-            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-21)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-30)
-            make.width.height.equalTo(70)
-        }
+//        view.addSubview(runBtn)
+//        runBtn.snp.makeConstraints { make in
+//            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-21)
+//            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-30)
+//            make.width.height.equalTo(70)
+//        }
     }
     
     private func setNavigationbar() {
@@ -348,8 +348,6 @@ class HomeViewController: UIViewController {
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: main_Label)
         navigationItem.rightBarButtonItems = [profile_Buttion, spacer, search_Button]
-        
-        
     }
     
     private func setHeaderView() {

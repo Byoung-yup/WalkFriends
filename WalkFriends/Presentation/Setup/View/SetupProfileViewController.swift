@@ -25,11 +25,12 @@ class SetupProfileViewController: UIViewController {
     }()
     
     lazy var indicatorView: UIActivityIndicatorView = {
-        let indicatorView = UIActivityIndicatorView()
-        indicatorView.style = .large
-        indicatorView.color = .gray
-        indicatorView.hidesWhenStopped = true
-        return indicatorView
+        let view = UIActivityIndicatorView()
+        view.style = .large
+        view.color = .gray
+        view.backgroundColor = .clear
+        view.hidesWhenStopped = true
+        return view
     }()
     
     lazy var imageView: UIImageView = {
@@ -43,12 +44,14 @@ class SetupProfileViewController: UIViewController {
         return imageV
     }()
     
-    lazy var userNicknameTextField: CustomTextField = {
-        let tf = CustomTextField()
+    lazy var userNicknameTextField: UITextField = {
+        let tf = UITextField()
         tf.addLeftPadding()
         tf.textColor = .black
-        tf.font = UIFont(name: "LettersforLearners", size: 15)
         tf.attributedPlaceholder = NSAttributedString(string: "닉네임(2글자 이상)", attributes: [.foregroundColor: UIColor.systemGray])
+        tf.layer.cornerRadius = 5
+        tf.layer.borderColor = UIColor.gray.cgColor
+        tf.layer.borderWidth = 1.0
         return tf
     }()
     
@@ -76,7 +79,7 @@ class SetupProfileViewController: UIViewController {
         btn.backgroundColor = .main_Color
         btn.setTitleColor(.white, for: .normal)
         btn.titleLabel?.font = UIFont(name: "LettersforLearners", size: 15)
-        btn.layer.cornerRadius = 25
+        btn.layer.cornerRadius = 5
         return btn
     }()
     
@@ -85,7 +88,7 @@ class SetupProfileViewController: UIViewController {
     
     let setupProfileViewModel: SetupProfileViewModel
     
-    let defaultImage: BehaviorRelay<UIImage> = BehaviorRelay<UIImage>(value: UIImage(systemName: "person.crop.circle")!)
+    let defaultImage: BehaviorSubject<UIImage> = BehaviorSubject(value: UIImage(systemName: "person.crop.circle")!)
     
     let disposeBag = DisposeBag()
     
@@ -107,11 +110,10 @@ class SetupProfileViewController: UIViewController {
         
         view.backgroundColor = .white
         title = "프로필 설정"
-        navigationItem.hidesBackButton = true
 //        print("index: \(userGenderSgControl.selectedSegmentIndex)")
         drawBackground()
         configureUI()
-        
+//        setupData()
         binding()
         
     }
@@ -142,22 +144,23 @@ class SetupProfileViewController: UIViewController {
         
         view.addSubview(imageView)
         imageView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
+            make.top.equalTo(navigationBar.safeAreaLayoutGuide.snp.bottom).offset(50)
             make.centerX.equalTo(view.snp.centerX)
-            make.width.height.equalTo(130)
+            make.width.equalTo(view.snp.width).dividedBy(4)
+            make.height.equalTo(view.snp.width).dividedBy(4)
         }
         
         view.addSubview(userNicknameTextField)
         userNicknameTextField.snp.makeConstraints { make in
             make.top.equalTo(imageView.safeAreaLayoutGuide.snp.bottom).offset(40)
-            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(25)
-            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-25)
+            make.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(21)
+            make.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-21)
             make.height.equalTo(50)
         }
         
         view.addSubview(alertLbl)
         alertLbl.snp.makeConstraints { make in
-            make.left.equalTo(userNicknameTextField.snp.left).offset(10)
+            make.left.equalTo(userNicknameTextField.snp.left)
             make.top.equalTo(userNicknameTextField.safeAreaLayoutGuide.snp.bottom)
         }
         
@@ -183,12 +186,18 @@ class SetupProfileViewController: UIViewController {
             make.height.equalTo(50)
         }
         
+        view.addSubview(indicatorView)
+        indicatorView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+        
 //        setupSegmentControl()
     }
     
     private func setNaviBar() {
 
         let naviItem = UINavigationItem()
+        naviItem.titleView?.tintColor = .black
         naviItem.title = "프로필 설정"
         
         navigationBar.setItems([naviItem], animated: false)
@@ -196,66 +205,84 @@ class SetupProfileViewController: UIViewController {
         view.addSubview(navigationBar)
     }
     
+    // MARK: - Setup Data
+    
+//    private func setupData() {
+//        let defaultImage = UIImage(systemName: "person.crop.circle")!
+//        guard let defaultData = defaultImage.jpegData(compressionQuality: 0.7) else { return }
+//        observable_DefaultImage.accept(defaultData)
+//    }
+    
     // MARK: - Binding
     
     private func binding() {
         
-//        let input = SetupProfileViewModel.Input(profileImage: defaultImage.asObservable(),
-//                                                usernickName: userNicknameTextField.rx.text.orEmpty.asObservable(),
-//                                                createTrigger: createProfileBtn.rx.tap.asObservable())
-//        let output = setupProfileViewModel.transform(input: input)
-//
-//        output.createEnabled
-//            .asDriver(onErrorJustReturn: false)
-//            .drive(onNext: { [weak self] state in
-//
-//                guard let self = self else { return }
-//
-//                if state {
-//                    self.createProfileBtn.backgroundColor = .main_Color
-//                    self.createProfileBtn.isEnabled = true
-//                } else {
-//                    self.createProfileBtn.backgroundColor = .systemGray
-//                    self.createProfileBtn.isEnabled = false
-//                }
-//            })
-//            .disposed(by: disposeBag)
-//
-//        output.create
-//            .observe(on: MainScheduler.instance)
-//            .subscribe(onNext: { [weak self] result in
-//
-//                guard let strongSelf = self else { return }
-//
-//                switch result {
-//                case .success(_):
-//                    strongSelf.setupProfileViewModel.actions.createProfile()
-//                case .failure(let err):
-//
-//                    switch err {
-//                    case .ExistNicknameError:
-//                        strongSelf.alertLbl.isHidden = false
-//                    default:
-//                        strongSelf.showAlert(error: err)
-//                    }
-//                }
-//
-//            }).disposed(by: disposeBag)
-//
-//        imageView.rx.tapGesture()
-//            .when(.recognized)
-//            .subscribe(onNext: { [weak self] event in
-//                print("touch: \(event)")
-//                guard let strongSelf = self else { return }
-//
-//                strongSelf.presentImagePicker()
-//
-//            }).disposed(by: disposeBag)
-//
-//        output.isLoding
-//            .bind(to: indicatorView.rx.isAnimating)
-//            .disposed(by: disposeBag)
-//
+        let input = SetupProfileViewModel.Input(profileImageData: defaultImage.asObservable(),
+                                                usernickName: userNicknameTextField.rx.text.orEmpty.asObservable(),
+                                                createTrigger: createProfileBtn.rx.tap.asObservable())
+        let output = setupProfileViewModel.transform(input: input)
+
+        output.createEnabled
+            .asDriver(onErrorJustReturn: false)
+            .drive(onNext: { [weak self] state in
+
+                guard let self = self else { return }
+
+                if state {
+                    self.createProfileBtn.backgroundColor = .main_Color
+                    self.createProfileBtn.isEnabled = true
+                } else {
+                    self.createProfileBtn.backgroundColor = .main_Color.withAlphaComponent(0.3)
+                    self.createProfileBtn.isEnabled = false
+                }
+            })
+            .disposed(by: disposeBag)
+
+        output.create
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] result in
+                print("result: \(result)")
+                guard let self = self else { return }
+                
+                self.setupProfileViewModel.isLoding.onNext(false)
+
+                switch result {
+                case .success(_):
+                    self.setupProfileViewModel.actions.createProfile()
+                case .failure(let err):
+
+                    switch err {
+                    case .ExistNicknameError:
+                        self.alertLbl.isHidden = false
+                    default:
+                        self.showAlert(error: err)
+                    }
+                }
+                self.view.isUserInteractionEnabled = true
+            }).disposed(by: disposeBag)
+
+        imageView.rx.tapGesture()
+            .when(.recognized)
+            .subscribe(onNext: { [weak self] event in
+        
+                guard let self = self else { return }
+
+                self.presentImagePicker()
+
+            }).disposed(by: disposeBag)
+
+        setupProfileViewModel.isLoding
+            .bind(to: indicatorView.rx.isAnimating)
+            .disposed(by: disposeBag)
+        
+        createProfileBtn
+            .rx
+            .tap
+            .asDriver()
+            .drive(onNext: { [weak self] in
+                self?.view.isUserInteractionEnabled = false
+            }).disposed(by: disposeBag)
+        
 //        output.isLoding
 //            .asDriver(onErrorJustReturn: false)
 //            .drive(onNext: { [weak self] state in
@@ -293,14 +320,14 @@ extension SetupProfileViewController {
 
         } finish: { [weak self] (asset) in
 
-            guard let strongSelf = self else { return }
+            guard let self = self else { return }
 
-            let images = strongSelf.convertAssetToImage(asset, size: CGSize(width: 100, height: 100))
+            let images = self.convertAssetToImage(asset, size: CGSize(width: 100, height: 100))
 
-            strongSelf.defaultImage.accept(images.first!)
+            self.defaultImage.onNext(images.first!)
 
             DispatchQueue.main.async {
-                strongSelf.imageView.image = images.first
+                self.imageView.image = images.first!
             }
         }
 

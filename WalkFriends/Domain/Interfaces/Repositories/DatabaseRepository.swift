@@ -24,7 +24,8 @@ protocol DataRepository {
 //    func fetchMapListData3() async throws -> [MapList]
     
     //
-    func createUser() -> Observable<Result<Bool, FBError>>
+    func checkUser() -> Observable<Result<Bool, FBError>>
+    func createUser(with data: UserProfileData) -> Observable<Result<Bool, FBError>>
 }
 
 protocol NetworkService {
